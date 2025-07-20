@@ -88,6 +88,8 @@ var main_tween_Array: Array[Tween]
 var player_invincible_counter: float = 0
 var player_invincible_bool: bool
 var player_shoot_counter: float = 0
+#-------------------------------------------------------------------------------
+var bullet_Color_Id_Max: int = 16
 #endregion
 #-------------------------------------------------------------------------------
 #region MONOVEHAVIOUR
@@ -637,7 +639,7 @@ func Create_SpellCard_Tween(_node2d:Node2D, _tween:Tween, _mirror: float):
 	var _dir: float
 	var _dir2: float = 0.0
 	var _max1: float = 10.0*(difficulty+1)
-	var _max2: float = 10.0*(difficulty+1)
+	var _max2: int = 10*(int(difficulty)+1)
 	var _vel1: float = 4.0
 	var _vel2: float = 1.0
 	var _dvel: float = (_vel2-_vel1)/_max2
@@ -645,7 +647,7 @@ func Create_SpellCard_Tween(_node2d:Node2D, _tween:Tween, _mirror: float):
 	#-------------------------------------------------------------------------------
 	for _j in _max2:
 		_dir = 0.0
-		_frame = int(_j)%16
+		_frame = _j % bullet_Color_Id_Max
 		for _i in _max1:
 			_tween.tween_callback(func():Create_SpellCard_bullet(_node2d, _dir+_dir2*_mirror, _vel1, _frame, _mirror))
 			_dir += 360/_max1
@@ -662,13 +664,9 @@ func Create_SpellCard_bullet(_node2d:Node2D, _dir:float, _vel:float, _frame:int,
 	var _x: float = _node2d.position.x + 48 * cos(_dir2)
 	var _y: float = _node2d.position.y + 48 * sin(_dir2)
 	#-------------------------------------------------------------------------------
-	var _bullet: Bullet = Create_EnemyBullet(_x, _y, 4.0, _dir, "Rice_Bullet", _frame)
+	var _bullet: Bullet = Create_EnemyBullet(_x, _y, 4.0, _dir, "Rice_Bullet", _frame, true)
 	#-------------------------------------------------------------------------------
 	var _tween: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
-	#-------------------------------------------------------------------------------
-	_tween.tween_callback(func():
-		_bullet.can_Go_OffLimits = true
-	)
 	#-------------------------------------------------------------------------------
 	_tween.tween_property(_bullet, "vel",0.5, 1.0)
 	_tween.parallel().tween_property(_bullet, "dir",_bullet.dir+30*_mirror, 1.0)
@@ -867,11 +865,7 @@ func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float, _type:String,
 	#-------------------------------------------------------------------------------
 	var _bulletResource: BulletResource = bulletDictionary.get(_type, "ArrowHead_Bullet")
 	_bullet.texture = _bulletResource.texture
-	#_frame = clampi(_frame, 0, _bulletResource.maxFrame)
 	_bullet.frame = _frame
-	_bullet.hframes = _bulletResource.h_frames
-	_bullet.vframes = _bulletResource.v_frames
-	_bullet.offset = _bulletResource.offset
 	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false
@@ -1253,7 +1247,7 @@ func Create_EnemyBullets_Disabled(_iMax:int):
 		content.add_child(_bullet)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, _frame:int) ->Bullet:
+func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, _frame:int, _can_Go_OffLimits:bool = false) ->Bullet:
 	var _bullet: Bullet
 	#-------------------------------------------------------------------------------
 	if(enemyBullets_Disabled_Array.size() > 0):
@@ -1270,15 +1264,11 @@ func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, 
 	#-------------------------------------------------------------------------------
 	var _bulletResource: BulletResource = bulletDictionary.get(_type, "ArrowHead_Bullet")
 	_bullet.texture = _bulletResource.texture
-	#_frame = clampi(_frame, 0, _bulletResource.maxFrame)
 	_bullet.frame = _frame
-	_bullet.hframes = _bulletResource.h_frames
-	_bullet.vframes = _bulletResource.v_frames
-	_bullet.offset = _bulletResource.offset
 	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false
-	_bullet.can_Go_OffLimits = false
+	_bullet.can_Go_OffLimits = _can_Go_OffLimits
 	_bullet.dir = _dir
 	_bullet.vel = _v
 	#-------------------------------------------------------------------------------

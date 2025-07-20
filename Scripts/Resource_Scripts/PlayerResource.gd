@@ -1,5 +1,7 @@
+## Player Resource.
+## 
+## A resource that hold all the player Select Stats.
 extends Resource
-##A resource that hold all the player Select Stats.
 class_name PlayerResource
 #region VARIABLES
 @export var picture: Texture2D
