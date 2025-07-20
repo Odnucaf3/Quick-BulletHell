@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="PlayerResource" load_steps=3 format=3 uid="uid://p8lqv58vpcxv"]
+[gd_resource type="Resource" script_class="PlayerResource" load_steps=4 format=3 uid="uid://p8lqv58vpcxv"]
 
 [ext_resource type="Texture2D" uid="uid://j6sy2d6bl6al" path="res://Assets/Images/PlayerSelect1.png" id="1_xuota"]
 [ext_resource type="Script" uid="uid://bc56grp6plryu" path="res://Scripts/Resource_Scripts/PlayerResource.gd" id="2_vephl"]
+[ext_resource type="Texture2D" uid="uid://drx4sqikt30op" path="res://Assets/Sprites/Player1.png" id="3_wkko2"]
 
 [resource]
 script = ExtResource("2_vephl")
 picture = ExtResource("1_xuota")
+texture = ExtResource("3_wkko2")
 normalSpeed = 6.0
 focusSpeed = 3.0
 hitBox_Scale = 1.0

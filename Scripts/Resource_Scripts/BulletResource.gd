@@ -5,6 +5,8 @@ class_name BulletResource
 @export var texture: Texture2D
 #-------------------------------------------------------------------------------
 @export var radius: float = 2
+@export var h_frames: int = 16
+@export var v_frames: int = 1
 @export var maxFrame: int = 16
 @export var offset: Vector2 = Vector2(0, 0)
 #-------------------------------------------------------------------------------

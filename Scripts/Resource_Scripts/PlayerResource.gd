@@ -3,6 +3,7 @@ extends Resource
 class_name PlayerResource
 #region VARIABLES
 @export var picture: Texture2D
+@export var texture: Texture2D
 #-------------------------------------------------------------------------------
 @export var normalSpeed: float = 7.0
 @export var focusSpeed: float = 3.5

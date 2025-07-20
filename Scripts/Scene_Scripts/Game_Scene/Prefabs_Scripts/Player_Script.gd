@@ -24,12 +24,18 @@ var myMOVING_STATE: MOVING_STATE = MOVING_STATE.IDLE
 @export var grazeBox_Sprite: Sprite2D
 @export var hitBox_Sprite: Sprite2D
 #-------------------------------------------------------------------------------
+var hitBox_radius: float = 8.0
+var grazeBox_radius: float = 34.0
+var magnetBox_radius: float = 98.0
+#-------------------------------------------------------------------------------
 var playerResource: PlayerResource
 #endregion
 #-------------------------------------------------------------------------------
 #region CONSTRUCTORS
 func SetPlayer(_playerResournce: PlayerResource):
 	playerResource = _playerResournce
+	#-------------------------------------------------------------------------------
+	sprite.texture = _playerResournce.texture
 	#-------------------------------------------------------------------------------
 	magnetBox_Sprite.scale.x  *= _playerResournce.magnetBox_Scale
 	magnetBox_Sprite.scale.y  *= _playerResournce.magnetBox_Scale
@@ -40,4 +46,9 @@ func SetPlayer(_playerResournce: PlayerResource):
 	hitBox_Sprite.scale.x  *= _playerResournce.hitBox_Scale
 	hitBox_Sprite.scale.y  *= _playerResournce.hitBox_Scale
 #endregion
+#-------------------------------------------------------------------------------
+#func _draw() -> void:
+#	draw_circle(Vector2.ZERO, magnetBox_radius, Color.BLUE)
+#	draw_circle(Vector2.ZERO, grazeBox_radius, Color.GREEN)
+#	draw_circle(Vector2.ZERO, hitBox_radius, Color.RED)
 #-------------------------------------------------------------------------------
