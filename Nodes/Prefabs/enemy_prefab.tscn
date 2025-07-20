@@ -104,11 +104,11 @@ animation = &"Idle"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dwf8l"]
 animation = &"Moving_Right"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ycuey"]
-animation = &"Turn_Right"
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8n8ss"]
 animation = &"Turning_Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ycuey"]
+animation = &"Turn_Right"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gwas1"]
 advance_mode = 2
@@ -127,16 +127,17 @@ states/Idle/position = Vector2(374, 100)
 states/Moving_Right/node = SubResource("AnimationNodeAnimation_dwf8l")
 states/Moving_Right/position = Vector2(541, 100)
 states/Start/position = Vector2(206, 100)
-states/Turn_Right/node = SubResource("AnimationNodeAnimation_ycuey")
-states/Turn_Right/position = Vector2(541, 7)
 states/Turning_Idle/node = SubResource("AnimationNodeAnimation_8n8ss")
 states/Turning_Idle/position = Vector2(374, 7)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_gwas1"), "Turn_Right", "Moving_Right", SubResource("AnimationNodeStateMachineTransition_qary4"), "Turning_Idle", "Idle", SubResource("AnimationNodeStateMachineTransition_gt60k")]
+states/Turning_Right/node = SubResource("AnimationNodeAnimation_ycuey")
+states/Turning_Right/position = Vector2(541, 7)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_gwas1"), "Turning_Right", "Moving_Right", SubResource("AnimationNodeStateMachineTransition_qary4"), "Turning_Idle", "Idle", SubResource("AnimationNodeStateMachineTransition_gt60k")]
 graph_offset = Vector2(-46, -49)
 
-[node name="Enemy" type="Node2D" node_paths=PackedStringArray("label", "animationTree")]
+[node name="Enemy" type="Node2D" node_paths=PackedStringArray("label", "sprite", "animationTree")]
 script = ExtResource("1_30lj2")
 label = NodePath("Label")
+sprite = NodePath("Sprite2D")
 animationTree = NodePath("AnimationTree")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

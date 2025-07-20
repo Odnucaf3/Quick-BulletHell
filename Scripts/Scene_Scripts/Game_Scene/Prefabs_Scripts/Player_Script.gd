@@ -2,6 +2,7 @@ extends Node2D
 class_name Player
 #-------------------------------------------------------------------------------
 enum PLAYER_STATE{ALIVE, DEATH, INVINCIBLE}
+enum MOVING_STATE{IDLE, RIGHT, LEFT}
 #region VARIABLES
 var velocity: Vector2
 var dir: float
@@ -15,6 +16,9 @@ var tween_Array: Array[Tween] = []
 @export var myPLAYER_STATE: PLAYER_STATE
 #-------------------------------------------------------------------------------
 @export var sprite: Sprite2D
+@export var animationTree: AnimationTree
+var playback: AnimationNodeStateMachinePlayback
+var myMOVING_STATE: MOVING_STATE = MOVING_STATE.IDLE
 #-------------------------------------------------------------------------------
 @export var magnetBox_Sprite: Sprite2D
 @export var grazeBox_Sprite: Sprite2D

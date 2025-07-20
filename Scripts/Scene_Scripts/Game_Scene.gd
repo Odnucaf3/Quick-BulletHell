@@ -1,7 +1,7 @@
 extends Node
 class_name Game_Scene
 #-------------------------------------------------------------------------------
-enum GAME_STATE{IN_GAMEPLAY, IN_CUTIN, IN_MARKET, IN_OPTION_MENU, IN_DIALOGUE, IN_GAMEOVER}
+enum GAME_STATE{IN_GAMEPLAY, IN_MARKET, IN_DIALOGUE, IN_GAMEOVER}
 #region VARIABLES
 var singleton: Singleton
 #-------------------------------------------------------------------------------
@@ -134,18 +134,12 @@ func _physics_process(_delta:float) -> void:
 	Game_StateMachine()
 #endregion
 #-------------------------------------------------------------------------------
-#region PLAYER FUNCTIONS
+#region STATE-MACHINE FUNCTIONS
 func Game_StateMachine():
 	player.hitBox_Sprite.rotate(0.05*deltaTimeScale)
 	#-------------------------------------------------------------------------------
 	match(myGAME_STATE):
 		GAME_STATE.IN_GAMEPLAY:
-			PlayerShoot()
-			Player_StateMachine()
-			PauseGame()
-			return
-		#-------------------------------------------------------------------------------
-		GAME_STATE.IN_CUTIN:
 			PlayerShoot()
 			Player_StateMachine()
 			PauseGame()
@@ -163,9 +157,6 @@ func Game_StateMachine():
 					Player_StateMachine_Invincible()
 				#-------------------------------------------------------------------------------
 			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-		GAME_STATE.IN_OPTION_MENU:
-			pass
 		#-------------------------------------------------------------------------------
 		GAME_STATE.IN_DIALOGUE:
 			Player_StateMachine()
@@ -247,6 +238,8 @@ func Player_Movement() -> void:
 			player.hitBox_Sprite.show()
 			isFocus = true
 		#-------------------------------------------------------------------------------
+	#-------------------------------------------------------------------------------
+	Player_Animation(input_dir.x)
 	#-------------------------------------------------------------------------------
 	if(input_dir != Vector2.ZERO):
 		input_dir.normalized()
@@ -364,6 +357,9 @@ func BeginGame() -> void:
 	player.SetPlayer(singleton.Copy_CurrentPlayer())
 	player.grazeBox_Sprite.hide()
 	player.hitBox_Sprite.hide()
+	player.playback = player.animationTree.get("parameters/playback")
+	player.playback.travel("Idle")
+	player.myMOVING_STATE = Player.MOVING_STATE.IDLE
 	#-------------------------------------------------------------------------------
 	SetScore()
 	SetMoney()
@@ -384,8 +380,8 @@ func BeginGame() -> void:
 	#-------------------------------------------------------------------------------
 	Create_Boss_Disabled(1)
 	Create_Enemy_Disabled(1)
-	Create_EnemyBullets_Disabled(2400)
-	Create_Items_Disabled(1000)
+	Create_EnemyBullets_Disabled(2000)
+	Create_Items_Disabled(500)
 	Create_PlayerBullets_Disabled(50)
 	#-------------------------------------------------------------------------------
 	LoadBulletDatabase()
@@ -448,7 +444,6 @@ func Nothing_and_Market():
 	Enter_GameState_InGameplay()
 #-------------------------------------------------------------------------------
 func OpenMarket():
-	myGAME_STATE = GAME_STATE.IN_CUTIN
 	await ShowBanner2("Flea Market has being Open")
 	myGAME_STATE = GAME_STATE.IN_MARKET
 	await marketMenu.OpenMarket()
@@ -504,10 +499,11 @@ func GoToMainScene():
 #-------------------------------------------------------------------------------
 #region STAGE 1 FUNCTIONS
 func Stage1():
-	await EnemyWave_and_Market("Enemy Wave 1", func():Stage1_EnemyWave1(), 20)
-	await EnemyWave_and_Market("Enemy Wave 1", func():InfiniteEnemyTest(), 10)
+	await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
+	await EnemyWave_and_Market("Enemy-Wave 2", func():InfiniteEnemyTest(), 10)
 	#-------------------------------------------------------------------------------
-	await Nothing_and_Market()
+	#await Nothing_and_Market()
+	await ShowBanner("Enter Boss")	#IMPORTANTE: Tiene que haber un await antres de entrar al dialogo porque si no se saltea la primer liena.
 	myGAME_STATE = GAME_STATE.IN_DIALOGUE
 	dialogueMenu.OpenDialogue()
 	#-------------------------------------------------------------------------------
@@ -523,7 +519,7 @@ func Stage1():
 	dialogueMenu.CloseDialogue()
 	myGAME_STATE = GAME_STATE.IN_GAMEPLAY
 	#-------------------------------------------------------------------------------
-	await EnemyWave_and_Market("Boss Battle", func():Create_SpellCard(_boss), 60)
+	await EnemyWave_and_Market("Spell-Card 1", func():Create_SpellCard(_boss), 60)
 	await StageCommon("Stage 1 Completed",1,0)
 #-------------------------------------------------------------------------------
 func InfiniteEnemyTest():
@@ -610,7 +606,7 @@ func Stage1_EnemyWave1_Enemy1_Fire1(_tween:Tween, _node2D: Node2D):
 			var _dir: float = AngleToPlayer(_node2D)
 			var _x:float = _node2D.position.x
 			var _y:float = _node2D.position.y
-			var _bullet: Bullet = Create_EnemyBullet(_x, _y, 8, _dir)
+			var _bullet: Bullet = Create_EnemyBullet(_x, _y, 8, _dir, "ArrowHead_Bullet", 3)
 		)
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(0.1)
@@ -635,11 +631,13 @@ func Create_SpellCard_Tween(_node2d:Node2D, _tween:Tween, _mirror: float):
 	var _vel1: float = 4.0
 	var _vel2: float = 1.0
 	var _dvel: float = (_vel2-_vel1)/_max2
+	var _frame: int = 0
 	#-------------------------------------------------------------------------------
 	for _j in _max2:
 		_dir = 0.0
+		_frame = int(_j)%16
 		for _i in _max1:
-			_tween.tween_callback(func():Create_SpellCard_bullet(_node2d, _dir+_dir2*_mirror, _vel1, _mirror))
+			_tween.tween_callback(func():Create_SpellCard_bullet(_node2d, _dir+_dir2*_mirror, _vel1, _frame, _mirror))
 			_dir += 360/_max1
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(0.1)
@@ -649,12 +647,12 @@ func Create_SpellCard_Tween(_node2d:Node2D, _tween:Tween, _mirror: float):
 	_tween.set_parallel(false)
 	_tween.tween_interval(4.0)
 #-------------------------------------------------------------------------------
-func Create_SpellCard_bullet(_node2d:Node2D, _dir:float, _vel:float, _mirror: float):
+func Create_SpellCard_bullet(_node2d:Node2D, _dir:float, _vel:float, _frame:int, _mirror: float):
 	var _dir2: float = deg_to_rad(_dir)
 	var _x: float = _node2d.position.x + 48 * cos(_dir2)
 	var _y: float = _node2d.position.y + 48 * sin(_dir2)
 	#-------------------------------------------------------------------------------
-	var _bullet: Bullet = Create_EnemyBullet(_x, _y, 4.0, _dir)
+	var _bullet: Bullet = Create_EnemyBullet(_x, _y, 4.0, _dir, "Rice_Bullet", _frame)
 	#-------------------------------------------------------------------------------
 	var _tween: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
 	#-------------------------------------------------------------------------------
@@ -715,13 +713,44 @@ func Stage_BossRish():
 #endregion
 #-------------------------------------------------------------------------------
 #region PLAYER FUNCTIONS
+func Player_Animation(velX:float):
+	#-------------------------------------------------------------------------------
+	match(player.myMOVING_STATE):
+		Player.MOVING_STATE.IDLE:
+			if(velX > 0.6):
+				player.myMOVING_STATE = Player.MOVING_STATE.RIGHT
+				player.playback.travel("Turning_Right")
+				return
+			#-------------------------------------------------------------------------------
+			elif(velX < -0.6):
+				player.myMOVING_STATE = Player.MOVING_STATE.LEFT
+				player.playback.travel("Turning_Left")
+				return
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+		Enemy.MOVING_STATE.RIGHT:
+			if(velX < 0.3):
+				player.myMOVING_STATE = Player.MOVING_STATE.IDLE
+				player.playback.travel("Turning_Idle_from_Right")
+				return
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+		Enemy.MOVING_STATE.LEFT:
+			if(velX > -0.3):
+				player.myMOVING_STATE = Player.MOVING_STATE.IDLE
+				player.playback.travel("Turning_Idle_from_Left")
+				return
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 func PlayerShoot():
 	if(Input.is_action_pressed("input_Shoot")):
 		player_shoot_counter += deltaTimeScale
 		#-------------------------------------------------------------------------------
 		if(player_shoot_counter > 5.0):
 			player_shoot_counter = 0.0
-			Create_PlayerBullet(player.position.x, player.position.y-50, 18.0, -90.0)
+			Create_PlayerBullet(player.position.x, player.position.y-50, 18.0, -90.0, "ArrowHead_Bullet", 4)
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -751,6 +780,8 @@ func PlayerRespawn():
 	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
 		player.show()
+		player.myMOVING_STATE = Player.MOVING_STATE.IDLE
+		player.playback.travel("Idle")
 	)
 	_tween.tween_property(player, "position", Vector2(width*0.5, height*0.8), 1.0)
 	#-------------------------------------------------------------------------------
@@ -797,14 +828,6 @@ func PlayerDeath() -> void:
 		if(items_Enabled_Array[_i].myITEM_STATE == Item.ITEM_STATE.IMANTED):
 			items_Enabled_Array[_i].velocity.y = -4
 			items_Enabled_Array[_i].myITEM_STATE = Item.ITEM_STATE.SPIN
-#-------------------------------------------------------------------------------
-func CanPlayerShoot() -> bool:
-	if(myGAME_STATE == GAME_STATE.IN_GAMEPLAY or myGAME_STATE == GAME_STATE.IN_CUTIN):
-		return true
-	#-------------------------------------------------------------------------------
-	else:
-		return false
-	#-------------------------------------------------------------------------------
 #endregion
 #-------------------------------------------------------------------------------
 #region PLAYER BULLET FUNCTIONS
@@ -817,7 +840,7 @@ func Create_PlayerBullets_Disabled(_iMax:int):
 		content.add_child(_bullet)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float) ->Bullet:
+func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, _frame:int) ->Bullet:
 	var _bullet: Bullet
 	#-------------------------------------------------------------------------------
 	if(playerBullets_Disabled_Array.size() > 0):
@@ -832,11 +855,15 @@ func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float) ->Bullet:
 	#-------------------------------------------------------------------------------
 	playerBullets_Enabled_Array.append(_bullet)
 	#-------------------------------------------------------------------------------
+	var _bulletResource: BulletResource = bulletDictionary.get(_type, "ArrowHead_Bullet")
+	_bullet.texture = _bulletResource.texture
+	#_frame = clampi(_frame, 0, _bulletResource.maxFrame)
+	_bullet.frame = _frame
+	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false
 	_bullet.dir = _dir
 	_bullet.vel = _v
-	_bullet.frame = 7
 	#-------------------------------------------------------------------------------
 	return _bullet
 #-------------------------------------------------------------------------------
@@ -956,7 +983,7 @@ func Items_PhysicsUpdate(_item:Item):
 					_item.myITEM_STATE = Item.ITEM_STATE.IMANTED
 					return
 				#-------------------------------------------------------------------------------
-				elif(!CanPlayerShoot() and player.myPLAYER_STATE != Player.PLAYER_STATE.DEATH):
+				elif(myGAME_STATE != GAME_STATE.IN_GAMEPLAY and player.myPLAYER_STATE != Player.PLAYER_STATE.DEATH):
 					_item.myITEM_STATE = Item.ITEM_STATE.IMANTED
 					return
 				#-------------------------------------------------------------------------------
@@ -1053,7 +1080,7 @@ func Boss_InstantDeath():
 	timer_tween.finished.emit()
 #-------------------------------------------------------------------------------
 func Set_BossLife_Label(_boss: Boss):
-	_boss.label.text = str(_boss.hp)+" / "+str(_boss.maxHp)
+	_boss.label.text = str(_boss.hp)+" / "+str(_boss.maxHp) + " HP"
 #endregion
 #-------------------------------------------------------------------------------
 #region ENEMY FUNCTIONS
@@ -1063,6 +1090,7 @@ func Create_Enemy_Disabled(_iMax:int):
 		enemy_Disabled_Array.append(_enemy)
 		_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
 		_enemy.hide()
+		_enemy.playback = _enemy.animationTree.get("parameters/playback")
 		content.add_child(_enemy)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -1078,9 +1106,14 @@ func Create_Enemy(_x:float, _y:float, _v:float, _dir: float, _hp: int) -> Enemy:
 		_enemy = enemy_Prefab.instantiate() as Enemy
 		singleton.DisconnectAll(_enemy.death_signal)
 		_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
+		_enemy.playback = _enemy.animationTree.get("parameters/playback")
 		content.add_child(_enemy)
 	#-------------------------------------------------------------------------------
 	enemy_Enabled_Array.append(_enemy)
+	#-------------------------------------------------------------------------------
+	_enemy.sprite.flip_h = false
+	_enemy.playback.travel("Idle")
+	_enemy.myMOVING_STATE = Enemy.MOVING_STATE.IDLE
 	#-------------------------------------------------------------------------------
 	_enemy.position = Vector2(_x, _y)
 	_enemy.maxHp = _hp
@@ -1107,6 +1140,41 @@ func Enemy_PhysicsUpdate(_enemy:Enemy):
 	#_enemy.rotation_degrees = _enemy.dir+90
 	#-------------------------------------------------------------------------------
 	_enemy.position += _enemy.velocity * deltaTimeScale
+	#-------------------------------------------------------------------------------
+	Enemy_Animation(_enemy)
+#-------------------------------------------------------------------------------
+func Enemy_Animation(_enemy:Enemy):
+	#-------------------------------------------------------------------------------
+	match(_enemy.myMOVING_STATE):
+		Enemy.MOVING_STATE.IDLE:
+			if(_enemy.velocity.x > 2):
+				_enemy.myMOVING_STATE = Enemy.MOVING_STATE.RIGHT
+				_enemy.playback.travel("Turning_Right")
+				return
+			#-------------------------------------------------------------------------------
+			elif(_enemy.velocity.x < -2):
+				_enemy.myMOVING_STATE = Enemy.MOVING_STATE.LEFT
+				_enemy.playback.travel("Turning_Right")
+				_enemy.sprite.flip_h = true
+				return
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+		Enemy.MOVING_STATE.RIGHT:
+			if(_enemy.velocity.x < 1):
+				_enemy.myMOVING_STATE = Enemy.MOVING_STATE.IDLE
+				_enemy.playback.travel("Turning_Idle")
+				return
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+		Enemy.MOVING_STATE.LEFT:
+			if(_enemy.velocity.x > -1):
+				_enemy.myMOVING_STATE = Enemy.MOVING_STATE.IDLE
+				_enemy.playback.travel("Turning_Idle")
+				_enemy.sprite.flip_h = false
+				return
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Destroy_Enemy(_enemy: Enemy):
 	KillTween_Array(_enemy.tween_Array)
@@ -1116,7 +1184,7 @@ func Destroy_Enemy(_enemy: Enemy):
 	_enemy.hide()
 #-------------------------------------------------------------------------------
 func Set_EnemyLife_Label(_enemy: Enemy):
-	_enemy.label.text = str(_enemy.hp)+" / "+str(_enemy.maxHp)
+	_enemy.label.text = str(_enemy.hp)+" / "+str(_enemy.maxHp) + " hp"
 #endregion
 #-------------------------------------------------------------------------------
 #region ENEMY BULLET FUNCTIONS
@@ -1129,7 +1197,7 @@ func Create_EnemyBullets_Disabled(_iMax:int):
 		content.add_child(_bullet)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float) ->Bullet:
+func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, _frame:int) ->Bullet:
 	var _bullet: Bullet
 	#-------------------------------------------------------------------------------
 	if(enemyBullets_Disabled_Array.size() > 0):
@@ -1143,6 +1211,11 @@ func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float) ->Bullet:
 		_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate(_bullet)
 	#-------------------------------------------------------------------------------
 	enemyBullets_Enabled_Array.append(_bullet)
+	#-------------------------------------------------------------------------------
+	var _bulletResource: BulletResource = bulletDictionary.get(_type, "ArrowHead_Bullet")
+	_bullet.texture = _bulletResource.texture
+	#_frame = clampi(_frame, 0, _bulletResource.maxFrame)
+	_bullet.frame = _frame
 	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false
@@ -1210,7 +1283,7 @@ func TimeOut_Tween(_iMax: int):
 	_tween.tween_callback(func():
 		timer = _iMax
 		timerLabel.show()
-		timerLabel.text = str(timer).pad_zeros(2)+" / " +str(_iMax).pad_zeros(2)
+		PrintTimer(timer, _iMax)
 	)
 	#-------------------------------------------------------------------------------
 	_tween.tween_interval(1.0)
@@ -1218,7 +1291,7 @@ func TimeOut_Tween(_iMax: int):
 	for _i in _iMax:
 		_tween.tween_callback(func():
 			timer-=1
-			timerLabel.text = str(timer).pad_zeros(2)+" / " +str(_iMax).pad_zeros(2)
+			PrintTimer(timer, _iMax)
 		)
 		_tween.tween_interval(1.0)
 		#-------------------------------------------------------------------------------
@@ -1228,6 +1301,9 @@ func TimeOut_Tween(_iMax: int):
 	)
 	#-------------------------------------------------------------------------------
 	await timer_tween.finished
+#-------------------------------------------------------------------------------
+func PrintTimer(_i:int, _iMax:int):
+	timerLabel.text = str(_i).pad_zeros(2)+" / " +str(_iMax).pad_zeros(2) + " s"
 #-------------------------------------------------------------------------------
 func StopEverithing():
 	timerLabel.text = ""

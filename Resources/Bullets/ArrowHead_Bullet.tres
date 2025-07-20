@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("1_o1iu1")
 texture = ExtResource("2_btxxo")
-frame = Vector2(16, 1)
-size = Vector2(2, 4)
+radius = 2.0
+maxFrame = 16
 offset = Vector2(0, -3.5)

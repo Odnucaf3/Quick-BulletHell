@@ -6,10 +6,13 @@ enum ITEM_STATE{SPIN, FALL, IMANTED}
 var velocity: Vector2
 var dir: float
 var vel: float
-var radius: float = 2
+var radius: float = 3
 #-------------------------------------------------------------------------------
 var myITEM_STATE: ITEM_STATE
 #-------------------------------------------------------------------------------
 var physics_Update: Callable = func(): pass
 #endregion
+#-------------------------------------------------------------------------------
+#func _draw() -> void:
+#	draw_circle(Vector2.ZERO, radius, Color.GREEN)
 #-------------------------------------------------------------------------------

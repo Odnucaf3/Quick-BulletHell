@@ -16,3 +16,6 @@ var physics_Update: Callable = func(): pass
 var tween_Array: Array[Tween] = []
 #endregion
 #-------------------------------------------------------------------------------
+#func _draw() -> void:
+#	draw_circle(Vector2.ZERO, radius, Color.RED)
+#-------------------------------------------------------------------------------

@@ -4,6 +4,7 @@ class_name BulletResource
 ##Name of the card.
 @export var texture: Texture2D
 #-------------------------------------------------------------------------------
-@export var frame: Vector2 = Vector2i(16, 1)
+@export var radius: float = 2
+@export var maxFrame: int = 16
 @export var offset: Vector2 = Vector2(0, 0)
 #-------------------------------------------------------------------------------
