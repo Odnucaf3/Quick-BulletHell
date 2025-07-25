@@ -6,6 +6,5 @@
 [node name="Item_Prefab" type="Sprite2D"]
 self_modulate = Color(1, 1, 1, 0.411765)
 z_index = 18
-scale = Vector2(2.5, 2.5)
 texture = ExtResource("1_0ml4w")
 script = ExtResource("2_88yrc")

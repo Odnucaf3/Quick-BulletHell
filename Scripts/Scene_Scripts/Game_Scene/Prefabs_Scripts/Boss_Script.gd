@@ -1,7 +1,6 @@
 extends Node2D
 class_name Boss
-#-------------------------------------------------------------------------------
-enum MOVING_STATE{IDLE, RIGHT, LEFT}
+
 #region VARIABLES
 @export var label: Label
 @export var sprite: Sprite2D
@@ -16,9 +15,6 @@ var hp: int
 var maxHp: int
 var canBeHit: bool = true
 var canMove: bool = true
-#-------------------------------------------------------------------------------
-var playback: AnimationNodeStateMachinePlayback
-var myMOVING_STATE: MOVING_STATE = MOVING_STATE.IDLE
 #-------------------------------------------------------------------------------
 var physics_Update: Callable = func(): pass
 var tween_Array: Array[Tween] = []

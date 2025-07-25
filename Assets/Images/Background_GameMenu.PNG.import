@@ -2,27 +2,26 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p7vwg4oncvs4"
-path.s3tc="res://.godot/imported/Background_GameMenu.jpg-654ad632ec6341c1a1e4f7f00aecb199.s3tc.ctex"
+uid="uid://cette1g2u2p8r"
+path="res://.godot/imported/Background_GameMenu.PNG-2c526d5ca3e02a147df5965edcb858c6.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Images/Background_GameMenu.jpg"
-dest_files=["res://.godot/imported/Background_GameMenu.jpg-654ad632ec6341c1a1e4f7f00aecb199.s3tc.ctex"]
+source_file="res://Assets/Images/Background_GameMenu.PNG"
+dest_files=["res://.godot/imported/Background_GameMenu.PNG-2c526d5ca3e02a147df5965edcb858c6.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -32,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

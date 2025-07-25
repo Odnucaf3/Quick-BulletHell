@@ -5,9 +5,5 @@
 
 [node name="Bullet_Prefab" type="Sprite2D"]
 z_index = 15
-scale = Vector2(2.5, 2.5)
 texture = ExtResource("1_6s5ys")
-offset = Vector2(0, -2)
-hframes = 16
-frame = 3
 script = ExtResource("2_jvvdl")

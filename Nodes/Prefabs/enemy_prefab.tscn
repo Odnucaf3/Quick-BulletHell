@@ -1,149 +1,16 @@
-[gd_scene load_steps=18 format=3 uid="uid://c3ym6uahxyv5x"]
+[gd_scene load_steps=4 format=3 uid="uid://c3ym6uahxyv5x"]
 
 [ext_resource type="Script" uid="uid://cb6frkhllxl6i" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Enemy_Script.gd" id="1_30lj2"]
 [ext_resource type="Texture2D" uid="uid://cycuo84xkdqc6" path="res://Assets/Sprites/Enemy.png" id="1_x48a8"]
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="3_b7mhl"]
 
-[sub_resource type="Animation" id="Animation_ep7ps"]
-resource_name = "Idle"
-length = 0.40001
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3]
-}
-
-[sub_resource type="Animation" id="Animation_mtsc7"]
-resource_name = "Moving_Right"
-length = 0.40001
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [8, 9, 10, 11]
-}
-
-[sub_resource type="Animation" id="Animation_nl47s"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_qind8"]
-resource_name = "Turn_Right"
-length = 0.40001
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [4, 5, 6, 7]
-}
-
-[sub_resource type="Animation" id="Animation_gwas1"]
-resource_name = "Turning_Idle"
-length = 0.30001
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [7, 6, 5]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_qind8"]
-_data = {
-&"Idle": SubResource("Animation_ep7ps"),
-&"Moving_Right": SubResource("Animation_mtsc7"),
-&"RESET": SubResource("Animation_nl47s"),
-&"Turn_Right": SubResource("Animation_qind8"),
-&"Turning_Idle": SubResource("Animation_gwas1")
-}
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mtsc7"]
-animation = &"Idle"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dwf8l"]
-animation = &"Moving_Right"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8n8ss"]
-animation = &"Turning_Idle"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ycuey"]
-animation = &"Turn_Right"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gwas1"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qary4"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gt60k"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_dwf8l"]
-states/Idle/node = SubResource("AnimationNodeAnimation_mtsc7")
-states/Idle/position = Vector2(374, 100)
-states/Moving_Right/node = SubResource("AnimationNodeAnimation_dwf8l")
-states/Moving_Right/position = Vector2(541, 100)
-states/Start/position = Vector2(206, 100)
-states/Turning_Idle/node = SubResource("AnimationNodeAnimation_8n8ss")
-states/Turning_Idle/position = Vector2(374, 7)
-states/Turning_Right/node = SubResource("AnimationNodeAnimation_ycuey")
-states/Turning_Right/position = Vector2(541, 7)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_gwas1"), "Turning_Right", "Moving_Right", SubResource("AnimationNodeStateMachineTransition_qary4"), "Turning_Idle", "Idle", SubResource("AnimationNodeStateMachineTransition_gt60k")]
-graph_offset = Vector2(-46, -49)
-
-[node name="Enemy" type="Node2D" node_paths=PackedStringArray("label", "sprite", "animationTree")]
+[node name="Enemy" type="Node2D" node_paths=PackedStringArray("label", "sprite")]
 script = ExtResource("1_30lj2")
 label = NodePath("Label")
 sprite = NodePath("Sprite2D")
-animationTree = NodePath("AnimationTree")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(2.5, 2.5)
 texture = ExtResource("1_x48a8")
-hframes = 12
 
 [node name="Label" type="Label" parent="."]
 z_index = 29
@@ -177,12 +44,3 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_b7mhl")
 expand_mode = 1
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_qind8")
-}
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource("AnimationNodeStateMachine_dwf8l")
-anim_player = NodePath("../AnimationPlayer")

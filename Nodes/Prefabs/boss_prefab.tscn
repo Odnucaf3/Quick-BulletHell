@@ -1,144 +1,17 @@
-[gd_scene load_steps=17 format=3 uid="uid://d04ils16lapv4"]
+[gd_scene load_steps=4 format=3 uid="uid://d04ils16lapv4"]
 
 [ext_resource type="Script" uid="uid://cfrrth5qp1vek" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Boss_Script.gd" id="1_5s01m"]
-[ext_resource type="Texture2D" uid="uid://cycuo84xkdqc6" path="res://Assets/Sprites/Enemy.png" id="2_p3cr7"]
+[ext_resource type="Texture2D" uid="uid://dayo07dj8q7mt" path="res://Assets/Images/PlayerSelect2.PNG" id="2_5s01m"]
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="3_56bkc"]
 
-[sub_resource type="Animation" id="Animation_5s01m"]
-resource_name = "Idle"
-length = 0.40001
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3]
-}
-
-[sub_resource type="Animation" id="Animation_56bkc"]
-resource_name = "Moving_Right"
-length = 0.40001
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [8, 9, 10, 11]
-}
-
-[sub_resource type="Animation" id="Animation_p3cr7"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_slrvb"]
-resource_name = "Turning_Idle"
-length = 0.30001
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [7, 6, 5]
-}
-
-[sub_resource type="Animation" id="Animation_d8puh"]
-resource_name = "Turning_Right"
-length = 0.40001
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [4, 5, 6, 7]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_xmf40"]
-_data = {
-&"Idle": SubResource("Animation_5s01m"),
-&"Moving_Right": SubResource("Animation_56bkc"),
-&"RESET": SubResource("Animation_p3cr7"),
-&"Turning_Idle": SubResource("Animation_slrvb"),
-&"Turning_Right": SubResource("Animation_d8puh")
-}
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wc13x"]
-animation = &"Idle"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2nnq7"]
-animation = &"Moving_Right"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_j1bnq"]
-animation = &"Turning_Idle"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_px1bv"]
-animation = &"Turning_Right"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wwnix"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e25rt"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_j8btp"]
-states/Idle/node = SubResource("AnimationNodeAnimation_wc13x")
-states/Idle/position = Vector2(365, 100)
-states/Moving_Right/node = SubResource("AnimationNodeAnimation_2nnq7")
-states/Moving_Right/position = Vector2(560, 100)
-states/Turning_Idle/node = SubResource("AnimationNodeAnimation_j1bnq")
-states/Turning_Idle/position = Vector2(365, 12)
-states/Turning_Right/node = SubResource("AnimationNodeAnimation_px1bv")
-states/Turning_Right/position = Vector2(560, 12)
-transitions = ["Turning_Idle", "Idle", SubResource("AnimationNodeStateMachineTransition_wwnix"), "Turning_Right", "Moving_Right", SubResource("AnimationNodeStateMachineTransition_e25rt")]
-
-[node name="boss_prefab" type="Node2D" node_paths=PackedStringArray("label", "sprite", "animationTree")]
+[node name="boss_prefab" type="Node2D" node_paths=PackedStringArray("label", "sprite")]
 script = ExtResource("1_5s01m")
 label = NodePath("Label")
 sprite = NodePath("Sprite2D")
-animationTree = NodePath("AnimationTree")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(2.5, 2.5)
-texture = ExtResource("2_p3cr7")
-hframes = 12
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_5s01m")
 
 [node name="Label" type="Label" parent="."]
 z_index = 29
@@ -148,9 +21,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -46.0
-offset_top = -58.0
+offset_top = -80.0
 offset_right = 46.0
-offset_bottom = -35.0
+offset_bottom = -57.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/outline_size = 4
@@ -170,12 +43,3 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_56bkc")
 expand_mode = 1
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_xmf40")
-}
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource("AnimationNodeStateMachine_j8btp")
-anim_player = NodePath("../AnimationPlayer")

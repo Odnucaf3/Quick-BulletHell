@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqbugw3tefi1c"
-path="res://.godot/imported/Hitbox.png-ababe17e5da80d3db8e265af12b5d648.ctex"
+uid="uid://bfer6cl8igw34"
+path="res://.godot/imported/Background_TitleMenu.PNG-425085a071b9641b880f6a7966f949c8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Hitbox.png"
-dest_files=["res://.godot/imported/Hitbox.png-ababe17e5da80d3db8e265af12b5d648.ctex"]
+source_file="res://Assets/Images/Background_TitleMenu.PNG"
+dest_files=["res://.godot/imported/Background_TitleMenu.PNG-425085a071b9641b880f6a7966f949c8.ctex"]
 
 [params]
 

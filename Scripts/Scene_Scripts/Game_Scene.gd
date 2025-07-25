@@ -237,8 +237,6 @@ func Player_Movement() -> void:
 			isFocus = true
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
-	Player_Animation(input_dir.x)
-	#-------------------------------------------------------------------------------
 	if(input_dir != Vector2.ZERO):
 		input_dir.normalized()
 		var myPosition: Vector2 = player.position
@@ -355,9 +353,6 @@ func BeginGame() -> void:
 	player.SetPlayer(singleton.Copy_CurrentPlayer())
 	player.grazeBox_Sprite.hide()
 	player.hitBox_Sprite.hide()
-	player.playback = player.animationTree.get("parameters/playback")
-	player.playback.travel("Idle")
-	player.myMOVING_STATE = Player.MOVING_STATE.IDLE
 	#-------------------------------------------------------------------------------
 	SetScore()
 	SetMoney()
@@ -497,8 +492,8 @@ func GoToMainScene():
 #-------------------------------------------------------------------------------
 #region STAGE 1 FUNCTIONS
 func Stage1():
-	#await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
-	#await EnemyWave_and_Market("Enemy-Wave 2", func():InfiniteEnemyTest(), 10)
+	await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
+	await EnemyWave_and_Market("Enemy-Wave 2", func():InfiniteEnemyTest(), 10)
 	#-------------------------------------------------------------------------------
 	#await Nothing_and_Market()
 	await ShowBanner("Enter Boss")	#IMPORTANTE: Tiene que haber un await antres de entrar al dialogo porque si no se saltea la primer liena.
@@ -511,16 +506,11 @@ func Stage1():
 	var _tween: Tween = create_tween()
 	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
-		_boss.playback.travel("Moving_Right")
 		_boss.label.hide()
 		_boss.canBeHit = false
 	)
 	#-------------------------------------------------------------------------------
 	_tween.tween_property(_boss, "position", Vector2(width*0.5, height*0.2), 1)
-	#-------------------------------------------------------------------------------
-	_tween.tween_callback(func():
-		_boss.playback.travel("Turning_Idle")
-	)
 	#-------------------------------------------------------------------------------
 	await _tween.finished
 	#-------------------------------------------------------------------------------
@@ -664,7 +654,7 @@ func Create_SpellCard_bullet(_node2d:Node2D, _dir:float, _vel:float, _frame:int,
 	var _x: float = _node2d.position.x + 48 * cos(_dir2)
 	var _y: float = _node2d.position.y + 48 * sin(_dir2)
 	#-------------------------------------------------------------------------------
-	var _bullet: Bullet = Create_EnemyBullet(_x, _y, 4.0, _dir, "Rice_Bullet", _frame, true)
+	var _bullet: Bullet = Create_EnemyBullet(_x, _y, 4.0, _dir, "ArrowHead_Bullet", _frame, true)
 	#-------------------------------------------------------------------------------
 	var _tween: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
 	#-------------------------------------------------------------------------------
@@ -721,37 +711,6 @@ func Stage_BossRish():
 #endregion
 #-------------------------------------------------------------------------------
 #region PLAYER FUNCTIONS
-func Player_Animation(velX:float):
-	#-------------------------------------------------------------------------------
-	match(player.myMOVING_STATE):
-		Player.MOVING_STATE.IDLE:
-			if(velX > 0.6):
-				player.myMOVING_STATE = Player.MOVING_STATE.RIGHT
-				player.playback.travel("Turning_Right")
-				return
-			#-------------------------------------------------------------------------------
-			elif(velX < -0.6):
-				player.myMOVING_STATE = Player.MOVING_STATE.LEFT
-				player.playback.travel("Turning_Left")
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-		Enemy.MOVING_STATE.RIGHT:
-			if(velX < 0.3):
-				player.myMOVING_STATE = Player.MOVING_STATE.IDLE
-				player.playback.travel("Turning_Idle_from_Right")
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-		Enemy.MOVING_STATE.LEFT:
-			if(velX > -0.3):
-				player.myMOVING_STATE = Player.MOVING_STATE.IDLE
-				player.playback.travel("Turning_Idle_from_Left")
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-	#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
 func PlayerShoot():
 	if(Input.is_action_pressed("input_Shoot")):
 		player_shoot_counter += deltaTimeScale
@@ -788,8 +747,6 @@ func PlayerRespawn():
 	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
 		player.show()
-		player.myMOVING_STATE = Player.MOVING_STATE.IDLE
-		player.playback.travel("Idle")
 	)
 	_tween.tween_property(player, "position", Vector2(width*0.5, height*0.8), 1.0)
 	#-------------------------------------------------------------------------------
@@ -865,7 +822,8 @@ func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float, _type:String,
 	#-------------------------------------------------------------------------------
 	var _bulletResource: BulletResource = bulletDictionary.get(_type, "ArrowHead_Bullet")
 	_bullet.texture = _bulletResource.texture
-	_bullet.frame = _frame
+	_bullet.radius = _bulletResource.radius
+	#_bullet.frame = _frame
 	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false
@@ -1033,7 +991,6 @@ func Create_Boss_Disabled(_iMax:int):
 		boss_Disabled_Array.append(_boss)
 		_boss.physics_Update = func():Boss_PhysicsUpdate(_boss)
 		_boss.hide()
-		_boss.playback = _boss.animationTree.get("parameters/playback")
 		content.add_child(_boss)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -1048,14 +1005,9 @@ func Create_Boss(_x:float, _y:float, _hp: int) -> Boss:
 	else:
 		_boss = boss_Prefab.instantiate() as Boss
 		_boss.physics_Update = func():Boss_PhysicsUpdate(_boss)
-		_boss.playback = _boss.animationTree.get("parameters/playback")
 		content.add_child(_boss)
 	#-------------------------------------------------------------------------------
 	boss_Enabled_Array.append(_boss)
-	#-------------------------------------------------------------------------------
-	_boss.sprite.flip_h = false
-	_boss.playback.travel("Idle")
-	_boss.myMOVING_STATE = Boss.MOVING_STATE.IDLE
 	#-------------------------------------------------------------------------------
 	_boss.position = Vector2(_x, _y)
 	_boss.maxHp = _hp
@@ -1083,40 +1035,6 @@ func Boss_PhysicsUpdate(_boss:Boss):
 	#-------------------------------------------------------------------------------
 	_boss.position += _boss.velocity * deltaTimeScale
 	#-------------------------------------------------------------------------------
-	Boss_Animation(_boss)
-#-------------------------------------------------------------------------------
-func Boss_Animation(_boss:Boss):
-	#-------------------------------------------------------------------------------
-	match(_boss.myMOVING_STATE):
-		Boss.MOVING_STATE.IDLE:
-			if(_boss.velocity.x > 2):
-				_boss.myMOVING_STATE = Boss.MOVING_STATE.RIGHT
-				_boss.playback.travel("Turning_Right")
-				return
-			#-------------------------------------------------------------------------------
-			elif(_boss.velocity.x < -2):
-				_boss.myMOVING_STATE = Boss.MOVING_STATE.LEFT
-				_boss.playback.travel("Turning_Right")
-				_boss.sprite.flip_h = true
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-		Boss.MOVING_STATE.RIGHT:
-			if(_boss.velocity.x < 1):
-				_boss.myMOVING_STATE = Boss.MOVING_STATE.IDLE
-				_boss.playback.travel("Turning_Idle")
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-		Boss.MOVING_STATE.LEFT:
-			if(_boss.velocity.x > -1):
-				_boss.myMOVING_STATE = Boss.MOVING_STATE.IDLE
-				_boss.playback.travel("Turning_Idle")
-				_boss.sprite.flip_h = false
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Disable_Boss(_boss: Boss):
 	KillTween_Array(_boss.tween_Array)
@@ -1140,7 +1058,6 @@ func Create_Enemy_Disabled(_iMax:int):
 		enemy_Disabled_Array.append(_enemy)
 		_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
 		_enemy.hide()
-		_enemy.playback = _enemy.animationTree.get("parameters/playback")
 		content.add_child(_enemy)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -1156,14 +1073,9 @@ func Create_Enemy(_x:float, _y:float, _v:float, _dir: float, _hp: int) -> Enemy:
 		_enemy = enemy_Prefab.instantiate() as Enemy
 		singleton.DisconnectAll(_enemy.death_signal)
 		_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
-		_enemy.playback = _enemy.animationTree.get("parameters/playback")
 		content.add_child(_enemy)
 	#-------------------------------------------------------------------------------
 	enemy_Enabled_Array.append(_enemy)
-	#-------------------------------------------------------------------------------
-	_enemy.sprite.flip_h = false
-	_enemy.playback.travel("Idle")
-	_enemy.myMOVING_STATE = Enemy.MOVING_STATE.IDLE
 	#-------------------------------------------------------------------------------
 	_enemy.position = Vector2(_x, _y)
 	_enemy.maxHp = _hp
@@ -1190,40 +1102,6 @@ func Enemy_PhysicsUpdate(_enemy:Enemy):
 	#_enemy.rotation_degrees = _enemy.dir+90
 	#-------------------------------------------------------------------------------
 	_enemy.position += _enemy.velocity * deltaTimeScale
-	#-------------------------------------------------------------------------------
-	Enemy_Animation(_enemy)
-#-------------------------------------------------------------------------------
-func Enemy_Animation(_enemy:Enemy):
-	#-------------------------------------------------------------------------------
-	match(_enemy.myMOVING_STATE):
-		Enemy.MOVING_STATE.IDLE:
-			if(_enemy.velocity.x > 2):
-				_enemy.myMOVING_STATE = Enemy.MOVING_STATE.RIGHT
-				_enemy.playback.travel("Turning_Right")
-				return
-			#-------------------------------------------------------------------------------
-			elif(_enemy.velocity.x < -2):
-				_enemy.myMOVING_STATE = Enemy.MOVING_STATE.LEFT
-				_enemy.playback.travel("Turning_Right")
-				_enemy.sprite.flip_h = true
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-		Enemy.MOVING_STATE.RIGHT:
-			if(_enemy.velocity.x < 1):
-				_enemy.myMOVING_STATE = Enemy.MOVING_STATE.IDLE
-				_enemy.playback.travel("Turning_Idle")
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
-		Enemy.MOVING_STATE.LEFT:
-			if(_enemy.velocity.x > -1):
-				_enemy.myMOVING_STATE = Enemy.MOVING_STATE.IDLE
-				_enemy.playback.travel("Turning_Idle")
-				_enemy.sprite.flip_h = false
-				return
-			#-------------------------------------------------------------------------------
-		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Destroy_Enemy(_enemy: Enemy):
@@ -1264,7 +1142,8 @@ func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, 
 	#-------------------------------------------------------------------------------
 	var _bulletResource: BulletResource = bulletDictionary.get(_type, "ArrowHead_Bullet")
 	_bullet.texture = _bulletResource.texture
-	_bullet.frame = _frame
+	_bullet.radius = _bulletResource.radius
+	#_bullet.frame = _frame
 	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false

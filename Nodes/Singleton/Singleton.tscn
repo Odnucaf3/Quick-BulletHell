@@ -14,7 +14,7 @@
 [ext_resource type="Resource" uid="uid://chvopxu8qt3y2" path="res://Resources/Players/player_id_2.tres" id="7_qck47"]
 [ext_resource type="Script" uid="uid://fy0va77e608n" path="res://Scripts/Scene_Scripts/Option_Menu/Option_CheckButton.gd" id="7_xklla"]
 [ext_resource type="Script" uid="uid://et6qf8ddxav8" path="res://Scripts/Scene_Scripts/Option_Menu/Option_Slider.gd" id="8_p8ele"]
-[ext_resource type="Texture2D" uid="uid://brgp4hqi8vah0" path="res://Assets/Images/Background_OptionMenu.jpg" id="12_fp365"]
+[ext_resource type="Texture2D" uid="uid://1m6q8a0e163u" path="res://Assets/Images/Background_OptionMenu.PNG" id="12_fp365"]
 
 [sub_resource type="Image" id="Image_76c87"]
 data = {

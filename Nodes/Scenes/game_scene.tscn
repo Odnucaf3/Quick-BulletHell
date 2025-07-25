@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://qpw70cvfh5bf"]
+[gd_scene load_steps=22 format=3 uid="uid://qpw70cvfh5bf"]
 
 [ext_resource type="Script" uid="uid://b471unj5j3evn" path="res://Scripts/Scene_Scripts/Game_Scene.gd" id="1_143dr"]
 [ext_resource type="PackedScene" uid="uid://c3ym6uahxyv5x" path="res://Nodes/Prefabs/enemy_prefab.tscn" id="2_acyb6"]
@@ -6,17 +6,17 @@
 [ext_resource type="PackedScene" uid="uid://d04ils16lapv4" path="res://Nodes/Prefabs/boss_prefab.tscn" id="3_xrh8u"]
 [ext_resource type="PackedScene" uid="uid://b2r2t7rrfwiys" path="res://Nodes/Prefabs/item_prefab.tscn" id="4_7dwg7"]
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="5_0qyn6"]
-[ext_resource type="Texture2D" uid="uid://dfxnixm6kp712" path="res://Assets/Images/Background_TitleMenu.jpg" id="6_hxoxt"]
-[ext_resource type="Texture2D" uid="uid://p7vwg4oncvs4" path="res://Assets/Images/Background_GameMenu.jpg" id="8_hxoxt"]
+[ext_resource type="Texture2D" uid="uid://cette1g2u2p8r" path="res://Assets/Images/Background_GameMenu.PNG" id="6_x381h"]
+[ext_resource type="Texture2D" uid="uid://bfer6cl8igw34" path="res://Assets/Images/Background_TitleMenu.PNG" id="7_tnh07"]
 [ext_resource type="Script" uid="uid://c4b6si6rx0wc8" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Pause_Menu.gd" id="8_q0g70"]
 [ext_resource type="Script" uid="uid://0g6t8l52l1kw" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Market_Menu.gd" id="9_3u2qh"]
 [ext_resource type="Script" uid="uid://bgogvq8gsxvk1" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Player_Script.gd" id="9_4cqcx"]
 [ext_resource type="Texture2D" uid="uid://drx4sqikt30op" path="res://Assets/Sprites/Player1.png" id="10_v4ix3"]
-[ext_resource type="Texture2D" uid="uid://dqbugw3tefi1c" path="res://Assets/Sprites/Hitbox.png" id="13_6lohc"]
 [ext_resource type="Script" uid="uid://cauphv42fsmg2" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/game_over_menu.gd" id="15_ou6t6"]
 [ext_resource type="Texture2D" uid="uid://yvix06fsckwj" path="res://Assets/Images/Cards/CardFront.PNG" id="17_sjbfm"]
 [ext_resource type="Texture2D" uid="uid://0ncvd5s3kli" path="res://Assets/Images/Cards/CardBack.PNG" id="18_6xp6x"]
-[ext_resource type="Texture2D" uid="uid://q4fdwkimip0n" path="res://icon.svg" id="19_jc3d8"]
+[ext_resource type="Texture2D" uid="uid://ciaogarcw61as" path="res://Assets/Images/PlayerSelect1.PNG" id="18_xrh8u"]
+[ext_resource type="Texture2D" uid="uid://dayo07dj8q7mt" path="res://Assets/Images/PlayerSelect2.PNG" id="19_ik87f"]
 [ext_resource type="PackedScene" uid="uid://kthlaqw0sk1v" path="res://Nodes/Prefabs/card_button_prefab.tscn" id="20_4usgd"]
 [ext_resource type="Script" uid="uid://d0kihyc8vswun" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Dialogue_Menu.gd" id="20_kjtdd"]
 
@@ -25,210 +25,6 @@ color = Color(1, 1, 1, 1)
 grow_begin = -25.0
 grow_end = -25.0
 thickness = 3
-
-[sub_resource type="Animation" id="Animation_xrh8u"]
-resource_name = "Idle"
-length = 0.466673
-loop_mode = 1
-step = 0.0666667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [1, 2, 3, 4, 5, 6, 7]
-}
-
-[sub_resource type="Animation" id="Animation_igypo"]
-resource_name = "Moving_Left"
-length = 0.266673
-loop_mode = 1
-step = 0.0666667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [12, 13, 14, 15]
-}
-
-[sub_resource type="Animation" id="Animation_hxoxt"]
-resource_name = "Moving_Right"
-length = 0.266673
-loop_mode = 1
-step = 0.0666667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [20, 21, 22, 23]
-}
-
-[sub_resource type="Animation" id="Animation_ik87f"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_lujb4"]
-resource_name = "Turning_Idle_from_Left"
-length = 0.200005
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [11, 10, 9, 8]
-}
-
-[sub_resource type="Animation" id="Animation_1th3s"]
-resource_name = "Turning_Idle_from_Right"
-length = 0.200005
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [19, 18, 17, 16]
-}
-
-[sub_resource type="Animation" id="Animation_gg6rv"]
-resource_name = "Turning_Left"
-length = 0.200005
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [8, 9, 10, 11]
-}
-
-[sub_resource type="Animation" id="Animation_rpgth"]
-resource_name = "Turning_Right"
-length = 0.200005
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [16, 17, 18, 19]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_hxoxt"]
-_data = {
-&"Idle": SubResource("Animation_xrh8u"),
-&"Moving_Left": SubResource("Animation_igypo"),
-&"Moving_Right": SubResource("Animation_hxoxt"),
-&"RESET": SubResource("Animation_ik87f"),
-&"Turning_Idle_from_Left": SubResource("Animation_lujb4"),
-&"Turning_Idle_from_Right": SubResource("Animation_1th3s"),
-&"Turning_Left": SubResource("Animation_gg6rv"),
-&"Turning_Right": SubResource("Animation_rpgth")
-}
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xrh8u"]
-animation = &"Idle"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ik87f"]
-animation = &"Moving_Left"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hxoxt"]
-animation = &"Moving_Right"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mitwg"]
-animation = &"Turning_Idle_from_Left"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3p4s7"]
-animation = &"Turning_Idle_from_Right"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xhx7r"]
-animation = &"Turning_Left"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_42b3h"]
-animation = &"Turning_Right"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yqvj6"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hko5v"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_s3ops"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rka03"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_igypo"]
-states/Idle/node = SubResource("AnimationNodeAnimation_xrh8u")
-states/Idle/position = Vector2(366, 100)
-states/Moving_Left/node = SubResource("AnimationNodeAnimation_ik87f")
-states/Moving_Left/position = Vector2(572, 100)
-states/Moving_Right/node = SubResource("AnimationNodeAnimation_hxoxt")
-states/Moving_Right/position = Vector2(750, 100)
-states/Turning_Idle_from_Left/node = SubResource("AnimationNodeAnimation_mitwg")
-states/Turning_Idle_from_Left/position = Vector2(366, 16)
-states/Turning_Idle_from_Right/node = SubResource("AnimationNodeAnimation_3p4s7")
-states/Turning_Idle_from_Right/position = Vector2(366, 200)
-states/Turning_Left/node = SubResource("AnimationNodeAnimation_xhx7r")
-states/Turning_Left/position = Vector2(572, 16)
-states/Turning_Right/node = SubResource("AnimationNodeAnimation_42b3h")
-states/Turning_Right/position = Vector2(750, 200)
-transitions = ["Turning_Idle_from_Left", "Idle", SubResource("AnimationNodeStateMachineTransition_yqvj6"), "Turning_Idle_from_Right", "Idle", SubResource("AnimationNodeStateMachineTransition_hko5v"), "Turning_Left", "Moving_Left", SubResource("AnimationNodeStateMachineTransition_s3ops"), "Turning_Right", "Moving_Right", SubResource("AnimationNodeStateMachineTransition_rka03")]
-graph_offset = Vector2(-68, -27)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrh8u"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -280,7 +76,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_hxoxt")
+texture = ExtResource("6_x381h")
 expand_mode = 1
 
 [node name="LeftUI_MarginContainer" type="MarginContainer" parent="CanvasLayer"]
@@ -547,18 +343,17 @@ theme_override_constants/margin_bottom = 10
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer"]
 layout_mode = 2
-texture = ExtResource("6_hxoxt")
+texture = ExtResource("7_tnh07")
 expand_mode = 1
 
 [node name="Content" type="Control" parent="CanvasLayer/Window_MarginContainer"]
 clip_contents = true
 layout_mode = 2
 
-[node name="Player" type="Node2D" parent="CanvasLayer/Window_MarginContainer/Content" node_paths=PackedStringArray("sprite", "animationTree", "magnetBox_Sprite", "grazeBox_Sprite", "hitBox_Sprite")]
+[node name="Player" type="Node2D" parent="CanvasLayer/Window_MarginContainer/Content" node_paths=PackedStringArray("sprite", "magnetBox_Sprite", "grazeBox_Sprite", "hitBox_Sprite")]
 position = Vector2(302, 559)
 script = ExtResource("9_4cqcx")
 sprite = NodePath("Sprite2D")
-animationTree = NodePath("AnimationTree")
 magnetBox_Sprite = NodePath("Magnet_Sprite2D")
 grazeBox_Sprite = NodePath("Graze_Sprite2D")
 hitBox_Sprite = NodePath("Hitbox_Sprite2D")
@@ -569,35 +364,23 @@ scale = Vector2(0.75, 0.75)
 texture = ExtResource("5_0qyn6")
 
 [node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
-scale = Vector2(2.5, 2.5)
+position = Vector2(-2.905, 0)
 texture = ExtResource("10_v4ix3")
-hframes = 8
-vframes = 3
 
 [node name="Graze_Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
-visible = false
 self_modulate = Color(1, 0, 1, 0.415686)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_0qyn6")
 
 [node name="Hitbox_Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
-visible = false
+self_modulate = Color(1, 0, 0, 0.803922)
 z_index = 20
-scale = Vector2(2.5, 2.5)
-texture = ExtResource("13_6lohc")
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("5_0qyn6")
 
 [node name="Marker2D" type="Marker2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
-position = Vector2(96, 0)
+position = Vector2(8, 0)
 gizmo_extents = 50.0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
-libraries = {
-&"": SubResource("AnimationLibrary_hxoxt")
-}
-
-[node name="AnimationTree" type="AnimationTree" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
-tree_root = SubResource("AnimationNodeStateMachine_igypo")
-anim_player = NodePath("../AnimationPlayer")
 
 [node name="Timer_Label" type="Label" parent="CanvasLayer/Window_MarginContainer"]
 z_index = 30
@@ -953,38 +736,73 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 30
 text = "No"
 
+[node name="WhiteOutlines_Panel" type="Panel" parent="CanvasLayer/Window_MarginContainer"]
+z_index = 30
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xrh8u")
+
 [node name="Dialogue_Menu" type="Control" parent="CanvasLayer/Window_MarginContainer" node_paths=PackedStringArray("gameScene", "dialogueLabel")]
-visible = false
 z_index = 30
 layout_mode = 2
 script = ExtResource("20_kjtdd")
 gameScene = NodePath("../../..")
 dialogueLabel = NodePath("MarginContainer/PanelContainer/MarginContainer/RichTextLabel")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu"]
+[node name="Control" type="Control" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -64.0
-offset_right = 128.0
-offset_bottom = 64.0
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
 grow_vertical = 2
-texture = ExtResource("19_jc3d8")
 
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -324.0
+offset_top = -324.0
+offset_right = 324.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_xrh8u")
+stretch_mode = 3
+flip_h = true
+
+[node name="Control2" type="Control" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -64.0
-offset_bottom = 64.0
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
-texture = ExtResource("19_jc3d8")
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu/Control2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_ik87f")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu"]
 custom_minimum_size = Vector2(0, 166)
@@ -1017,9 +835,3 @@ theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[u]Name of the Speaker:[/u]
 Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla."
-
-[node name="WhiteOutlines_Panel" type="Panel" parent="CanvasLayer/Window_MarginContainer"]
-z_index = 30
-layout_mode = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_xrh8u")

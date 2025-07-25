@@ -5,6 +5,6 @@ extends Resource
 class_name BulletResource
 #region VARIABLES
 @export var texture: Texture2D
-@export var radius: float = 2
+@export var radius: float = 7.0
 #endregion
 #-------------------------------------------------------------------------------
