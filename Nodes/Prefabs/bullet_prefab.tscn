@@ -1,9 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://cspvg8uimw0jt"]
 
-[ext_resource type="Texture2D" uid="uid://db00buwxk3mf2" path="res://Assets/Sprites/Bullets/Arrowhead_Bullet.png" id="1_6s5ys"]
+[ext_resource type="Texture2D" uid="uid://ci1kcbf837flv" path="res://Assets/ansimuz/Starfighter Files/sprites/FX/bullet/bullet1.png" id="1_qvks0"]
 [ext_resource type="Script" uid="uid://dm6nhurlgc7r2" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Bullet_Script.gd" id="2_jvvdl"]
 
 [node name="Bullet_Prefab" type="Sprite2D"]
 z_index = 15
-texture = ExtResource("1_6s5ys")
+scale = Vector2(4, 4)
+texture = ExtResource("1_qvks0")
+offset = Vector2(-3, 0)
 script = ExtResource("2_jvvdl")

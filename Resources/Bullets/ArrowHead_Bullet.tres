@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="BulletResource" load_steps=3 format=3 uid="uid://t2conetv0utm"]
 
 [ext_resource type="Script" uid="uid://ep36t5njjqt5" path="res://Scripts/Resource_Scripts/BulletResource.gd" id="1_o1iu1"]
-[ext_resource type="Texture2D" uid="uid://db00buwxk3mf2" path="res://Assets/Sprites/Bullets/Arrowhead_Bullet.png" id="2_btxxo"]
+[ext_resource type="Texture2D" uid="uid://ci1kcbf837flv" path="res://Assets/ansimuz/Starfighter Files/sprites/FX/bullet/bullet1.png" id="2_e8sx1"]
 
 [resource]
 script = ExtResource("1_o1iu1")
-texture = ExtResource("2_btxxo")
+texture = ExtResource("2_e8sx1")
 radius = 7.0

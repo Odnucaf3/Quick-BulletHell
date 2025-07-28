@@ -286,8 +286,9 @@ func SetGameLimits() -> void:
 	playerLimitsX = Vector2(_offSet, width-_offSet)
 	playerLimitsY = Vector2(_offSet, height-_offSet)
 	#-------------------------------------------------------------------------------
-	enemyLimitsX = Vector2(0, width)
-	enemyLimitsY = Vector2(0, height)
+	var _offSet2: float = 32
+	enemyLimitsX = Vector2(0-_offSet2, width+_offSet2)
+	enemyLimitsY = Vector2(0-_offSet2, height+_offSet2)
 	#-------------------------------------------------------------------------------
 	bossStartingPosition = Vector2(width*0.5, height*0.25)
 #-------------------------------------------------------------------------------
@@ -828,6 +829,7 @@ func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float, _type:String,
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false
 	_bullet.dir = _dir
+	_bullet.rotation_degrees = _bullet.dir
 	_bullet.vel = _v
 	#-------------------------------------------------------------------------------
 	return _bullet
@@ -872,7 +874,7 @@ func PlayerBullet_PhysicsUpdate_Limitless(_bullet: Bullet):
 	var _dir2: float = deg_to_rad(_bullet.dir)
 	_bullet.velocity.x = _bullet.vel * cos(_dir2)
 	_bullet.velocity.y = _bullet.vel * sin(_dir2)
-	_bullet.rotation_degrees = _bullet.dir+90
+	_bullet.rotation_degrees = _bullet.dir
 	#-------------------------------------------------------------------------------
 	_bullet.position += _bullet.velocity * deltaTimeScale
 #-------------------------------------------------------------------------------
@@ -1149,6 +1151,7 @@ func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, 
 	_bullet.isGrazed = false
 	_bullet.can_Go_OffLimits = _can_Go_OffLimits
 	_bullet.dir = _dir
+	_bullet.rotation_degrees = _bullet.dir
 	_bullet.vel = _v
 	#-------------------------------------------------------------------------------
 	return _bullet
@@ -1186,7 +1189,7 @@ func EnemyBullet_PhysicsUpdate_Limitless(_bullet: Bullet):
 		var _dir2: float = deg_to_rad(_bullet.dir)
 		_bullet.velocity.x = _bullet.vel * cos(_dir2)
 		_bullet.velocity.y = _bullet.vel * sin(_dir2)
-		_bullet.rotation_degrees = _bullet.dir+90
+		_bullet.rotation_degrees = _bullet.dir
 		#-------------------------------------------------------------------------------
 		_bullet.position += _bullet.velocity * deltaTimeScale
 		#-------------------------------------------------------------------------------

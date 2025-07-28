@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="PlayerResource" load_steps=4 format=3 uid="uid://chvopxu8qt3y2"]
 
-[ext_resource type="Texture2D" uid="uid://dayo07dj8q7mt" path="res://Assets/Images/PlayerSelect2.PNG" id="1_x2re4"]
+[ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="1_x2re4"]
 [ext_resource type="Script" uid="uid://bc56grp6plryu" path="res://Scripts/Resource_Scripts/PlayerResource.gd" id="2_wwops"]
-[ext_resource type="Texture2D" uid="uid://cblstdmvgqxly" path="res://Assets/Sprites/Player2.png" id="3_x2re4"]
+[ext_resource type="Texture2D" uid="uid://chxroj8biltx7" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/spritesheets/ship.png" id="3_x2re4"]
 
 [resource]
 script = ExtResource("2_wwops")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://qpw70cvfh5bf"]
+[gd_scene load_steps=28 format=3 uid="uid://qpw70cvfh5bf"]
 
 [ext_resource type="Script" uid="uid://b471unj5j3evn" path="res://Scripts/Scene_Scripts/Game_Scene.gd" id="1_143dr"]
 [ext_resource type="PackedScene" uid="uid://c3ym6uahxyv5x" path="res://Nodes/Prefabs/enemy_prefab.tscn" id="2_acyb6"]
@@ -6,25 +6,69 @@
 [ext_resource type="PackedScene" uid="uid://d04ils16lapv4" path="res://Nodes/Prefabs/boss_prefab.tscn" id="3_xrh8u"]
 [ext_resource type="PackedScene" uid="uid://b2r2t7rrfwiys" path="res://Nodes/Prefabs/item_prefab.tscn" id="4_7dwg7"]
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="5_0qyn6"]
-[ext_resource type="Texture2D" uid="uid://cette1g2u2p8r" path="res://Assets/Images/Background_GameMenu.PNG" id="6_x381h"]
-[ext_resource type="Texture2D" uid="uid://bfer6cl8igw34" path="res://Assets/Images/Background_TitleMenu.PNG" id="7_tnh07"]
+[ext_resource type="Texture2D" uid="uid://wj08opye2r6h" path="res://Assets/ansimuz/Starfighter Files/Backgrounds/backround.png" id="6_hxoxt"]
+[ext_resource type="Texture2D" uid="uid://dhr2o7k6gxpyg" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/desert-backgorund.png" id="7_xrh8u"]
 [ext_resource type="Script" uid="uid://c4b6si6rx0wc8" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Pause_Menu.gd" id="8_q0g70"]
 [ext_resource type="Script" uid="uid://0g6t8l52l1kw" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Market_Menu.gd" id="9_3u2qh"]
 [ext_resource type="Script" uid="uid://bgogvq8gsxvk1" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Player_Script.gd" id="9_4cqcx"]
-[ext_resource type="Texture2D" uid="uid://drx4sqikt30op" path="res://Assets/Sprites/Player1.png" id="10_v4ix3"]
+[ext_resource type="Texture2D" uid="uid://bk3qcbg1kj8da" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a1.png" id="10_ik87f"]
+[ext_resource type="Texture2D" uid="uid://bjwbqgqw76ott" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a2.png" id="11_hxoxt"]
+[ext_resource type="Texture2D" uid="uid://cjqj1ikrxyhxa" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a3.png" id="12_igypo"]
 [ext_resource type="Script" uid="uid://cauphv42fsmg2" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/game_over_menu.gd" id="15_ou6t6"]
 [ext_resource type="Texture2D" uid="uid://yvix06fsckwj" path="res://Assets/Images/Cards/CardFront.PNG" id="17_sjbfm"]
 [ext_resource type="Texture2D" uid="uid://0ncvd5s3kli" path="res://Assets/Images/Cards/CardBack.PNG" id="18_6xp6x"]
-[ext_resource type="Texture2D" uid="uid://ciaogarcw61as" path="res://Assets/Images/PlayerSelect1.PNG" id="18_xrh8u"]
-[ext_resource type="Texture2D" uid="uid://dayo07dj8q7mt" path="res://Assets/Images/PlayerSelect2.PNG" id="19_ik87f"]
 [ext_resource type="PackedScene" uid="uid://kthlaqw0sk1v" path="res://Nodes/Prefabs/card_button_prefab.tscn" id="20_4usgd"]
+[ext_resource type="Texture2D" uid="uid://ctqwl3pbjdb7h" path="res://Assets/ansimuz/Starfighter Files/sprites/shoot.png" id="20_hxoxt"]
 [ext_resource type="Script" uid="uid://d0kihyc8vswun" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Dialogue_Menu.gd" id="20_kjtdd"]
+[ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="21_igypo"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_jmjr4"]
 color = Color(1, 1, 1, 1)
 grow_begin = -25.0
 grow_end = -25.0
 thickness = 3
+
+[sub_resource type="Animation" id="Animation_xrh8u"]
+resource_name = "Idle"
+length = 0.30001
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("10_ik87f"), ExtResource("11_hxoxt"), ExtResource("12_igypo")]
+}
+
+[sub_resource type="Animation" id="Animation_ik87f"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_ik87f")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hxoxt"]
+_data = {
+&"Idle": SubResource("Animation_xrh8u"),
+&"RESET": SubResource("Animation_ik87f")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_igypo"]
+animation = &"Idle"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrh8u"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -76,8 +120,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("6_x381h")
-expand_mode = 1
+texture = ExtResource("6_hxoxt")
 
 [node name="LeftUI_MarginContainer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = 9
@@ -343,7 +386,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer"]
 layout_mode = 2
-texture = ExtResource("7_tnh07")
+texture = ExtResource("7_xrh8u")
 expand_mode = 1
 
 [node name="Content" type="Control" parent="CanvasLayer/Window_MarginContainer"]
@@ -364,8 +407,18 @@ scale = Vector2(0.75, 0.75)
 texture = ExtResource("5_0qyn6")
 
 [node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
-position = Vector2(-2.905, 0)
-texture = ExtResource("10_v4ix3")
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("10_ik87f")
+offset = Vector2(0, -2)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Window_MarginContainer/Content/Player/Sprite2D"]
+libraries = {
+&"": SubResource("AnimationLibrary_hxoxt")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="CanvasLayer/Window_MarginContainer/Content/Player/Sprite2D"]
+tree_root = SubResource("AnimationNodeAnimation_igypo")
+anim_player = NodePath("../AnimationPlayer")
 
 [node name="Graze_Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
 self_modulate = Color(1, 0, 1, 0.415686)
@@ -743,6 +796,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_xrh8u")
 
 [node name="Dialogue_Menu" type="Control" parent="CanvasLayer/Window_MarginContainer" node_paths=PackedStringArray("gameScene", "dialogueLabel")]
+visible = false
 z_index = 30
 layout_mode = 2
 script = ExtResource("20_kjtdd")
@@ -759,6 +813,23 @@ offset_right = 40.0
 offset_bottom = 20.0
 grow_vertical = 2
 
+[node name="Panel" type="Panel" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu/Control"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.785398
+pivot_offset = Vector2(200, 200)
+
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu/Control"]
 layout_mode = 1
 anchors_preset = 8
@@ -772,9 +843,9 @@ offset_right = 324.0
 offset_bottom = 324.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("18_xrh8u")
-stretch_mode = 3
-flip_h = true
+texture = ExtResource("20_hxoxt")
+expand_mode = 5
+stretch_mode = 5
 
 [node name="Control2" type="Control" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu"]
 layout_mode = 1
@@ -789,6 +860,23 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
+[node name="Panel2" type="Panel" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu/Control2"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.785398
+pivot_offset = Vector2(200, 200)
+
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu/Control2"]
 layout_mode = 1
 anchors_preset = 8
@@ -796,13 +884,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = 64.0
+offset_left = -324.0
+offset_top = -324.0
+offset_right = 324.0
+offset_bottom = 324.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("19_ik87f")
+texture = ExtResource("21_igypo")
+expand_mode = 5
+stretch_mode = 5
+flip_h = true
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu"]
 custom_minimum_size = Vector2(0, 166)

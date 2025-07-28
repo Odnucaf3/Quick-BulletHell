@@ -1,14 +1,14 @@
 [gd_scene load_steps=10 format=3 uid="uid://d0dbuca6xjv3b"]
 
 [ext_resource type="Script" uid="uid://dh6p17sjfdxco" path="res://Scripts/Scene_Scripts/Main_Scene.gd" id="1_5f268"]
-[ext_resource type="Texture2D" uid="uid://b23q1loaairew" path="res://Assets/Images/Background_MainMenu.PNG" id="2_6x71i"]
+[ext_resource type="Texture2D" uid="uid://s3joo8ifj678" path="res://Assets/ansimuz/Starfighter Files/Backgrounds/Mountain-Dusk-vb.png" id="2_6x71i"]
 [ext_resource type="Script" uid="uid://bos7kpj21x1e4" path="res://Scripts/Scene_Scripts/Main_Scene/Main_Menu.gd" id="3_s5nvw"]
+[ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="4_6x71i"]
 [ext_resource type="Script" uid="uid://mj63dv50jsa4" path="res://Scripts/Scene_Scripts/Main_Scene/Player_Menu.gd" id="4_e83j3"]
 [ext_resource type="PackedScene" uid="uid://bcew6q4vq4d3j" path="res://Nodes/Prefabs/player_button.tscn" id="5_c5p36"]
 [ext_resource type="Script" uid="uid://0cv5dqgbfkap" path="res://Scripts/Scene_Scripts/Main_Scene/Difficulty_Menu.gd" id="5_i24b0"]
 [ext_resource type="Script" uid="uid://c1hg3hvpiyil0" path="res://Scripts/Scene_Scripts/Main_Scene/Stage_Menu.gd" id="6_x5vwy"]
 [ext_resource type="Script" uid="uid://0ka8twb7v4p3" path="res://Scripts/Scene_Scripts/Main_Scene/Start_Menu.gd" id="7_jwsoe"]
-[ext_resource type="Texture2D" uid="uid://ciaogarcw61as" path="res://Assets/Images/PlayerSelect1.PNG" id="10_38oag"]
 
 [node name="Main_Scene" type="Control" node_paths=PackedStringArray("mainMenu", "difficultyMenu", "playerMenu", "stageMenu", "startMenu")]
 layout_mode = 3
@@ -51,8 +51,8 @@ layout_mode = 2
 script = ExtResource("3_s5nvw")
 mainScene = NodePath("../..")
 button = [NodePath("HBoxContainer/VBoxContainer/Button"), NodePath("HBoxContainer/VBoxContainer/Button2"), NodePath("HBoxContainer/VBoxContainer/Button3"), NodePath("HBoxContainer/VBoxContainer/Button4"), NodePath("HBoxContainer/VBoxContainer/Button5")]
-gameInfo = NodePath("HBoxContainer/TextureRect2/Label2")
-picture = NodePath("HBoxContainer/TextureRect2")
+gameInfo = NodePath("HBoxContainer/Control/MarginContainer/TextureRect2/Label2")
+picture = NodePath("HBoxContainer/Control/MarginContainer/TextureRect2")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Main_Menu"]
 layout_mode = 1
@@ -62,6 +62,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
+alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Main_Menu/HBoxContainer"]
 layout_mode = 2
@@ -100,20 +101,63 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "Go to Title"
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/Main_Menu/HBoxContainer"]
+[node name="Control" type="Control" parent="MarginContainer/Main_Menu/HBoxContainer"]
 layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("10_38oag")
-expand_mode = 3
-stretch_mode = 4
+size_flags_horizontal = 3
 
-[node name="Label2" type="Label" parent="MarginContainer/Main_Menu/HBoxContainer/TextureRect2"]
+[node name="Panel" type="Panel" parent="MarginContainer/Main_Menu/HBoxContainer/Control"]
+custom_minimum_size = Vector2(450, 450)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.5
+offset_top = -225.0
+offset_right = 179.5
+offset_bottom = 225.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.785398
+pivot_offset = Vector2(225, 225)
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/Main_Menu/HBoxContainer/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Main_Menu/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = -90
+theme_override_constants/margin_top = -150
+theme_override_constants/margin_bottom = 50
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/Main_Menu/HBoxContainer/Control/MarginContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_6x71i")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label2" type="Label" parent="MarginContainer/Main_Menu/HBoxContainer/Control/MarginContainer/TextureRect2"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -177.0
+grow_horizontal = 2
+grow_vertical = 0
 size_flags_vertical = 8
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 30

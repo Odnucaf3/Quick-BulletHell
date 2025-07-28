@@ -1,8 +1,50 @@
-[gd_scene load_steps=4 format=3 uid="uid://c3ym6uahxyv5x"]
+[gd_scene load_steps=8 format=3 uid="uid://c3ym6uahxyv5x"]
 
 [ext_resource type="Script" uid="uid://cb6frkhllxl6i" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Enemy_Script.gd" id="1_30lj2"]
-[ext_resource type="Texture2D" uid="uid://cycuo84xkdqc6" path="res://Assets/Sprites/Enemy.png" id="1_x48a8"]
+[ext_resource type="Texture2D" uid="uid://bxxdr2igf40ia" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/spritesheets/enemy-small.png" id="2_ep7ps"]
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="3_b7mhl"]
+
+[sub_resource type="Animation" id="Animation_ep7ps"]
+resource_name = "Idle"
+length = 0.20001
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_nl47s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qind8"]
+_data = {
+&"Idle": SubResource("Animation_ep7ps"),
+&"RESET": SubResource("Animation_nl47s")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mtsc7"]
+animation = &"Idle"
 
 [node name="Enemy" type="Node2D" node_paths=PackedStringArray("label", "sprite")]
 script = ExtResource("1_30lj2")
@@ -10,7 +52,19 @@ label = NodePath("Label")
 sprite = NodePath("Sprite2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_x48a8")
+scale = Vector2(4, 4)
+texture = ExtResource("2_ep7ps")
+offset = Vector2(0, -3)
+hframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D"]
+libraries = {
+&"": SubResource("AnimationLibrary_qind8")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="Sprite2D"]
+tree_root = SubResource("AnimationNodeAnimation_mtsc7")
+anim_player = NodePath("../AnimationPlayer")
 
 [node name="Label" type="Label" parent="."]
 z_index = 29

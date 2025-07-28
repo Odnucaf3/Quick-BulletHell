@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://qbwtirmt7cw5" path="res://Scripts/Scene_Scripts/Title_Scene.gd" id="1_i05x6"]
 [ext_resource type="Script" uid="uid://xw1cchvuqtw" path="res://Scripts/Scene_Scripts/Title_Scene/Title_Menu.gd" id="2_ctd5h"]
-[ext_resource type="Texture2D" uid="uid://bfer6cl8igw34" path="res://Assets/Images/Background_TitleMenu.PNG" id="2_ywsiu"]
+[ext_resource type="Texture2D" uid="uid://dquyheyugb5nx" path="res://Assets/ansimuz/Starfighter Files/Backgrounds/cyberpunk-street.png" id="2_ywsiu"]
 [ext_resource type="Script" uid="uid://ctrg4leyp0tph" path="res://Scripts/Scene_Scripts/Title_Scene/Save_Menu.gd" id="3_g1pxl"]
 [ext_resource type="Script" uid="uid://dsj3ins7pl6nv" path="res://Scripts/Scene_Scripts/Title_Scene/Save_Menu2.gd" id="4_k54io"]
 
@@ -60,10 +60,12 @@ offset_right = 472.5
 offset_bottom = 186.5
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/Title_Menu/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 80
 text = "Salamanca of Sincretism"
 horizontal_alignment = 1
