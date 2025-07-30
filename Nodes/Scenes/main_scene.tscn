@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://d0dbuca6xjv3b"]
+[gd_scene load_steps=11 format=3 uid="uid://d0dbuca6xjv3b"]
 
 [ext_resource type="Script" uid="uid://dh6p17sjfdxco" path="res://Scripts/Scene_Scripts/Main_Scene.gd" id="1_5f268"]
-[ext_resource type="Texture2D" uid="uid://s3joo8ifj678" path="res://Assets/ansimuz/Starfighter Files/Backgrounds/Mountain-Dusk-vb.png" id="2_6x71i"]
+[ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="2_yl2dh"]
+[ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="3_482i4"]
 [ext_resource type="Script" uid="uid://bos7kpj21x1e4" path="res://Scripts/Scene_Scripts/Main_Scene/Main_Menu.gd" id="3_s5nvw"]
 [ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="4_6x71i"]
 [ext_resource type="Script" uid="uid://mj63dv50jsa4" path="res://Scripts/Scene_Scripts/Main_Scene/Player_Menu.gd" id="4_e83j3"]
@@ -25,14 +26,27 @@ stageMenu = NodePath("MarginContainer/Stage_Menu")
 startMenu = NodePath("MarginContainer/Start_Menu")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+self_modulate = Color(0.644007, 0.314552, 0.353045, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_6x71i")
+texture = ExtResource("2_yl2dh")
 expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+self_modulate = Color(0, 0, 0, 0.215686)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_482i4")
+stretch_mode = 1
+flip_v = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://qpw70cvfh5bf"]
+[gd_scene load_steps=34 format=3 uid="uid://qpw70cvfh5bf"]
 
 [ext_resource type="Script" uid="uid://b471unj5j3evn" path="res://Scripts/Scene_Scripts/Game_Scene.gd" id="1_143dr"]
 [ext_resource type="PackedScene" uid="uid://c3ym6uahxyv5x" path="res://Nodes/Prefabs/enemy_prefab.tscn" id="2_acyb6"]
@@ -6,13 +6,18 @@
 [ext_resource type="PackedScene" uid="uid://d04ils16lapv4" path="res://Nodes/Prefabs/boss_prefab.tscn" id="3_xrh8u"]
 [ext_resource type="PackedScene" uid="uid://b2r2t7rrfwiys" path="res://Nodes/Prefabs/item_prefab.tscn" id="4_7dwg7"]
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="5_0qyn6"]
-[ext_resource type="Texture2D" uid="uid://wj08opye2r6h" path="res://Assets/ansimuz/Starfighter Files/Backgrounds/backround.png" id="6_hxoxt"]
+[ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="6_igypo"]
+[ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="7_gg6rv"]
 [ext_resource type="Texture2D" uid="uid://dhr2o7k6gxpyg" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/desert-backgorund.png" id="7_xrh8u"]
+[ext_resource type="Shader" uid="uid://byviwp6gsqigi" path="res://Shaders/scroll_x.gdshader" id="8_gg6rv"]
 [ext_resource type="Script" uid="uid://c4b6si6rx0wc8" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Pause_Menu.gd" id="8_q0g70"]
 [ext_resource type="Script" uid="uid://0g6t8l52l1kw" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Market_Menu.gd" id="9_3u2qh"]
 [ext_resource type="Script" uid="uid://bgogvq8gsxvk1" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Player_Script.gd" id="9_4cqcx"]
 [ext_resource type="Texture2D" uid="uid://bk3qcbg1kj8da" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a1.png" id="10_ik87f"]
+[ext_resource type="Texture2D" uid="uid://crpbxq0w23pbh" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/clouds-transparent.png" id="10_lujb4"]
+[ext_resource type="Texture2D" uid="uid://dkixw58graqdm" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/clouds.png" id="11_1th3s"]
 [ext_resource type="Texture2D" uid="uid://bjwbqgqw76ott" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a2.png" id="11_hxoxt"]
+[ext_resource type="Script" uid="uid://ikhf13h2o5d5" path="res://Scripts/Scene_Scripts/Game_Scene/scroll_script.gd" id="11_mitwg"]
 [ext_resource type="Texture2D" uid="uid://cjqj1ikrxyhxa" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a3.png" id="12_igypo"]
 [ext_resource type="Script" uid="uid://cauphv42fsmg2" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/game_over_menu.gd" id="15_ou6t6"]
 [ext_resource type="Texture2D" uid="uid://yvix06fsckwj" path="res://Assets/Images/Cards/CardFront.PNG" id="17_sjbfm"]
@@ -27,6 +32,10 @@ color = Color(1, 1, 1, 1)
 grow_begin = -25.0
 grow_end = -25.0
 thickness = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rpgth"]
+shader = ExtResource("8_gg6rv")
+shader_parameter/speed = 0.1
 
 [sub_resource type="Animation" id="Animation_xrh8u"]
 resource_name = "Idle"
@@ -115,12 +124,23 @@ completedLabel = NodePath("CanvasLayer/Window_MarginContainer/Banner/MarginConta
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+self_modulate = Color(0.304739, 0.430292, 0.319166, 1)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("6_hxoxt")
+texture = ExtResource("6_igypo")
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
+self_modulate = Color(0, 0, 0, 0.215686)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_gg6rv")
+stretch_mode = 1
 
 [node name="LeftUI_MarginContainer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = 9
@@ -385,9 +405,51 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer"]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_rpgth")
 layout_mode = 2
 texture = ExtResource("7_xrh8u")
 expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/TextureRect"]
+self_modulate = Color(1, 1, 1, 0.803922)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -300.0
+offset_bottom = -47.3281
+grow_horizontal = 2
+texture = ExtResource("11_1th3s")
+expand_mode = 5
+flip_h = true
+flip_v = true
+script = ExtResource("11_mitwg")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -300.0
+offset_bottom = -47.3281
+grow_horizontal = 2
+texture = ExtResource("10_lujb4")
+expand_mode = 5
+script = ExtResource("11_mitwg")
+scroll_y = 3.0
+
+[node name="TextureRect3" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/TextureRect"]
+self_modulate = Color(1, 1, 1, 0.803922)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -300.0
+offset_bottom = -47.3281
+grow_horizontal = 2
+texture = ExtResource("10_lujb4")
+expand_mode = 5
+flip_h = true
+script = ExtResource("11_mitwg")
+scroll_y = 4.0
 
 [node name="Content" type="Control" parent="CanvasLayer/Window_MarginContainer"]
 clip_contents = true
