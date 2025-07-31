@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://qpw70cvfh5bf"]
+[gd_scene load_steps=35 format=3 uid="uid://qpw70cvfh5bf"]
 
 [ext_resource type="Script" uid="uid://b471unj5j3evn" path="res://Scripts/Scene_Scripts/Game_Scene.gd" id="1_143dr"]
 [ext_resource type="PackedScene" uid="uid://c3ym6uahxyv5x" path="res://Nodes/Prefabs/enemy_prefab.tscn" id="2_acyb6"]
@@ -8,13 +8,13 @@
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="5_0qyn6"]
 [ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="6_igypo"]
 [ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="7_gg6rv"]
+[ext_resource type="Shader" uid="uid://cufqavmvfm34k" path="res://Shaders/scroll_xy.gdshader" id="7_mitwg"]
 [ext_resource type="Texture2D" uid="uid://dhr2o7k6gxpyg" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/desert-backgorund.png" id="7_xrh8u"]
 [ext_resource type="Shader" uid="uid://byviwp6gsqigi" path="res://Shaders/scroll_x.gdshader" id="8_gg6rv"]
 [ext_resource type="Script" uid="uid://c4b6si6rx0wc8" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Pause_Menu.gd" id="8_q0g70"]
 [ext_resource type="Script" uid="uid://0g6t8l52l1kw" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Market_Menu.gd" id="9_3u2qh"]
 [ext_resource type="Script" uid="uid://bgogvq8gsxvk1" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Player_Script.gd" id="9_4cqcx"]
 [ext_resource type="Texture2D" uid="uid://bk3qcbg1kj8da" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a1.png" id="10_ik87f"]
-[ext_resource type="Texture2D" uid="uid://crpbxq0w23pbh" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/clouds-transparent.png" id="10_lujb4"]
 [ext_resource type="Texture2D" uid="uid://dkixw58graqdm" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/clouds.png" id="11_1th3s"]
 [ext_resource type="Texture2D" uid="uid://bjwbqgqw76ott" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a2.png" id="11_hxoxt"]
 [ext_resource type="Script" uid="uid://ikhf13h2o5d5" path="res://Scripts/Scene_Scripts/Game_Scene/scroll_script.gd" id="11_mitwg"]
@@ -27,6 +27,11 @@
 [ext_resource type="Script" uid="uid://d0kihyc8vswun" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Dialogue_Menu.gd" id="20_kjtdd"]
 [ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="21_igypo"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3p4s7"]
+shader = ExtResource("7_mitwg")
+shader_parameter/speed_x = 0.1
+shader_parameter/speed_y = 0.1
+
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_jmjr4"]
 color = Color(1, 1, 1, 1)
 grow_begin = -25.0
@@ -35,9 +40,9 @@ thickness = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rpgth"]
 shader = ExtResource("8_gg6rv")
-shader_parameter/speed = 0.1
+shader_parameter/speed = -0.1
 
-[sub_resource type="Animation" id="Animation_xrh8u"]
+[sub_resource type="Animation" id="Animation_mitwg"]
 resource_name = "Idle"
 length = 0.30001
 loop_mode = 1
@@ -55,7 +60,7 @@ tracks/0/keys = {
 "values": [ExtResource("10_ik87f"), ExtResource("11_hxoxt"), ExtResource("12_igypo")]
 }
 
-[sub_resource type="Animation" id="Animation_ik87f"]
+[sub_resource type="Animation" id="Animation_3p4s7"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -70,13 +75,13 @@ tracks/0/keys = {
 "values": [ExtResource("10_ik87f")]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_hxoxt"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xhx7r"]
 _data = {
-&"Idle": SubResource("Animation_xrh8u"),
-&"RESET": SubResource("Animation_ik87f")
+&"Idle": SubResource("Animation_mitwg"),
+&"RESET": SubResource("Animation_3p4s7")
 }
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_igypo"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_42b3h"]
 animation = &"Idle"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrh8u"]
@@ -134,6 +139,7 @@ texture = ExtResource("6_igypo")
 
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
 self_modulate = Color(0, 0, 0, 0.215686)
+material = SubResource("ShaderMaterial_3p4s7")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -141,6 +147,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_gg6rv")
 stretch_mode = 1
+flip_h = true
 
 [node name="LeftUI_MarginContainer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = 9
@@ -416,42 +423,58 @@ self_modulate = Color(1, 1, 1, 0.803922)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_top = -400.0
+offset_bottom = -147.328
+grow_horizontal = 2
+texture = ExtResource("11_1th3s")
+expand_mode = 5
+script = ExtResource("11_mitwg")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/TextureRect"]
+self_modulate = Color(1, 1, 1, 0.607843)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -350.0
+offset_bottom = -97.3281
+grow_horizontal = 2
+texture = ExtResource("11_1th3s")
+expand_mode = 5
+flip_h = true
+script = ExtResource("11_mitwg")
+scroll_y = 3.0
+
+[node name="TextureRect3" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/TextureRect"]
+self_modulate = Color(1, 1, 1, 0.411765)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
 offset_top = -300.0
 offset_bottom = -47.3281
+grow_horizontal = 2
+texture = ExtResource("11_1th3s")
+expand_mode = 5
+flip_v = true
+script = ExtResource("11_mitwg")
+scroll_y = 4.0
+
+[node name="TextureRect4" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/TextureRect"]
+self_modulate = Color(1, 1, 1, 0.215686)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -250.0
+offset_bottom = 2.67191
 grow_horizontal = 2
 texture = ExtResource("11_1th3s")
 expand_mode = 5
 flip_h = true
 flip_v = true
 script = ExtResource("11_mitwg")
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/TextureRect"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = -300.0
-offset_bottom = -47.3281
-grow_horizontal = 2
-texture = ExtResource("10_lujb4")
-expand_mode = 5
-script = ExtResource("11_mitwg")
-scroll_y = 3.0
-
-[node name="TextureRect3" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/TextureRect"]
-self_modulate = Color(1, 1, 1, 0.803922)
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = -300.0
-offset_bottom = -47.3281
-grow_horizontal = 2
-texture = ExtResource("10_lujb4")
-expand_mode = 5
-flip_h = true
-script = ExtResource("11_mitwg")
-scroll_y = 4.0
+scroll_y = 5.0
 
 [node name="Content" type="Control" parent="CanvasLayer/Window_MarginContainer"]
+y_sort_enabled = true
 clip_contents = true
 layout_mode = 2
 
@@ -475,11 +498,11 @@ offset = Vector2(0, -2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Window_MarginContainer/Content/Player/Sprite2D"]
 libraries = {
-&"": SubResource("AnimationLibrary_hxoxt")
+&"": SubResource("AnimationLibrary_xhx7r")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="CanvasLayer/Window_MarginContainer/Content/Player/Sprite2D"]
-tree_root = SubResource("AnimationNodeAnimation_igypo")
+tree_root = SubResource("AnimationNodeAnimation_42b3h")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="Graze_Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]

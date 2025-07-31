@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://bushxnb3qli8s"]
-
-[node name="House" type="CSGPolygon3D"]
-transform = Transform3D(1.52, 0, 0, 0, 1.52, 0, 0, 0, 1.52, 0, 0, 0)
-polygon = PackedVector2Array(-0.5, 0, -0.5, 0.5, -0.6, 0.5, 0, 0.8, 0.6, 0.5, 0.5, 0.5, 0.5, 0)

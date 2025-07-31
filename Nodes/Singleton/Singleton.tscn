@@ -1,10 +1,9 @@
-[gd_scene load_steps=63 format=4 uid="uid://6uqyy262fely"]
+[gd_scene load_steps=64 format=4 uid="uid://6uqyy262fely"]
 
 [ext_resource type="Script" uid="uid://bhmqd4n3aj5so" path="res://Scripts/Singleton.gd" id="1_2qyiw"]
-[ext_resource type="AudioStream" uid="uid://bf22yl5v4hmw8" path="res://Assets/BGMs/02. An Exciting and Familiar Gensokyo.mp3" id="2_fp365"]
-[ext_resource type="AudioStream" uid="uid://c227g3efh1ohj" path="res://Assets/BGMs/03. Youkai Hook On.mp3" id="3_762mc"]
+[ext_resource type="AudioStream" uid="uid://cgpa31fuwepra" path="res://Assets/ansimuz/Starfighter Files/Music/spaceship shooter.ogg" id="2_762mc"]
+[ext_resource type="AudioStream" uid="uid://c5j4oulmvit0l" path="res://Assets/ansimuz/Starfighter Files/Music/Nesquence.ogg" id="3_2qwun"]
 [ext_resource type="AudioStream" uid="uid://bxjr1vi13d7xu" path="res://Assets/inteface_sfx_pack_1_wav/cursor_style_1.wav" id="4_0p315"]
-[ext_resource type="AudioStream" uid="uid://bedu8tlgf600a" path="res://Assets/BGMs/01. The Collector's Melancholy Afternoon.mp3" id="4_2qwun"]
 [ext_resource type="Script" uid="uid://chr4oxxu33htr" path="res://Scripts/Scene_Scripts/Option_Menu.gd" id="4_t0wof"]
 [ext_resource type="AudioStream" uid="uid://dxdi78sj6m86i" path="res://Assets/inteface_sfx_pack_1_wav/confirm_style_1_001.wav" id="5_espkf"]
 [ext_resource type="Script" uid="uid://bc56grp6plryu" path="res://Scripts/Resource_Scripts/PlayerResource.gd" id="5_im34j"]
@@ -16,6 +15,12 @@
 [ext_resource type="Script" uid="uid://et6qf8ddxav8" path="res://Scripts/Scene_Scripts/Option_Menu/Option_Slider.gd" id="8_p8ele"]
 [ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="12_762mc"]
 [ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="13_2qwun"]
+[ext_resource type="Shader" uid="uid://cufqavmvfm34k" path="res://Shaders/scroll_xy.gdshader" id="13_7e2ae"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lbo7f"]
+shader = ExtResource("13_7e2ae")
+shader_parameter/speed_x = 0.1
+shader_parameter/speed_y = 0.1
 
 [sub_resource type="Image" id="Image_76c87"]
 data = {
@@ -6803,9 +6808,9 @@ sfx_Selected = NodePath("sfx_Selected")
 sfx_Submited = NodePath("sfx_Submited")
 sfx_Canceled = NodePath("sfx_Canceled")
 bgmPlayer = NodePath("bgm_Player")
-bgmStage1 = ExtResource("2_fp365")
-bgmBoss1 = ExtResource("3_762mc")
-bgmTitle = ExtResource("4_2qwun")
+bgmStage1 = ExtResource("2_762mc")
+bgmBoss1 = ExtResource("2_762mc")
+bgmTitle = ExtResource("3_2qwun")
 playerResource = Array[ExtResource("5_im34j")]([ExtResource("6_0jlie"), ExtResource("7_qck47")])
 fps = NodePath("CanvasLayer/fps_MarginContainer/fps_Label")
 useCustomButton = false
@@ -6864,6 +6869,7 @@ expand_mode = 1
 
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Option_Menu"]
 self_modulate = Color(0, 0, 0, 0.215686)
+material = SubResource("ShaderMaterial_lbo7f")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -6872,6 +6878,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("13_2qwun")
 stretch_mode = 1
+flip_h = true
 flip_v = true
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Option_Menu"]

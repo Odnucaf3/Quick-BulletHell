@@ -26,7 +26,7 @@ func _physics_process(_delta:float) -> void:
 	if(inOption or gameScene.myGAME_STATE == gameScene.GAME_STATE.IN_GAMEOVER):
 		return
 	if(Input.is_action_just_pressed("input_Pause")):
-		gameScene.PauseOff()
+		gameScene.Pause_Off()
 		singleton.CommonCanceled()
 #endregion
 #-------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ func SetAllButtons() -> void:
 	singleton.SetButton(quitGame, singleton.CommonSelected, QuitGameButton_Subited, AnyButton_Canceled)
 #-------------------------------------------------------------------------------
 func ContinueButton_Subited() -> void:
-	gameScene.PauseOff()
+	gameScene.Pause_Off()
 	singleton.CommonSubmited()
 #-------------------------------------------------------------------------------
 func RetryButton_Subited() -> void:

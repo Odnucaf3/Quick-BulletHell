@@ -6,7 +6,8 @@ enum GAME_STATE{IN_GAMEPLAY, IN_MARKET, IN_DIALOGUE, IN_GAMEOVER}
 var singleton: Singleton
 #-------------------------------------------------------------------------------
 var myGAME_STATE: GAME_STATE = GAME_STATE.IN_GAMEPLAY
-var inPause: bool = false
+var isSlowMotion: bool = false
+var time_scale: float = 1.0
 #-------------------------------------------------------------------------------
 @export var currentLayer: CanvasLayer
 @export var pauseMenu: Pause_Menu
@@ -104,7 +105,8 @@ func _ready():
 	SetIdiome()
 	#-------------------------------------------------------------------------------
 	singleton.PlayBGM(singleton.bgmStage1)
-	get_tree().set_deferred("paused", false)
+	NormalMotion()
+	Resume_Time()
 	currentLayer.show()
 	#-------------------------------------------------------------------------------
 	await BeginGame()
@@ -113,6 +115,8 @@ func _physics_process(_delta:float) -> void:
 	deltaTimeScale = Engine.time_scale
 	tween_Array = get_tree().get_processed_tweens()
 	Debug_Information()
+	#-------------------------------------------------------------------------------
+	Set_SlowMotion()
 	#-------------------------------------------------------------------------------
 	for _i in range(enemyBullets_Enabled_Array.size()-1,-1,-1):
 		enemyBullets_Enabled_Array[_i].physics_Update.call()
@@ -140,7 +144,7 @@ func Game_StateMachine():
 		GAME_STATE.IN_GAMEPLAY:
 			PlayerShoot()
 			Player_StateMachine()
-			PauseGame()
+			Pause_On()
 			return
 		#-------------------------------------------------------------------------------
 		GAME_STATE.IN_MARKET:
@@ -254,7 +258,7 @@ func Player_Movement() -> void:
 #endregion
 #-------------------------------------------------------------------------------
 #region PAUSE INPUTS
-func PauseGame() -> void:
+func Pause_On() -> void:
 	if(myGAME_STATE == GAME_STATE.IN_GAMEOVER):
 		return
 	#-------------------------------------------------------------------------------
@@ -267,12 +271,36 @@ func StopTime():
 	singleton.playPosition = singleton.bgmPlayer.get_playback_position()
 	singleton.bgmPlayer.stop()
 	get_tree().set_deferred("paused", true)
+	Engine.time_scale = 0.0
 #-------------------------------------------------------------------------------
-func PauseOff():
+func Pause_Off():
 	pauseMenu.hide()
-	myGAME_STATE = GAME_STATE.IN_GAMEPLAY
-	get_tree().set_deferred("paused", false)
 	singleton.bgmPlayer.play(singleton.playPosition)
+	Resume_Time()
+#-------------------------------------------------------------------------------
+func Resume_Time():
+	get_tree().set_deferred("paused", false)
+	Engine.time_scale = time_scale
+#-------------------------------------------------------------------------------
+func Set_SlowMotion() -> void:
+	if(get_tree().paused):
+		return
+	#-------------------------------------------------------------------------------
+	if(Input.is_action_just_pressed("Debug_SlowMotion")):
+		if(isSlowMotion):
+			NormalMotion()
+		#-------------------------------------------------------------------------------
+		else:
+			time_scale = 0.3
+			Engine.time_scale = time_scale
+			isSlowMotion = true
+		#-------------------------------------------------------------------------------
+	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func NormalMotion():
+	time_scale = 1.0
+	Engine.time_scale = time_scale
+	isSlowMotion = false
 #endregion
 #-------------------------------------------------------------------------------
 #region UI FINCTIONS
@@ -315,6 +343,7 @@ func Debug_Information() -> void:
 	_s += "-------------------------------------------------------\n"
 	_s += "GAME_STATE." + GAME_STATE.keys()[myGAME_STATE]+"\n"
 	_s += "PLAYER_STATE." + Player.PLAYER_STATE.keys()[player.myPLAYER_STATE]+"\n"
+	_s += "Slow Motion: " + str(isSlowMotion) + "\n"
 	_s += "-------------------------------------------------------\n"
 	leftLabel.text = _s
 #-------------------------------------------------------------------------------
@@ -487,14 +516,14 @@ func CompletedStage(_i:int):
 #-------------------------------------------------------------------------------
 func GoToMainScene():
 	singleton.PlayBGM(singleton.bgmTitle)
-	get_tree().set_deferred("paused", false)
+	Resume_Time()
 	get_tree().change_scene_to_file(singleton.mainScene_Path)
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE 1 FUNCTIONS
 func Stage1():
-	await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
-	await EnemyWave_and_Market("Enemy-Wave 2", func():InfiniteEnemyTest(), 10)
+	#await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
+	#await EnemyWave_and_Market("Enemy-Wave 2", func():InfiniteEnemyTest(), 10)
 	#-------------------------------------------------------------------------------
 	#await Nothing_and_Market()
 	await ShowBanner("Enter Boss")	#IMPORTANTE: Tiene que haber un await antres de entrar al dialogo porque si no se saltea la primer liena.
@@ -929,7 +958,7 @@ func Items_PhysicsUpdate(_item:Item):
 			if(_item.velocity.y <= 0):
 				_item.velocity.y += _velY_Accel * deltaTimeScale
 				_item.position.y += _item.velocity.y * deltaTimeScale
-				_item.rotation += 0.5 * deltaTimeScale
+				_item.rotation += 0.2 * deltaTimeScale
 				return
 			#-------------------------------------------------------------------------------
 			else:

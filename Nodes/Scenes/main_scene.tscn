@@ -1,15 +1,21 @@
-[gd_scene load_steps=11 format=3 uid="uid://d0dbuca6xjv3b"]
+[gd_scene load_steps=13 format=3 uid="uid://d0dbuca6xjv3b"]
 
 [ext_resource type="Script" uid="uid://dh6p17sjfdxco" path="res://Scripts/Scene_Scripts/Main_Scene.gd" id="1_5f268"]
 [ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="2_yl2dh"]
 [ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="3_482i4"]
+[ext_resource type="Shader" uid="uid://cufqavmvfm34k" path="res://Shaders/scroll_xy.gdshader" id="3_bkmeg"]
 [ext_resource type="Script" uid="uid://bos7kpj21x1e4" path="res://Scripts/Scene_Scripts/Main_Scene/Main_Menu.gd" id="3_s5nvw"]
-[ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="4_6x71i"]
 [ext_resource type="Script" uid="uid://mj63dv50jsa4" path="res://Scripts/Scene_Scripts/Main_Scene/Player_Menu.gd" id="4_e83j3"]
 [ext_resource type="PackedScene" uid="uid://bcew6q4vq4d3j" path="res://Nodes/Prefabs/player_button.tscn" id="5_c5p36"]
 [ext_resource type="Script" uid="uid://0cv5dqgbfkap" path="res://Scripts/Scene_Scripts/Main_Scene/Difficulty_Menu.gd" id="5_i24b0"]
+[ext_resource type="Texture2D" uid="uid://ctqwl3pbjdb7h" path="res://Assets/ansimuz/Starfighter Files/sprites/shoot.png" id="6_482i4"]
 [ext_resource type="Script" uid="uid://c1hg3hvpiyil0" path="res://Scripts/Scene_Scripts/Main_Scene/Stage_Menu.gd" id="6_x5vwy"]
 [ext_resource type="Script" uid="uid://0ka8twb7v4p3" path="res://Scripts/Scene_Scripts/Main_Scene/Start_Menu.gd" id="7_jwsoe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_htg7t"]
+shader = ExtResource("3_bkmeg")
+shader_parameter/speed_x = 0.1
+shader_parameter/speed_y = 0.1
 
 [node name="Main_Scene" type="Control" node_paths=PackedStringArray("mainMenu", "difficultyMenu", "playerMenu", "stageMenu", "startMenu")]
 layout_mode = 3
@@ -38,6 +44,7 @@ expand_mode = 1
 
 [node name="TextureRect2" type="TextureRect" parent="."]
 self_modulate = Color(0, 0, 0, 0.215686)
+material = SubResource("ShaderMaterial_htg7t")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -55,10 +62,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
 
 [node name="Main_Menu" type="Control" parent="MarginContainer" node_paths=PackedStringArray("mainScene", "button", "gameInfo", "picture")]
 layout_mode = 2
@@ -80,7 +87,7 @@ alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Main_Menu/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 2
 size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="MarginContainer/Main_Menu/HBoxContainer/VBoxContainer"]
@@ -159,7 +166,7 @@ theme_override_constants/margin_bottom = 50
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("4_6x71i")
+texture = ExtResource("6_482i4")
 expand_mode = 3
 stretch_mode = 5
 

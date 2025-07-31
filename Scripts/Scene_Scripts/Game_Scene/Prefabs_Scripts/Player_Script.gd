@@ -31,7 +31,7 @@ var playerResource: PlayerResource
 func SetPlayer(_playerResournce: PlayerResource):
 	playerResource = _playerResournce
 	#-------------------------------------------------------------------------------
-	sprite.texture = _playerResournce.texture
+	#sprite.texture = _playerResournce.texture
 	#-------------------------------------------------------------------------------
 	magnetBox_Sprite.scale.x  *= _playerResournce.magnetBox_Scale
 	magnetBox_Sprite.scale.y  *= _playerResournce.magnetBox_Scale
