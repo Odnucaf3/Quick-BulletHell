@@ -1,17 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://5271js7mt3af"]
+[gd_scene load_steps=8 format=3 uid="uid://5271js7mt3af"]
 
 [ext_resource type="Script" uid="uid://qbwtirmt7cw5" path="res://Scripts/Scene_Scripts/Title_Scene.gd" id="1_i05x6"]
 [ext_resource type="Script" uid="uid://xw1cchvuqtw" path="res://Scripts/Scene_Scripts/Title_Scene/Title_Menu.gd" id="2_ctd5h"]
 [ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="2_ywsiu"]
-[ext_resource type="Shader" uid="uid://cufqavmvfm34k" path="res://Shaders/scroll_xy.gdshader" id="3_f2pgg"]
 [ext_resource type="Script" uid="uid://ctrg4leyp0tph" path="res://Scripts/Scene_Scripts/Title_Scene/Save_Menu.gd" id="3_g1pxl"]
 [ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="3_vmviq"]
 [ext_resource type="Script" uid="uid://dsj3ins7pl6nv" path="res://Scripts/Scene_Scripts/Title_Scene/Save_Menu2.gd" id="4_k54io"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7wq1i"]
-shader = ExtResource("3_f2pgg")
-shader_parameter/speed_x = 0.1
-shader_parameter/speed_y = 0.1
 
 [node name="Title_Scene" type="Control" node_paths=PackedStringArray("titleMenu", "saveMenu", "saveMenu2")]
 layout_mode = 3
@@ -126,8 +122,8 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -77.0
-offset_right = 499.0
+offset_top = -205.0
+offset_right = 332.0
 grow_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Title_Menu/PanelContainer2"]
@@ -137,14 +133,66 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Label" type="Label" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer"]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
-text = "Assets:
-* Music by Abstraction (https://tallbeard.itch.io/music-loop-bundle).
-* Interface sfx pack 1 by ObsydianX (https://obsydianx.itch.io/interface-sfx-pack-1).
-* Sprites by Ansimuz (https://ansimuz.itch.io/gothicvania-patreon-collection)
-* Pattern Pack 2 by kenney-assets (https://kenney-assets.itch.io/pattern-pack-2)"
+text = "Assets Used:"
+
+[node name="Label3" type="Label" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "* Gothicvania Patreon Collection by Ansimuz:"
+
+[node name="LinkButton3" type="LinkButton" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "https://ansimuz.itch.io/gothicvania-patreon-collection"
+uri = "https://ansimuz.itch.io/gothicvania-patreon-collection"
+
+[node name="Label2" type="Label" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "* Interface sfx pack 1 by ObsydianX:"
+
+[node name="LinkButton2" type="LinkButton" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "https://obsydianx.itch.io/interface-sfx-pack-1"
+uri = "https://obsydianx.itch.io/interface-sfx-pack-1"
+
+[node name="Label5" type="Label" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "* Music by Abstraction:"
+
+[node name="LinkButton" type="LinkButton" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "https://tallbeard.itch.io/music-loop-bundle"
+uri = "https://tallbeard.itch.io/music-loop-bundle"
+
+[node name="Label4" type="Label" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "* Pattern Pack 2 by kenney-assets:"
+
+[node name="LinkButton4" type="LinkButton" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "https://kenney-assets.itch.io/pattern-pack-2"
+uri = "https://kenney-assets.itch.io/pattern-pack-2"
 
 [node name="Save_Menu" type="Control" parent="MarginContainer" node_paths=PackedStringArray("titleScene", "clipContainer", "scrollContainer", "vBoxContainer", "back")]
 visible = false

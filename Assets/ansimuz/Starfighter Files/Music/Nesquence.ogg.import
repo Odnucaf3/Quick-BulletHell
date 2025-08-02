@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/Nesquence.ogg-220a7d879e5af2454ceea2420471261
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://qpw70cvfh5bf"]
+[gd_scene load_steps=33 format=3 uid="uid://qpw70cvfh5bf"]
 
 [ext_resource type="Script" uid="uid://b471unj5j3evn" path="res://Scripts/Scene_Scripts/Game_Scene.gd" id="1_143dr"]
 [ext_resource type="PackedScene" uid="uid://c3ym6uahxyv5x" path="res://Nodes/Prefabs/enemy_prefab.tscn" id="2_acyb6"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="5_0qyn6"]
 [ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="6_igypo"]
 [ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="7_gg6rv"]
-[ext_resource type="Shader" uid="uid://cufqavmvfm34k" path="res://Shaders/scroll_xy.gdshader" id="7_mitwg"]
 [ext_resource type="Texture2D" uid="uid://dhr2o7k6gxpyg" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/desert-backgorund.png" id="7_xrh8u"]
 [ext_resource type="Shader" uid="uid://byviwp6gsqigi" path="res://Shaders/scroll_x.gdshader" id="8_gg6rv"]
 [ext_resource type="Script" uid="uid://c4b6si6rx0wc8" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Pause_Menu.gd" id="8_q0g70"]
@@ -26,11 +25,6 @@
 [ext_resource type="Texture2D" uid="uid://ctqwl3pbjdb7h" path="res://Assets/ansimuz/Starfighter Files/sprites/shoot.png" id="20_hxoxt"]
 [ext_resource type="Script" uid="uid://d0kihyc8vswun" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Dialogue_Menu.gd" id="20_kjtdd"]
 [ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="21_igypo"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3p4s7"]
-shader = ExtResource("7_mitwg")
-shader_parameter/speed_x = 0.1
-shader_parameter/speed_y = 0.1
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_jmjr4"]
 color = Color(1, 1, 1, 1)
@@ -139,7 +133,6 @@ texture = ExtResource("6_igypo")
 
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
 self_modulate = Color(0, 0, 0, 0.215686)
-material = SubResource("ShaderMaterial_3p4s7")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

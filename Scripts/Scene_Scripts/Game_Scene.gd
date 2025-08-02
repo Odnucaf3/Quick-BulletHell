@@ -467,7 +467,7 @@ func Nothing_and_Market():
 	Enter_GameState_InGameplay()
 #-------------------------------------------------------------------------------
 func OpenMarket():
-	await ShowBanner2("Flea Market has being Open")
+	await ShowBanner2("Flea Market")
 	myGAME_STATE = GAME_STATE.IN_MARKET
 	await marketMenu.OpenMarket()
 #-------------------------------------------------------------------------------
@@ -522,8 +522,8 @@ func GoToMainScene():
 #-------------------------------------------------------------------------------
 #region STAGE 1 FUNCTIONS
 func Stage1():
-	#await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
-	#await EnemyWave_and_Market("Enemy-Wave 2", func():InfiniteEnemyTest(), 10)
+	await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
+	await EnemyWave_and_Market("Enemy-Wave 2", func():InfiniteEnemyTest(), 10)
 	#-------------------------------------------------------------------------------
 	#await Nothing_and_Market()
 	await ShowBanner("Enter Boss")	#IMPORTANTE: Tiene que haber un await antres de entrar al dialogo porque si no se saltea la primer liena.
@@ -636,7 +636,7 @@ func Stage1_EnemyWave1_Enemy1_Fire1(_tween:Tween, _node2D: Node2D):
 			var _dir: float = AngleToPlayer(_node2D)
 			var _x:float = _node2D.position.x
 			var _y:float = _node2D.position.y
-			var _bullet: Bullet = Create_EnemyBullet(_x, _y, 8, _dir, "ArrowHead_Bullet", 3)
+			var _bullet: Bullet = Create_EnemyBullet(_x, _y, 8, _dir, "Ball1_Bullet", 3)
 		)
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(0.1)
@@ -883,7 +883,6 @@ func PlayerBullet_PhysicsUpdate_Limitless(_bullet: Bullet):
 		var _enemy: Enemy = enemy_Enabled_Array[_i]
 		#-------------------------------------------------------------------------------
 		if(_bullet.position.distance_to(_enemy.position) < (_bullet.radius+_enemy.radius) and _enemy.canBeHit):
-			
 			_enemy.hp -=1
 			Set_EnemyLife_Label(_enemy)
 			Destroy_PlayerBullet(_bullet)
@@ -1079,7 +1078,10 @@ func Boss_InstantDeath():
 	timer_tween.finished.emit()
 #-------------------------------------------------------------------------------
 func Set_BossLife_Label(_boss: Boss):
-	_boss.label.text = str(_boss.hp)+" / "+str(_boss.maxHp) + " HP"
+	Set_CommonLife_Label(_boss.label, _boss.hp, _boss.maxHp)
+#-------------------------------------------------------------------------------
+func Set_CommonLife_Label(_label:Label, _hp:int, _maxHp:int):
+	_label.text = str(_hp)+" / "+str(_maxHp) + "hp"
 #endregion
 #-------------------------------------------------------------------------------
 #region ENEMY FUNCTIONS
@@ -1143,7 +1145,7 @@ func Destroy_Enemy(_enemy: Enemy):
 	_enemy.hide()
 #-------------------------------------------------------------------------------
 func Set_EnemyLife_Label(_enemy: Enemy):
-	_enemy.label.text = str(_enemy.hp)+" / "+str(_enemy.maxHp) + " hp"
+	Set_CommonLife_Label(_enemy.label, _enemy.hp, _enemy.maxHp)
 #endregion
 #-------------------------------------------------------------------------------
 #region ENEMY BULLET FUNCTIONS
@@ -1263,7 +1265,7 @@ func TimeOut_Tween(_iMax: int):
 	await timer_tween.finished
 #-------------------------------------------------------------------------------
 func PrintTimer(_i:int, _iMax:int):
-	timerLabel.text = str(_i).pad_zeros(2)+" / " +str(_iMax).pad_zeros(2) + " s"
+	timerLabel.text = str(_i).pad_zeros(2)+"s / " +str(_iMax).pad_zeros(2) + "s"
 #-------------------------------------------------------------------------------
 func StopEverithing():
 	timerLabel.text = ""

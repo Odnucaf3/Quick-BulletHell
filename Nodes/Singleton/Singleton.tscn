@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=4 uid="uid://6uqyy262fely"]
+[gd_scene load_steps=62 format=4 uid="uid://6uqyy262fely"]
 
 [ext_resource type="Script" uid="uid://bhmqd4n3aj5so" path="res://Scripts/Singleton.gd" id="1_2qyiw"]
 [ext_resource type="AudioStream" uid="uid://cgpa31fuwepra" path="res://Assets/ansimuz/Starfighter Files/Music/spaceship shooter.ogg" id="2_762mc"]
@@ -15,12 +15,6 @@
 [ext_resource type="Script" uid="uid://et6qf8ddxav8" path="res://Scripts/Scene_Scripts/Option_Menu/Option_Slider.gd" id="8_p8ele"]
 [ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="12_762mc"]
 [ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="13_2qwun"]
-[ext_resource type="Shader" uid="uid://cufqavmvfm34k" path="res://Shaders/scroll_xy.gdshader" id="13_7e2ae"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lbo7f"]
-shader = ExtResource("13_7e2ae")
-shader_parameter/speed_x = 0.1
-shader_parameter/speed_y = 0.1
 
 [sub_resource type="Image" id="Image_76c87"]
 data = {
@@ -6869,7 +6863,6 @@ expand_mode = 1
 
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Option_Menu"]
 self_modulate = Color(0, 0, 0, 0.215686)
-material = SubResource("ShaderMaterial_lbo7f")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

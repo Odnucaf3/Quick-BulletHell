@@ -6,7 +6,7 @@ enum ITEM_STATE{SPIN, FALL, IMANTED}
 var velocity: Vector2
 var dir: float
 var vel: float
-var radius: float = 8.0
+var radius: float = 4.0
 #-------------------------------------------------------------------------------
 var myITEM_STATE: ITEM_STATE
 #-------------------------------------------------------------------------------
