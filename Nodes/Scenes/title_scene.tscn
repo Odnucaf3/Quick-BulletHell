@@ -159,9 +159,22 @@ uri = "https://ansimuz.itch.io/gothicvania-patreon-collection"
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
-text = "* Interface sfx pack 1 by ObsydianX:"
+text = "* Cyberpunk Icons by Craftpit:"
 
 [node name="LinkButton2" type="LinkButton" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "https://free-game-assets.itch.io/free-cyberpunk-game-icons-for-ui"
+uri = "https://free-game-assets.itch.io/free-cyberpunk-game-icons-for-ui"
+
+[node name="Label6" type="Label" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "* Interface sfx pack 1 by ObsydianX:"
+
+[node name="LinkButton5" type="LinkButton" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
@@ -169,12 +182,14 @@ text = "https://obsydianx.itch.io/interface-sfx-pack-1"
 uri = "https://obsydianx.itch.io/interface-sfx-pack-1"
 
 [node name="Label5" type="Label" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
 text = "* Music by Abstraction:"
 
 [node name="LinkButton" type="LinkButton" parent="MarginContainer/Title_Menu/PanelContainer2/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12

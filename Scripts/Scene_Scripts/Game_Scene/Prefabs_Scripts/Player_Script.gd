@@ -21,8 +21,8 @@ var tween_Array: Array[Tween] = []
 @export var hitBox_Sprite: Sprite2D
 #-------------------------------------------------------------------------------
 var hitBox_radius: float = 8.0
-var grazeBox_radius: float = 34.0
-var magnetBox_radius: float = 98.0
+var grazeBox_radius: float = 32.0
+var magnetBox_radius: float = 95.0
 #-------------------------------------------------------------------------------
 var playerResource: PlayerResource
 #endregion

@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://kthlaqw0sk1v"]
 
 [ext_resource type="Script" uid="uid://byhmy1qonwtm1" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/cardButton_Script.gd" id="1_3uemk"]
-[ext_resource type="Texture2D" uid="uid://yvix06fsckwj" path="res://Assets/Images/Cards/CardFront.PNG" id="2_gfkub"]
-[ext_resource type="Texture2D" uid="uid://b8tpyno12at6c" path="res://Assets/Images/Cards/Card1.PNG" id="3_li0l5"]
+[ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="2_dccqt"]
+[ext_resource type="Texture2D" uid="uid://jhxu6q3gmuqx" path="res://Assets/Craftpix/free-cyberpunk-game-icons-for-ui/standart/without background/24.png" id="3_dccqt"]
 
 [node name="cardButton" type="Button" node_paths=PackedStringArray("artwork", "hold", "price")]
-custom_minimum_size = Vector2(198, 250)
-offset_right = 198.0
-offset_bottom = 250.0
+custom_minimum_size = Vector2(200, 200)
+offset_right = 200.0
+offset_bottom = 200.0
 script = ExtResource("1_3uemk")
 artwork = NodePath("MarginContainer/TextureRect/TextureRect")
 hold = NodePath("Label")
@@ -26,8 +26,9 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-texture = ExtResource("2_gfkub")
+texture = ExtResource("2_dccqt")
 expand_mode = 1
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/TextureRect"]
@@ -37,7 +38,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_li0l5")
+texture = ExtResource("3_dccqt")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="."]

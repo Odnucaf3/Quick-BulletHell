@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="CardResource" load_steps=3 format=3 uid="uid://bmxxocjyyqhjw"]
 
-[ext_resource type="Texture2D" uid="uid://bdn37rxu1dkrq" path="res://Assets/Images/Cards/Card2.PNG" id="1_2fh6b"]
+[ext_resource type="Texture2D" uid="uid://cv0w025044d5g" path="res://Assets/Craftpix/free-cyberpunk-game-icons-for-ui/standart/without background/25.png" id="1_2jema"]
 [ext_resource type="Script" uid="uid://cuksf88s1cb0g" path="res://Scripts/Resource_Scripts/CardResource.gd" id="1_j2t11"]
 
 [resource]
 script = ExtResource("1_j2t11")
 price = 150
 maxHold = 25
-artwork = ExtResource("1_2fh6b")
+artwork = ExtResource("1_2jema")

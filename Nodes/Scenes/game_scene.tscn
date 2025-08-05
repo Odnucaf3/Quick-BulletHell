@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://qpw70cvfh5bf"]
+[gd_scene load_steps=41 format=3 uid="uid://qpw70cvfh5bf"]
 
 [ext_resource type="Script" uid="uid://b471unj5j3evn" path="res://Scripts/Scene_Scripts/Game_Scene.gd" id="1_143dr"]
 [ext_resource type="PackedScene" uid="uid://c3ym6uahxyv5x" path="res://Nodes/Prefabs/enemy_prefab.tscn" id="2_acyb6"]
@@ -19,12 +19,17 @@
 [ext_resource type="Script" uid="uid://ikhf13h2o5d5" path="res://Scripts/Scene_Scripts/Game_Scene/scroll_script.gd" id="11_mitwg"]
 [ext_resource type="Texture2D" uid="uid://cjqj1ikrxyhxa" path="res://Assets/ansimuz/Starfighter Files/sprites/Ships/ship-a/ship-a3.png" id="12_igypo"]
 [ext_resource type="Script" uid="uid://cauphv42fsmg2" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/game_over_menu.gd" id="15_ou6t6"]
-[ext_resource type="Texture2D" uid="uid://yvix06fsckwj" path="res://Assets/Images/Cards/CardFront.PNG" id="17_sjbfm"]
-[ext_resource type="Texture2D" uid="uid://0ncvd5s3kli" path="res://Assets/Images/Cards/CardBack.PNG" id="18_6xp6x"]
+[ext_resource type="Texture2D" uid="uid://cldwd11ea533b" path="res://Assets/ansimuz/Starfighter Files/sprites/Explosions/explosions-a1.png" id="17_yqvj6"]
+[ext_resource type="Texture2D" uid="uid://4vmekbcyljt2" path="res://Assets/ansimuz/Starfighter Files/sprites/Explosions/explosions-a2.png" id="18_hko5v"]
+[ext_resource type="Texture2D" uid="uid://timeli6fvh4y" path="res://Assets/ansimuz/Starfighter Files/sprites/Explosions/explosions-a3.png" id="19_s3ops"]
 [ext_resource type="PackedScene" uid="uid://kthlaqw0sk1v" path="res://Nodes/Prefabs/card_button_prefab.tscn" id="20_4usgd"]
 [ext_resource type="Texture2D" uid="uid://ctqwl3pbjdb7h" path="res://Assets/ansimuz/Starfighter Files/sprites/shoot.png" id="20_hxoxt"]
 [ext_resource type="Script" uid="uid://d0kihyc8vswun" path="res://Scripts/Scene_Scripts/Game_Scene/Menu_Nodes/Dialogue_Menu.gd" id="20_kjtdd"]
+[ext_resource type="Texture2D" uid="uid://drkiqj4heh7dp" path="res://Assets/ansimuz/Starfighter Files/sprites/Explosions/explosions-a4.png" id="20_rka03"]
 [ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="21_igypo"]
+[ext_resource type="Texture2D" uid="uid://dsdl0hsoeqmpw" path="res://Assets/ansimuz/Starfighter Files/sprites/Explosions/explosions-a5.png" id="21_ircg4"]
+[ext_resource type="Texture2D" uid="uid://b3spvkus1yjqj" path="res://Assets/ansimuz/Starfighter Files/sprites/Explosions/explosions-a6.png" id="22_62d7h"]
+[ext_resource type="Texture2D" uid="uid://bfwf0wpkron0r" path="res://Assets/Craftpix/free-cyberpunk-game-icons-for-ui/standart/without background/26.png" id="27_42b3h"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_jmjr4"]
 color = Color(1, 1, 1, 1)
@@ -78,6 +83,92 @@ _data = {
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_42b3h"]
 animation = &"Idle"
 
+[sub_resource type="Animation" id="Animation_ftd8i"]
+resource_name = "Explotion"
+length = 0.80001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("17_yqvj6"), ExtResource("18_hko5v"), ExtResource("19_s3ops"), ExtResource("20_rka03"), ExtResource("21_ircg4"), ExtResource("22_62d7h")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(8, 8), Vector2(12, 12)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_why6j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("17_yqvj6")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(4, 4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pb3t7"]
+_data = {
+&"Explotion": SubResource("Animation_ftd8i"),
+&"RESET": SubResource("Animation_why6j")
+}
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrh8u"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_left = 5
@@ -90,7 +181,7 @@ expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
 
-[node name="Game_Scene" type="Node" node_paths=PackedStringArray("currentLayer", "pauseMenu", "gameoverMenu", "marketMenu", "dialogueMenu", "timerLabel", "content", "player", "difficultyLabel", "maxScoreLabel_title", "maxScoreLabel_Num", "scoreLabel_title", "scoreLabel_Num", "powerLabel_title", "powerLabel_Num", "livesLabel_title", "livesLabel_Num", "moneyLabel_title", "moneyLabel_Num", "maxMoneyLabel_Num", "leftLabel", "completedPanel", "completedLabel")]
+[node name="Game_Scene" type="Node" node_paths=PackedStringArray("currentLayer", "pauseMenu", "gameoverMenu", "marketMenu", "dialogueMenu", "timerLabel", "content", "player", "explotion", "explotion_anim", "difficultyLabel", "maxScoreLabel_title", "maxScoreLabel_Num", "scoreLabel_title", "scoreLabel_Num", "powerLabel_title", "powerLabel_Num", "livesLabel_title", "livesLabel_Num", "moneyLabel_title", "moneyLabel_Num", "maxMoneyLabel_Num", "leftLabel", "completedPanel", "completedLabel")]
 script = ExtResource("1_143dr")
 currentLayer = NodePath("CanvasLayer")
 pauseMenu = NodePath("CanvasLayer/Window_MarginContainer/Pause_Menu")
@@ -100,6 +191,8 @@ dialogueMenu = NodePath("CanvasLayer/Window_MarginContainer/Dialogue_Menu")
 timerLabel = NodePath("CanvasLayer/Window_MarginContainer/Timer_Label")
 content = NodePath("CanvasLayer/Window_MarginContainer/Content")
 player = NodePath("CanvasLayer/Window_MarginContainer/Content/Player")
+explotion = NodePath("CanvasLayer/Window_MarginContainer/Content/Explotion_Sprite2D")
+explotion_anim = NodePath("CanvasLayer/Window_MarginContainer/Content/Explotion_Sprite2D/Explotion_AnimationPlayer")
 enemy_Prefab = ExtResource("2_acyb6")
 boss_Prefab = ExtResource("3_xrh8u")
 bullet_Prefab = ExtResource("3_5om1x")
@@ -513,6 +606,17 @@ texture = ExtResource("5_0qyn6")
 position = Vector2(8, 0)
 gizmo_extents = 50.0
 
+[node name="Explotion_Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content"]
+z_index = 20
+position = Vector2(198, 360)
+scale = Vector2(4, 4)
+texture = ExtResource("17_yqvj6")
+
+[node name="Explotion_AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Window_MarginContainer/Content/Explotion_Sprite2D"]
+libraries = {
+&"": SubResource("AnimationLibrary_pb3t7")
+}
+
 [node name="Timer_Label" type="Label" parent="CanvasLayer/Window_MarginContainer"]
 z_index = 30
 layout_mode = 2
@@ -520,7 +624,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 60
-text = "60s / 60s"
+text = "60 / 60 s"
 horizontal_alignment = 1
 
 [node name="Banner" type="PanelContainer" parent="CanvasLayer/Window_MarginContainer"]
@@ -664,7 +768,7 @@ buyMenu = NodePath("VBoxContainer/Buy_Menu")
 scrollContainer = NodePath("VBoxContainer/Buy_Menu/MarginContainer/ScrollContainer")
 cardContainer = NodePath("VBoxContainer/Buy_Menu/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer")
 cardPrefab = ExtResource("20_4usgd")
-deckTexture = ExtResource("18_6xp6x")
+deckTexture = ExtResource("27_42b3h")
 description = NodePath("VBoxContainer/Buy_Menu/MarginContainer2/RichTextLabel")
 confirmCard_Panel = NodePath("VBoxContainer/Confirm_Menu/VBoxContainer/MarginContainer/Panel")
 confirmCard_Artwork = NodePath("VBoxContainer/Confirm_Menu/VBoxContainer/MarginContainer/Panel/MarginContainer/TextureRect/TextureRect")
@@ -679,7 +783,7 @@ noButton = NodePath("VBoxContainer/Confirm_Menu/VBoxContainer/HBoxContainer/Butt
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 754.0
+offset_bottom = 966.0
 grow_horizontal = 2
 
 [node name="Label" type="Label" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer"]
@@ -688,7 +792,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 50
-text = "Flea Market"
+text = "Space Market:"
 horizontal_alignment = 1
 vertical_alignment = 2
 
@@ -699,15 +803,16 @@ layout_mode = 2
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu"]
 clip_contents = true
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu/MarginContainer"]
 clip_contents = false
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 0
+size_flags_vertical = 4
 follow_focus = true
 horizontal_scroll_mode = 2
 vertical_scroll_mode = 0
@@ -723,27 +828,23 @@ layout_mode = 2
 theme_override_constants/separation = 70
 
 [node name="cardButton" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer" instance=ExtResource("20_4usgd")]
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 
 [node name="cardButton2" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer" instance=ExtResource("20_4usgd")]
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 
 [node name="cardButton3" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer" instance=ExtResource("20_4usgd")]
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 
 [node name="cardButton4" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer" instance=ExtResource("20_4usgd")]
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 
 [node name="cardButton5" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer" instance=ExtResource("20_4usgd")]
-custom_minimum_size = Vector2(200, 250)
-layout_mode = 2
-
-[node name="cardButton6" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer" instance=ExtResource("20_4usgd")]
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Buy_Menu"]
@@ -765,6 +866,7 @@ fit_content = true
 
 [node name="Confirm_Menu" type="MarginContainer" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
@@ -779,7 +881,7 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="Panel" type="Panel" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Confirm_Menu/VBoxContainer/MarginContainer"]
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -797,8 +899,9 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Confirm_Menu/VBoxContainer/MarginContainer/Panel/MarginContainer"]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-texture = ExtResource("17_sjbfm")
+texture = ExtResource("6_igypo")
 expand_mode = 1
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Confirm_Menu/VBoxContainer/MarginContainer/Panel/MarginContainer/TextureRect"]
@@ -808,7 +911,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("18_6xp6x")
+texture = ExtResource("27_42b3h")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Window_MarginContainer/Market_Menu/VBoxContainer/Confirm_Menu/VBoxContainer/MarginContainer/Panel"]
@@ -873,13 +976,15 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_xrh8u")
 
-[node name="Dialogue_Menu" type="Control" parent="CanvasLayer/Window_MarginContainer" node_paths=PackedStringArray("gameScene", "dialogueLabel")]
+[node name="Dialogue_Menu" type="Control" parent="CanvasLayer/Window_MarginContainer" node_paths=PackedStringArray("gameScene", "dialogueLabel", "speaker1", "speaker2")]
 visible = false
 z_index = 30
 layout_mode = 2
 script = ExtResource("20_kjtdd")
 gameScene = NodePath("../../..")
 dialogueLabel = NodePath("MarginContainer/PanelContainer/MarginContainer/RichTextLabel")
+speaker1 = NodePath("Control")
+speaker2 = NodePath("Control2")
 
 [node name="Control" type="Control" parent="CanvasLayer/Window_MarginContainer/Dialogue_Menu"]
 layout_mode = 1

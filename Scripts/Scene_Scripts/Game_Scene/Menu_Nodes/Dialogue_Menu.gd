@@ -5,6 +5,8 @@ var singleton: Singleton
 #-------------------------------------------------------------------------------
 @export var gameScene: Game_Scene
 @export var dialogueLabel: RichTextLabel
+@export var speaker1: Control
+@export var speaker2: Control
 #-------------------------------------------------------------------------------
 signal dialogueNext_signal
 #endregion

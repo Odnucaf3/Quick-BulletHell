@@ -20,6 +20,8 @@ var timer: int
 var difficulty: float
 @export var content: Control
 @export var player: Player
+@export var explotion: Sprite2D
+@export var explotion_anim: AnimationPlayer
 var isFocus: bool = false
 var cardInventory: Dictionary[CardResource, int]
 #-------------------------------------------------------------------------------
@@ -384,6 +386,8 @@ func BeginGame() -> void:
 	player.grazeBox_Sprite.hide()
 	player.hitBox_Sprite.hide()
 	#-------------------------------------------------------------------------------
+	explotion.global_position = Vector2.ZERO
+	#-------------------------------------------------------------------------------
 	SetScore()
 	SetMoney()
 	SetMaxMoney()
@@ -467,7 +471,7 @@ func Nothing_and_Market():
 	Enter_GameState_InGameplay()
 #-------------------------------------------------------------------------------
 func OpenMarket():
-	await ShowBanner2("Flea Market")
+	await ShowBanner2("Space Market")
 	myGAME_STATE = GAME_STATE.IN_MARKET
 	await marketMenu.OpenMarket()
 #-------------------------------------------------------------------------------
@@ -528,6 +532,7 @@ func Stage1():
 	#await Nothing_and_Market()
 	await ShowBanner("Enter Boss")	#IMPORTANTE: Tiene que haber un await antres de entrar al dialogo porque si no se saltea la primer liena.
 	myGAME_STATE = GAME_STATE.IN_DIALOGUE
+	dialogueMenu.speaker2.hide()
 	dialogueMenu.OpenDialogue()
 	#-------------------------------------------------------------------------------
 	await Dialogue(0, 0, 4)
@@ -544,6 +549,7 @@ func Stage1():
 	#-------------------------------------------------------------------------------
 	await _tween.finished
 	#-------------------------------------------------------------------------------
+	dialogueMenu.speaker2.show()
 	await Dialogue(0, 4, 8)
 	#-------------------------------------------------------------------------------
 	dialogueMenu.CloseDialogue()
@@ -571,7 +577,7 @@ func InfiniteEnemyTest_Tween(_tween:Tween, _mirror:float):
 #-------------------------------------------------------------------------------
 func InfiniteEnemyTest_Enemy(_tween:Tween, _mirror:float):
 	var _x: float = width*0.5+width*0.25*_mirror
-	var _enemy: Enemy = Create_Enemy(_x, 0, 0, 0, 10)
+	var _enemy: Enemy = Create_Enemy(_x, 0, 0, 90, 10)
 	#-------------------------------------------------------------------------------
 	_enemy.death_signal.connect(
 		func(): _tween.play()
@@ -818,6 +824,8 @@ func PlayerGameOver() -> void:
 func PlayerDeath() -> void:
 	player.myPLAYER_STATE = Player.PLAYER_STATE.DEATH
 	player.hide()
+	explotion.position = player.position
+	explotion_anim.play("Explotion")
 	#-------------------------------------------------------------------------------
 	for _i in range(items_Enabled_Array.size()-1,-1,-1):
 		if(items_Enabled_Array[_i].myITEM_STATE == Item.ITEM_STATE.IMANTED):
@@ -1061,7 +1069,7 @@ func Boss_PhysicsUpdate(_boss:Boss):
 	var _dir2: float = deg_to_rad(_boss.dir)
 	_boss.velocity.x = _boss.vel * cos(_dir2)
 	_boss.velocity.y = _boss.vel * sin(_dir2)
-	#_boss.rotation_degrees = _boss.dir+90
+	#_boss.sprite.rotation_degrees = _boss.dir-90		#NOTA: Borrar si quiero enemigos que miren para abajo.
 	#-------------------------------------------------------------------------------
 	_boss.position += _boss.velocity * deltaTimeScale
 	#-------------------------------------------------------------------------------
@@ -1081,7 +1089,7 @@ func Set_BossLife_Label(_boss: Boss):
 	Set_CommonLife_Label(_boss.label, _boss.hp, _boss.maxHp)
 #-------------------------------------------------------------------------------
 func Set_CommonLife_Label(_label:Label, _hp:int, _maxHp:int):
-	_label.text = str(_hp)+" / "+str(_maxHp) + "hp"
+	_label.text = str(_hp)+" / "+str(_maxHp) + " hp"
 #endregion
 #-------------------------------------------------------------------------------
 #region ENEMY FUNCTIONS
@@ -1132,7 +1140,7 @@ func Enemy_PhysicsUpdate(_enemy:Enemy):
 	var _dir2: float = deg_to_rad(_enemy.dir)
 	_enemy.velocity.x = _enemy.vel * cos(_dir2)
 	_enemy.velocity.y = _enemy.vel * sin(_dir2)
-	#_enemy.rotation_degrees = _enemy.dir+90
+	_enemy.sprite.rotation_degrees = _enemy.dir-90		#NOTA: Borrar si quiero enemigos que miren para abajo.
 	#-------------------------------------------------------------------------------
 	_enemy.position += _enemy.velocity * deltaTimeScale
 	#-------------------------------------------------------------------------------
@@ -1265,7 +1273,7 @@ func TimeOut_Tween(_iMax: int):
 	await timer_tween.finished
 #-------------------------------------------------------------------------------
 func PrintTimer(_i:int, _iMax:int):
-	timerLabel.text = str(_i).pad_zeros(2)+"s / " +str(_iMax).pad_zeros(2) + "s"
+	timerLabel.text = str(_i).pad_zeros(2)+" / " +str(_iMax).pad_zeros(2) + " s"
 #-------------------------------------------------------------------------------
 func StopEverithing():
 	timerLabel.text = ""

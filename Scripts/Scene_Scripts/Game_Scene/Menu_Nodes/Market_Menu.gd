@@ -24,7 +24,7 @@ var cardDictionary: Dictionary
 @export var confirmCard_Title: Label
 @export var yesButton: Button
 @export var noButton: Button
-const buttonSize: Vector2 = Vector2(200, 250)
+const buttonSize: Vector2 = Vector2(225, 225)
 #-------------------------------------------------------------------------------
 signal closeMarket_signal
 #endregion
