@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BulletResource" load_steps=3 format=3 uid="uid://dncsfwv13nvh1"]
+
+[ext_resource type="Script" uid="uid://ep36t5njjqt5" path="res://Scripts/Resource_Scripts/BulletResource.gd" id="1_exg01"]
+[ext_resource type="Texture2D" uid="uid://dg5ijwp7crr2p" path="res://Assets/ansimuz/Starfighter Files/sprites/FX/Bullet-c/bullet-c2.png" id="2_exg01"]
+
+[resource]
+script = ExtResource("1_exg01")
+texture = ExtResource("2_exg01")
+radius = 13.0

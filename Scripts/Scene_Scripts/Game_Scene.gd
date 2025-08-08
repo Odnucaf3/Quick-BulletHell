@@ -526,40 +526,46 @@ func GoToMainScene():
 #-------------------------------------------------------------------------------
 #region STAGE_1
 func Stage1():
-	await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
-	await EnemyWave_and_Market("Enemy-Wave 2", func():Stage1_EnemyWave2(), 40)
+	#await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
+	#await EnemyWave_and_Market("Enemy-Wave 2", func():Stage1_EnemyWave2(), 40)
 	#-------------------------------------------------------------------------------
 	#await Nothing_and_Market()
-	await ShowBanner("Enter Boss")	#IMPORTANTE: Tiene que haber un await antres de entrar al dialogo porque si no se saltea la primer liena.
+	#await Stage1_Boss1_Dialogue1()
+	var _boss: Boss = await EnterBoss()
+	#await Stage1_Boss1_Dialogue2()
+	#-------------------------------------------------------------------------------
+	dialogueMenu.CloseDialogue()
+	myGAME_STATE = GAME_STATE.IN_GAMEPLAY
+	#-------------------------------------------------------------------------------
+	#await EnemyWave_and_Market("Spell-Card 1", func():Stage1_SpellCard1(_boss), 60)
+	await EnemyWave_and_Market("Spell-Card 2", func():Stage1_SpellCard2(_boss), 60)
+	await StageCommon("Stage 1 Completed",1,0)
+#-------------------------------------------------------------------------------
+func Stage1_Boss1_Dialogue1():
+	await ShowBanner("Enter Boss")		#IMPORTANTE: Tiene que haber un await antes de entrar al dialogo porque si no se saltea la primer liena.
 	myGAME_STATE = GAME_STATE.IN_DIALOGUE
 	dialogueMenu.speaker2.hide()
 	dialogueMenu.OpenDialogue()
 	#-------------------------------------------------------------------------------
 	await Dialogue(0, 0, 4)
-	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func EnterBoss() -> Boss:
 	var _boss: Boss = Create_Boss(0,0, 100)
+	_boss.label.hide()
+	_boss.canBeHit = false
+	#-------------------------------------------------------------------------------
 	var _tween: Tween = create_tween()
-	#-------------------------------------------------------------------------------
-	_tween.tween_callback(func():
-		_boss.label.hide()
-		_boss.canBeHit = false
-	)
-	#-------------------------------------------------------------------------------
 	_tween.tween_property(_boss, "position", Vector2(width*0.5, height*0.2), 1)
 	#-------------------------------------------------------------------------------
 	await _tween.finished
-	#-------------------------------------------------------------------------------
+	return _boss
+#-------------------------------------------------------------------------------
+func Stage1_Boss1_Dialogue2():
 	dialogueMenu.speaker2.show()
 	await Dialogue(0, 4, 8)
-	#-------------------------------------------------------------------------------
-	dialogueMenu.CloseDialogue()
-	myGAME_STATE = GAME_STATE.IN_GAMEPLAY
-	#-------------------------------------------------------------------------------
-	await EnemyWave_and_Market("Spell-Card 1", func():Stage1_SpellCard1(_boss), 60)
-	await StageCommon("Stage 1 Completed",1,0)
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_1 - ENEMYWAVE_1
+#region STAGE_1 ENEMYWAVE_1
 func Stage1_EnemyWave1():
 	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
 	_tween.tween_interval(0.5)
@@ -572,12 +578,12 @@ func Stage1_EnemyWave1():
 func Stage1_EnemyWave1_Loop():
 	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
 	_tween.set_loops()
-	Stage1_EnemyWave1_Loop_Unit(_tween, 1)
+	Stage1_EnemyWave1_Loop_Mirror(_tween, 1)
 	_tween.tween_interval(1)
-	Stage1_EnemyWave1_Loop_Unit(_tween, -1)
+	Stage1_EnemyWave1_Loop_Mirror(_tween, -1)
 	_tween.tween_interval(1)
 #-------------------------------------------------------------------------------
-func Stage1_EnemyWave1_Loop_Unit(_tween:Tween, _mirror: float):
+func Stage1_EnemyWave1_Loop_Mirror(_tween:Tween, _mirror: float):
 	for _i in 8:
 		#-------------------------------------------------------------------------------
 		for _j in 1:
@@ -621,14 +627,14 @@ func Stage1_EnemyWave1_Enemy1_Fire1(_tween:Tween, _node2D: Node2D):
 			var _dir: float = AngleToPlayer(_node2D)
 			var _x:float = _node2D.position.x
 			var _y:float = _node2D.position.y
-			var _bullet: Bullet = Create_EnemyBullet(_x, _y, _vel, _dir, "Ball1_Bullet", 3)
+			var _bullet: Bullet = Create_EnemyBullet_A(_x, _y, _vel, _dir, "bullet2", false)
 		)
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(_timer)
 	#-------------------------------------------------------------------------------
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_1 - ENEMYWAVE_2
+#region STAGE_1 ENEMYWAVE_2
 func Stage1_EnemyWave2():
 	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
 	_tween.tween_interval(0.5)
@@ -681,7 +687,7 @@ func Stage1_EnemyWave2_Enemy1_Fire1(_tween:Tween, _node2D: Node2D, _mirror:float
 			for _i in _max1:
 				var _x:float = _node2D.position.x
 				var _y:float = _node2D.position.y
-				var _bullet: Bullet = Create_EnemyBullet(_x, _y, _vel, _dir+_dir2+_ang, "Ball1_Bullet", 3)
+				var _bullet: Bullet = Create_EnemyBullet_A(_x, _y, _vel, _dir+_dir2+_ang, "bullet2", false)
 				_dir2 += 360/_max1
 			#-------------------------------------------------------------------------------
 		)
@@ -692,26 +698,29 @@ func Stage1_EnemyWave2_Enemy1_Fire1(_tween:Tween, _node2D: Node2D, _mirror:float
 	#-------------------------------------------------------------------------------
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_1 - SPELLCARD_1
+#region STAGE_1 SPELLCARD_1
 func Stage1_SpellCard1(_boss: Boss):
-	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
+	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
 	_tween.tween_interval(1)
 	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
 		_boss.label.show()
 		_boss.canBeHit = true
-		var _tween2: Tween = CreateTween_ArrayAppend(main_tween_Array)
-		_tween2.set_loops()
-		Create_SpellCard_Tween(_boss, _tween2, 1)
-		Create_SpellCard_Tween(_boss, _tween2, -1)
+		Stage1_SpellCard1_Loop(_boss)
 	)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func Create_SpellCard_Tween(_node2d:Node2D, _tween:Tween, _mirror: float):
+func Stage1_SpellCard1_Loop(_boss: Boss):
+	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
+	_tween.set_loops()
+	Stage1_SpellCard1_Loop_Mirror(_boss, _tween, 1)
+	Stage1_SpellCard1_Loop_Mirror(_boss, _tween, -1)
+#-------------------------------------------------------------------------------
+func Stage1_SpellCard1_Loop_Mirror(_node2d:Node2D, _tween:Tween, _mirror: float):
 	var _dir: float
 	var _dir2: float = 0.0
-	var _max1: float = 10.0*(difficulty+1)
-	var _max2: int = 10*(int(difficulty)+1)
+	var _max1: float = 10.0 * (difficulty + 1.0)
+	var _max2: int = int(10.0 * (difficulty + 1.0))
 	var _vel1: float = 4.0
 	var _vel2: float = 1.0
 	var _dvel: float = (_vel2-_vel1)/_max2
@@ -720,8 +729,9 @@ func Create_SpellCard_Tween(_node2d:Node2D, _tween:Tween, _mirror: float):
 	for _j in _max2:
 		_dir = 0.0
 		_frame = _j % bullet_Color_Id_Max
+		#-------------------------------------------------------------------------------
 		for _i in _max1:
-			_tween.tween_callback(func():Create_SpellCard_bullet(_node2d, _dir+_dir2*_mirror, _vel1, _frame, _mirror))
+			_tween.tween_callback(func():Stage1_SpellCard1_Bullet1(_node2d, _dir+_dir2*_mirror, _vel1, _mirror))
 			_dir += 360/_max1
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(0.1)
@@ -731,12 +741,12 @@ func Create_SpellCard_Tween(_node2d:Node2D, _tween:Tween, _mirror: float):
 	_tween.set_parallel(false)
 	_tween.tween_interval(4.0)
 #-------------------------------------------------------------------------------
-func Create_SpellCard_bullet(_node2d:Node2D, _dir:float, _vel:float, _frame:int, _mirror: float):
+func Stage1_SpellCard1_Bullet1(_node2d:Node2D, _dir:float, _vel:float, _mirror: float):
 	var _dir2: float = deg_to_rad(_dir)
 	var _x: float = _node2d.position.x + 48 * cos(_dir2)
 	var _y: float = _node2d.position.y + 48 * sin(_dir2)
 	#-------------------------------------------------------------------------------
-	var _bullet: Bullet = Create_EnemyBullet(_x, _y, 4.0, _dir, "ArrowHead_Bullet", _frame, true)
+	var _bullet: Bullet = Create_EnemyBullet_A(_x, _y, 4.0, _dir, "bullet1", true)
 	#-------------------------------------------------------------------------------
 	var _tween: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
 	#-------------------------------------------------------------------------------
@@ -752,42 +762,99 @@ func Create_SpellCard_bullet(_node2d:Node2D, _dir:float, _vel:float, _frame:int,
 	#-------------------------------------------------------------------------------
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_2 FUNCTIONS
+#region STAGE_1 SPELLCARD_2
+func Stage1_SpellCard2(_boss: Boss):
+	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
+	_tween.tween_interval(1)
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		_boss.label.show()
+		_boss.canBeHit = true
+		Stage1_SpellCard2_Loop(_boss)
+	)
+	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func Stage1_SpellCard2_Loop(_boss: Boss):
+	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
+	_tween.set_loops()
+	Stage1_SpellCard2_Fire1(_boss, _tween)
+#-------------------------------------------------------------------------------
+func Stage1_SpellCard2_Fire1(_node2d:Node2D, _tween:Tween):
+	var _dir: float
+	var _dir2: float = 90.0
+	var _max1: float = 10.0 + 5 * difficulty
+	var _max2: int = int(10.0 + 5.0 * difficulty)
+	var _vel: float
+	var _frame: int = 0
+	var _cone: float = 180.0
+	#-------------------------------------------------------------------------------
+	for _j in _max2:
+		_dir = -_cone/2.0
+		_dir2 = randf_range(-90.0-30.0, -90.0+30.0)
+		_vel = randf_range(4.0, 6.0)
+		_frame = _j % bullet_Color_Id_Max
+		#-------------------------------------------------------------------------------
+		for _i in _max1:
+			var _deg_2_rad: float = deg_to_rad(_dir+_dir2)
+			var _vel_x: float = _vel*cos(_deg_2_rad)
+			var _vel_y: float = _vel*sin(_deg_2_rad)
+			#-------------------------------------------------------------------------------
+			_tween.tween_callback(func():
+				var _bullet: Bullet = Create_EnemyBullet_B(_node2d.position.x, _node2d.position.y, _vel_x, _vel_y, "bullet-b1", true)
+				var _tween2: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
+				_tween2.tween_property(_bullet, "velocity", Vector2(_vel_x*0.5, randf_range(3.0, 5.0)), 2.0)
+				#-------------------------------------------------------------------------------
+				_tween2.tween_interval(3.0)
+				_tween2.tween_callback(func():
+					_bullet.can_Go_OffLimits = false
+				)
+				#-------------------------------------------------------------------------------
+			)
+			#-------------------------------------------------------------------------------
+			_dir += _cone/(_max1-1.0)
+		#-------------------------------------------------------------------------------
+		_tween.tween_interval(0.1)
+	#-------------------------------------------------------------------------------
+	_tween.set_parallel(false)
+	_tween.tween_interval(4.0)
+#endregion
+#-------------------------------------------------------------------------------
+#region STAGE_2
 func Stage2():
 	await StageCommon("Stage 2 Completed",2,1)
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_3 FUNCTIONS
+#region STAGE_3
 func Stage3():
 	await StageCommon("Stage 3 Completed",3,2)
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_4 FUNCTIONS
+#region STAGE_4
 func Stage4():
 	await StageCommon("Stage 4 Completed",4,3)
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_5 FUNCTIONS
+#region STAGE_5
 func Stage5():
 	await StageCommon("Stage 5 Completed",5,4)
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_6 FUNCTIONS
+#region STAGE_6
 func Stage6():
 	await StageCommon("Stage 6 Completed",6,5)
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_7 FUNCTIONS
+#region STAGE_7
 func Stage7():
 	await StageCommon("Stage 7 Completed",7,6)
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_8 FUNCTIONS
+#region STAGE_8
 func Stage_RougeLike():
 	await StageCommon("Stage Rogue-Like Completed",8,7)
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_9 FUNCTIONS
+#region STAGE_9
 func Stage_BossRish():
 	await StageCommon("Stage Boss-Rish Completed",8,8)
 #endregion
@@ -799,7 +866,7 @@ func PlayerShoot():
 		#-------------------------------------------------------------------------------
 		if(player_shoot_counter > 5.0):
 			player_shoot_counter = 0.0
-			Create_PlayerBullet(player.position.x, player.position.y-50, 18.0, -90.0, "ArrowHead_Bullet", 4)
+			Create_PlayerBullet(player.position.x, player.position.y-50, 18.0, -90.0, "bullet1")
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -889,7 +956,7 @@ func Create_PlayerBullets_Disabled(_iMax:int):
 		content.add_child(_bullet)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, _frame:int) ->Bullet:
+func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float, _type:String) ->Bullet:
 	var _bullet: Bullet
 	#-------------------------------------------------------------------------------
 	if(playerBullets_Disabled_Array.size() > 0):
@@ -904,10 +971,9 @@ func Create_PlayerBullet(_x:float, _y:float, _v:float, _dir:float, _type:String,
 	#-------------------------------------------------------------------------------
 	playerBullets_Enabled_Array.append(_bullet)
 	#-------------------------------------------------------------------------------
-	var _bulletResource: BulletResource = bulletDictionary.get(_type, "ArrowHead_Bullet")
+	var _bulletResource: BulletResource = bulletDictionary.get(_type, "bullet1")
 	_bullet.texture = _bulletResource.texture
 	_bullet.radius = _bulletResource.radius
-	#_bullet.frame = _frame
 	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false
@@ -1216,11 +1282,30 @@ func Create_EnemyBullets_Disabled(_iMax:int):
 		var _bullet: Bullet = bullet_Prefab.instantiate() as Bullet
 		enemyBullets_Disabled_Array.append(_bullet)
 		_bullet.hide()
-		_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate(_bullet)
+		#_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate(_bullet)
 		content.add_child(_bullet)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, _frame:int, _can_Go_OffLimits:bool = false) ->Bullet:
+func Create_EnemyBullet_A(_x:float, _y:float, _v:float, _dir:float, _type:String, _can_Go_OffLimits:bool) ->Bullet:
+	var _bullet: Bullet = Create_EnemyBullet_Common(_x, _y, _type, _can_Go_OffLimits)
+	#-------------------------------------------------------------------------------
+	_bullet.vel = _v
+	_bullet.dir = _dir
+	_bullet.rotation_degrees = _bullet.dir
+	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate(_bullet, func():EnemyBullet_VelDir(_bullet))
+	#-------------------------------------------------------------------------------
+	return _bullet
+#-------------------------------------------------------------------------------
+func Create_EnemyBullet_B(_x:float, _y:float, _velX:float, _velY:float, _type:String, _can_Go_OffLimits:bool) ->Bullet:
+	var _bullet: Bullet = Create_EnemyBullet_Common(_x, _y, _type, _can_Go_OffLimits)
+	#-------------------------------------------------------------------------------
+	_bullet.velocity = Vector2(_velX, _velY)
+	_bullet.rotation_degrees = GetAngleXY(_velX, _velY)
+	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate(_bullet, func():EnemyBullet_VelXY(_bullet))
+	#-------------------------------------------------------------------------------
+	return _bullet
+#-------------------------------------------------------------------------------
+func Create_EnemyBullet_Common(_x:float, _y:float, _type:String, _can_Go_OffLimits:bool) ->Bullet:
 	var _bullet: Bullet
 	#-------------------------------------------------------------------------------
 	if(enemyBullets_Disabled_Array.size() > 0):
@@ -1231,32 +1316,27 @@ func Create_EnemyBullet(_x:float, _y:float, _v:float, _dir:float, _type:String, 
 	else:
 		_bullet = bullet_Prefab.instantiate() as Bullet
 		content.add_child(_bullet)
-		_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate(_bullet)
 	#-------------------------------------------------------------------------------
 	enemyBullets_Enabled_Array.append(_bullet)
 	#-------------------------------------------------------------------------------
-	var _bulletResource: BulletResource = bulletDictionary.get(_type, "ArrowHead_Bullet")
+	var _bulletResource: BulletResource = bulletDictionary.get(_type, "bullet1")
 	_bullet.texture = _bulletResource.texture
 	_bullet.radius = _bulletResource.radius
-	#_bullet.frame = _frame
 	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false
 	_bullet.can_Go_OffLimits = _can_Go_OffLimits
-	_bullet.dir = _dir
-	_bullet.rotation_degrees = _bullet.dir
-	_bullet.vel = _v
 	#-------------------------------------------------------------------------------
 	return _bullet
 #-------------------------------------------------------------------------------
-func EnemyBullet_PhysicsUpdate(_bullet: Bullet):
+func EnemyBullet_PhysicsUpdate(_bullet: Bullet, _callable: Callable):
 	if(_bullet.can_Go_OffLimits):
-		EnemyBullet_PhysicsUpdate_Limitless(_bullet)
+		EnemyBullet_PhysicsUpdate_Limitless(_bullet, _callable)
 		return
 	#-------------------------------------------------------------------------------
 	if(_bullet.position.x > enemyLimitsX.x and _bullet.position.x < enemyLimitsX.y):
 		if(_bullet.position.y > enemyLimitsY.x and _bullet.position.y < enemyLimitsY.y):
-			EnemyBullet_PhysicsUpdate_Limitless(_bullet)
+			EnemyBullet_PhysicsUpdate_Limitless(_bullet, _callable)
 		#-------------------------------------------------------------------------------
 		else:
 			Destroy_EnemyBullet(_bullet)
@@ -1268,7 +1348,7 @@ func EnemyBullet_PhysicsUpdate(_bullet: Bullet):
 		return
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyBullet_PhysicsUpdate_Limitless(_bullet: Bullet):
+func EnemyBullet_PhysicsUpdate_Limitless(_bullet: Bullet, _callable: Callable):
 	if(_bullet.position.distance_to(player.position) < (_bullet.radius+player.grazeBox_radius) and !_bullet.isGrazed and player.myPLAYER_STATE == Player.PLAYER_STATE.ALIVE):
 		Create_Item(_bullet.position.x, _bullet.position.y, -5)
 		_bullet.isGrazed = true
@@ -1279,15 +1359,22 @@ func EnemyBullet_PhysicsUpdate_Limitless(_bullet: Bullet):
 		return
 	#-------------------------------------------------------------------------------
 	else:
-		var _dir2: float = deg_to_rad(_bullet.dir)
-		_bullet.velocity.x = _bullet.vel * cos(_dir2)
-		_bullet.velocity.y = _bullet.vel * sin(_dir2)
-		_bullet.rotation_degrees = _bullet.dir
-		#-------------------------------------------------------------------------------
-		_bullet.position += _bullet.velocity * deltaTimeScale
-		#-------------------------------------------------------------------------------
+		_callable.call()
 		return
 	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func EnemyBullet_VelDir(_bullet: Bullet):
+	var _dir2: float = deg_to_rad(_bullet.dir)
+	_bullet.velocity.x = _bullet.vel * cos(_dir2)
+	_bullet.velocity.y = _bullet.vel * sin(_dir2)
+	_bullet.rotation_degrees = _bullet.dir
+	#-------------------------------------------------------------------------------
+	_bullet.position += _bullet.velocity * deltaTimeScale
+#-------------------------------------------------------------------------------
+func EnemyBullet_VelXY(_bullet: Bullet):
+	_bullet.rotation_degrees = GetAngleXY(_bullet.velocity.x, _bullet.velocity.y)
+	#-------------------------------------------------------------------------------
+	_bullet.position += _bullet.velocity * deltaTimeScale
 #-------------------------------------------------------------------------------
 func Destroy_EnemyBullet(_bullet: Bullet):
 	KillTween_Array(_bullet.tween_Array)
