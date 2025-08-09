@@ -52,6 +52,7 @@ label = NodePath("Label")
 sprite = NodePath("Sprite2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+show_behind_parent = true
 scale = Vector2(4, 4)
 texture = ExtResource("2_ep7ps")
 offset = Vector2(0, -3)
@@ -68,17 +69,14 @@ anim_player = NodePath("../AnimationPlayer")
 
 [node name="Label" type="Label" parent="."]
 z_index = 29
-anchors_preset = 7
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -34.0
-offset_top = -58.0
-offset_right = 34.0
-offset_bottom = -38.0
+offset_left = -41.0
+offset_top = 18.0
+offset_right = 41.0
+offset_bottom = 38.0
 grow_horizontal = 2
-grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_constants/outline_size = 4

@@ -9,7 +9,8 @@ class_name Boss
 var velocity: Vector2 = Vector2.ZERO
 var dir: float = 0
 var vel: float = 0
-var radius: float = 30
+var radius: float
+var distance_squared_to_hitbox: float
 #-------------------------------------------------------------------------------
 var hp: int
 var maxHp: int
@@ -25,5 +26,5 @@ func Death_Signal():
 	death_signal.emit()
 #-------------------------------------------------------------------------------
 #func _draw() -> void:
-#	draw_circle(Vector2.ZERO, radius, Color.RED)
+#	draw_circle(Vector2.ZERO, radius/scale.x, Color.RED)
 #-------------------------------------------------------------------------------

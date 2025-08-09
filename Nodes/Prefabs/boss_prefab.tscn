@@ -46,12 +46,14 @@ _data = {
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d8puh"]
 animation = &"Idle"
 
-[node name="boss_prefab" type="Node2D" node_paths=PackedStringArray("label", "sprite")]
+[node name="boss_prefab" type="Node2D" node_paths=PackedStringArray("label", "sprite", "animationTree")]
 script = ExtResource("1_5s01m")
 label = NodePath("Label")
 sprite = NodePath("Sprite2D")
+animationTree = NodePath("Sprite2D/AnimationTree")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+show_behind_parent = true
 scale = Vector2(4, 4)
 texture = ExtResource("2_5s01m")
 offset = Vector2(0, -6)
@@ -68,17 +70,14 @@ anim_player = NodePath("../AnimationPlayer")
 
 [node name="Label" type="Label" parent="."]
 z_index = 29
-anchors_preset = 7
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
 offset_left = -46.0
-offset_top = -80.0
+offset_top = 40.0
 offset_right = 46.0
-offset_bottom = -57.0
+offset_bottom = 63.0
 grow_horizontal = 2
-grow_vertical = 0
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 14
 text = "100 / 100 HP"

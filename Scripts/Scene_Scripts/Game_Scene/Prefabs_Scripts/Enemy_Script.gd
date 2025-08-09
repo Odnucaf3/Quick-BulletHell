@@ -8,7 +8,8 @@ class_name Enemy
 var velocity: Vector2 = Vector2.ZERO
 var dir: float = 0
 var vel: float = 0
-var radius: float = 30
+var radius: float
+var distance_squared_to_hitbox: float
 #-------------------------------------------------------------------------------
 var hp: int
 var maxHp: int

@@ -4,7 +4,9 @@ class_name Bullet
 var velocity: Vector2
 var dir: float
 var vel: float
-var radius: float = 7.0
+var radius: float
+var distance_squared_to_grazebox: float
+var distance_squared_to_hitbox: float
 #-------------------------------------------------------------------------------
 var can_Go_OffLimits: bool = false
 var isGrazed: bool = false
