@@ -5,9 +5,11 @@ class_name Enemy
 @export var label: Label
 @export var sprite: Sprite2D
 #-------------------------------------------------------------------------------
-var velocity: Vector2 = Vector2.ZERO
-var dir: float = 0
-var vel: float = 0
+var dir: float
+var vel: float
+var vel_X: float
+var vel_Y: float
+#-------------------------------------------------------------------------------
 var radius: float
 var distance_squared_to_hitbox: float
 #-------------------------------------------------------------------------------
@@ -23,6 +25,6 @@ signal death_signal
 func Death_Signal():
 	death_signal.emit()
 #-------------------------------------------------------------------------------
-#func _draw() -> void:
-#	draw_circle(Vector2.ZERO, radius, Color.RED)
+func _draw() -> void:
+	draw_circle(Vector2.ZERO, radius, Color.RED, false)
 #-------------------------------------------------------------------------------

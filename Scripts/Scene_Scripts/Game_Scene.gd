@@ -489,18 +489,37 @@ func Choreography():
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyWave_and_Market(_s:String, _callable:Callable, _timer: int):
-	await ShowBanner(_s)
-	_callable.call()
-	await TimeOut_Tween(_timer)
+func EnemyWave_and_Market(_s:String, _callable:Callable, _timer:int):
+	await EnemyWave_and_Nothing(_s, _callable, _timer)
 	await Nothing_and_Market()
 #-------------------------------------------------------------------------------
-func SpellCard_and_Market(_s:String, _boss:Boss, _hp: int, _callable:Callable, _timer: int):
+func EnemyWave_and_Nothing(_s:String, _callable:Callable, _timer:int):
 	await ShowBanner(_s)
-	Enable_Boss(_boss, _hp)
 	_callable.call()
 	await TimeOut_Tween(_timer)
+#-------------------------------------------------------------------------------
+func SpellCard_and_Market(_s:String, _boss:Boss, _hp:int, _callable:Callable, _timer:int):
+	await SpellCard_and_Nothing(_s, _boss, _hp, _callable, _timer)
 	await Nothing_and_Market()
+	await Move_Boss_to_Hook(_boss)
+#-------------------------------------------------------------------------------
+func SpellCard_and_Nothing(_s:String, _boss:Boss, _hp: int, _callable:Callable, _timer:int):
+	await ShowBanner(_s)
+	Enable_Boss(_boss, _hp, _callable)
+	_callable.call()
+	await TimeOut_Tween(_timer)
+#-------------------------------------------------------------------------------
+func Enable_Boss(_boss:Boss, _hp:int, _callable:Callable):
+	boss_Disabled_Array.erase(_boss)
+	boss_Enabled_Array.append(_boss)
+	#-------------------------------------------------------------------------------
+	_boss.maxHp = _hp
+	_boss.hp = _hp
+	Set_BossLife_Label(_boss)
+	_boss.label.show()
+	#-------------------------------------------------------------------------------
+	_boss.canBeHit = true
+	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Nothing_and_Market():
 	await OpenMarket()
@@ -562,23 +581,23 @@ func GoToMainScene():
 #-------------------------------------------------------------------------------
 #region STAGE_1
 func Stage1():
-	#await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 20)
-	#await EnemyWave_and_Market("Enemy-Wave 2", func():Stage1_EnemyWave2(), 40)
+	await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 10)
+	await EnemyWave_and_Market("Enemy-Wave 2", func():Stage1_EnemyWave2(), 10)
 	#-------------------------------------------------------------------------------
-	#await Nothing_and_Market()
-	#await Stage1_Boss1_Dialogue1()
+	await ShowBanner("Enter Boss")
+	await Stage1_Boss1_Dialogue1()
 	var _boss: Boss = await EnterBoss()
-	#await Stage1_Boss1_Dialogue2()
+	await Stage1_Boss1_Dialogue2()
 	#-------------------------------------------------------------------------------
 	dialogueMenu.CloseDialogue()
 	myGAME_STATE = GAME_STATE.IN_GAMEPLAY
 	#-------------------------------------------------------------------------------
-	await SpellCard_and_Market("Spell-Card 1", _boss, 100, func():Stage1_SpellCard1(_boss), 50)
-	await SpellCard_and_Market("Spell-Card 2", _boss, 100, func():Stage1_SpellCard2(_boss), 50)
+	#await SpellCard_and_Market("Spell-Card 1", _boss, 100, func():Stage1_SpellCard1(_boss), 10)
+	await SpellCard_and_Nothing("Spell-Card 2", _boss, 100, func():Stage1_SpellCard2(_boss), 60)
+	_boss.hide()
 	await StageCommon("Stage 1 Completed",1,0)
 #-------------------------------------------------------------------------------
-func Stage1_Boss1_Dialogue1():
-	await ShowBanner("Enter Boss")		#IMPORTANTE: Tiene que haber un await antes de entrar al dialogo porque si no se saltea la primer liena.
+func Stage1_Boss1_Dialogue1():		#IMPORTANTE: Tiene que haber un await antes de entrar al dialogo porque si no se saltea la primer liena.
 	myGAME_STATE = GAME_STATE.IN_DIALOGUE
 	dialogueMenu.speaker2.hide()
 	dialogueMenu.OpenDialogue()
@@ -586,17 +605,17 @@ func Stage1_Boss1_Dialogue1():
 	await Dialogue(0, 0, 4)
 #-------------------------------------------------------------------------------
 func EnterBoss() -> Boss:
-	var _boss: Boss = Create_Boss(0, 0, 99)
-	_boss.show()
-	_boss.label.hide()
-	_boss.canBeHit = false
+	var _boss: Boss = Create_Boss(0, 0)
 	#-------------------------------------------------------------------------------
+	await Move_Boss_to_Hook(_boss)
+	#-------------------------------------------------------------------------------
+	return _boss
+#-------------------------------------------------------------------------------
+func Move_Boss_to_Hook(_boss:Boss):
 	var _tween: Tween = create_tween()
 	_tween.tween_property(_boss, "position", Vector2(width*0.5, height*0.2), 1)
 	#-------------------------------------------------------------------------------
 	await _tween.finished
-	#-------------------------------------------------------------------------------
-	return _boss
 #-------------------------------------------------------------------------------
 func Stage1_Boss1_Dialogue2():
 	dialogueMenu.speaker2.show()
@@ -606,22 +625,11 @@ func Stage1_Boss1_Dialogue2():
 #region STAGE_1 ENEMYWAVE_1
 func Stage1_EnemyWave1():
 	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
-	_tween.tween_interval(0.5)
-	#-------------------------------------------------------------------------------
-	_tween.tween_callback(func():
-		Stage1_EnemyWave1_Loop()
-	)
-	#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-func Stage1_EnemyWave1_Loop():
-	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
 	_tween.set_loops()
-	Stage1_EnemyWave1_Loop_Mirror(_tween, 1)
-	_tween.tween_interval(1)
-	Stage1_EnemyWave1_Loop_Mirror(_tween, -1)
-	_tween.tween_interval(1)
+	Stage1_EnemyWave1_Mirror(_tween, 1)
+	Stage1_EnemyWave1_Mirror(_tween, -1)
 #-------------------------------------------------------------------------------
-func Stage1_EnemyWave1_Loop_Mirror(_tween:Tween, _mirror: float):
+func Stage1_EnemyWave1_Mirror(_tween:Tween, _mirror: float):
 	for _i in 8:
 		#-------------------------------------------------------------------------------
 		for _j in 1:
@@ -634,6 +642,7 @@ func Stage1_EnemyWave1_Loop_Mirror(_tween:Tween, _mirror: float):
 		_tween.tween_interval(0.8)
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
+	_tween.tween_interval(1)
 #-------------------------------------------------------------------------------
 func Stage1_EnemyWave1_Enemy1(_x:float, _y:float, _mirror:float):
 	var _enemy: Enemy = Create_Enemy(_x, _y, 4.0, 90-20*_mirror, 10)
@@ -675,30 +684,23 @@ func Stage1_EnemyWave1_Enemy1_Fire1(_tween:Tween, _node2D: Node2D):
 #region STAGE_1 ENEMYWAVE_2
 func Stage1_EnemyWave2():
 	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
-	_tween.tween_interval(0.5)
-	#-------------------------------------------------------------------------------
-	_tween.tween_callback(func():
-		Stage1_EnemyWave2_Loop()
-	)
-#-------------------------------------------------------------------------------
-func Stage1_EnemyWave2_Loop():
-	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
 	_tween.set_loops()
-	Stage1_EnemyWave2_Loop_Mirror(_tween, 1)
-	Stage1_EnemyWave2_Loop_Mirror(_tween, -1)
+	Stage1_EnemyWave2_Mirror(_tween, 1)
+	Stage1_EnemyWave2_Mirror(_tween, -1)
 #-------------------------------------------------------------------------------
-func Stage1_EnemyWave2_Loop_Mirror(_tween:Tween, _mirror:float):
+func Stage1_EnemyWave2_Mirror(_tween:Tween, _mirror:float):
 	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
 		Stage1_EnemyWave2_Enemy1(_tween, _mirror)
 		_tween.pause()
 	)
+	#-------------------------------------------------------------------------------
 	_tween.tween_interval(0.5)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Stage1_EnemyWave2_Enemy1(_tween_death:Tween, _mirror:float):
 	var _x: float = width*0.5+width*0.25*_mirror
-	var _enemy: Enemy = Create_Enemy(_x, 0, 0, 90, 10)
+	var _enemy: Enemy = Create_Enemy(_x, -height*0.1, 0, 90, 10)
 	#-------------------------------------------------------------------------------
 	_enemy.death_signal.connect(
 		func(): _tween_death.play()
@@ -739,22 +741,11 @@ func Stage1_EnemyWave2_Enemy1_Fire1(_tween:Tween, _node2D: Node2D, _mirror:float
 #region STAGE_1 SPELLCARD_1
 func Stage1_SpellCard1(_boss: Boss):
 	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
-	_tween.tween_interval(1)
-	#-------------------------------------------------------------------------------
-	_tween.tween_callback(func():
-		_boss.label.show()
-		_boss.canBeHit = true
-		Stage1_SpellCard1_Loop(_boss)
-	)
-	#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-func Stage1_SpellCard1_Loop(_boss: Boss):
-	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
 	_tween.set_loops()
-	Stage1_SpellCard1_Loop_Mirror(_boss, _tween, 1)
-	Stage1_SpellCard1_Loop_Mirror(_boss, _tween, -1)
+	Stage1_SpellCard1_Mirror(_boss, _tween, 1)
+	Stage1_SpellCard1_Mirror(_boss, _tween, -1)
 #-------------------------------------------------------------------------------
-func Stage1_SpellCard1_Loop_Mirror(_node2d:Node2D, _tween:Tween, _mirror: float):
+func Stage1_SpellCard1_Mirror(_node2d:Node2D, _tween:Tween, _mirror: float):
 	var _dir: float
 	var _dir2: float = 0.0
 	var _max1: float = 10.0 + 10.0 * (difficulty + 1.0)
@@ -803,44 +794,35 @@ func Stage1_SpellCard1_Bullet1(_node2d:Node2D, _dir:float, _vel:float, _mirror: 
 #region STAGE_1 SPELLCARD_2
 func Stage1_SpellCard2(_boss: Boss):
 	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
-	_tween.tween_interval(1)
-	#-------------------------------------------------------------------------------
-	_tween.tween_callback(func():
-		_boss.label.show()
-		_boss.canBeHit = true
-		Stage1_SpellCard2_Loop(_boss)
-	)
-	#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-func Stage1_SpellCard2_Loop(_boss: Boss):
-	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
 	_tween.set_loops()
-	Stage1_SpellCard2_Fire1(_boss, _tween)
+	Stage1_SpellCard2_Mirror(_boss, _tween)
 #-------------------------------------------------------------------------------
-func Stage1_SpellCard2_Fire1(_node2d:Node2D, _tween:Tween):
+func Stage1_SpellCard2_Mirror(_node2d:Node2D, _tween:Tween):
 	var _dir: float
 	var _dir2: float = 90.0
 	var _max1: float = 10.0 + 5 * difficulty
 	var _max2: int = int(10.0 + 5.0 * difficulty)
-	var _vel: float
+	var _vel_x: float
+	var _vel_y: float
 	var _frame: int = 0
 	var _cone: float = 180.0
 	#-------------------------------------------------------------------------------
 	for _j in _max2:
 		_dir = -_cone/2.0
 		_dir2 = randf_range(-90.0-30.0, -90.0+30.0)
-		_vel = randf_range(4.0, 6.0)
+		_vel_x = 4.0
+		_vel_y = randf_range(4.0, 6.0)
 		_frame = _j % bullet_Color_Id_Max
 		#-------------------------------------------------------------------------------
 		for _i in _max1:
 			var _deg_2_rad: float = deg_to_rad(_dir+_dir2)
-			var _vel_x: float = _vel*cos(_deg_2_rad)
-			var _vel_y: float = _vel*sin(_deg_2_rad)
+			var _vel_x2: float = _vel_x * cos(_deg_2_rad)
+			var _vel_y2: float = _vel_y * sin(_deg_2_rad)
 			#-------------------------------------------------------------------------------
 			_tween.tween_callback(func():
-				var _bullet: Bullet = Create_EnemyBullet_B(_node2d.position.x, _node2d.position.y, _vel_x, _vel_y, "bullet-b1", true)
+				var _bullet: Bullet = Create_EnemyBullet_B(_node2d.position.x, _node2d.position.y, _vel_x2, _vel_y2, "bullet-b1", true)
 				var _tween2: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
-				_tween2.tween_property(_bullet, "velocity", Vector2(_vel_x*0.5, randf_range(3.0, 5.0)), 2.0)
+				_tween2.tween_property(_bullet, "vel_Y", randf_range(3.0, 5.0), 2.0)
 				#-------------------------------------------------------------------------------
 				_tween2.tween_interval(3.0)
 				_tween2.tween_callback(func():
@@ -978,7 +960,7 @@ func PlayerDeath() -> void:
 	#-------------------------------------------------------------------------------
 	for _i in range(items_Enabled_Array.size()-1,-1,-1):
 		if(items_Enabled_Array[_i].myITEM_STATE == Item.ITEM_STATE.IMANTED):
-			items_Enabled_Array[_i].velocity.y = -4
+			items_Enabled_Array[_i].vel_Y = -4
 			items_Enabled_Array[_i].myITEM_STATE = Item.ITEM_STATE.SPIN
 #endregion
 #-------------------------------------------------------------------------------
@@ -1037,11 +1019,12 @@ func PlayerBullet_PhysicsUpdate(_bullet: Bullet):
 #-------------------------------------------------------------------------------
 func PlayerBullet_PhysicsUpdate_Limitless(_bullet: Bullet):
 	var _dir2: float = deg_to_rad(_bullet.dir)
-	_bullet.velocity.x = _bullet.vel * cos(_dir2)
-	_bullet.velocity.y = _bullet.vel * sin(_dir2)
+	_bullet.vel_X = _bullet.vel * cos(_dir2)
+	_bullet.vel_Y = _bullet.vel * sin(_dir2)
 	_bullet.rotation_degrees = _bullet.dir
 	#-------------------------------------------------------------------------------
-	_bullet.position += _bullet.velocity * deltaTimeScale
+	_bullet.position.x += _bullet.vel_X * deltaTimeScale
+	_bullet.position.y += _bullet.vel_Y * deltaTimeScale
 #-------------------------------------------------------------------------------
 func Destroy_PlayerBullet(_bullet: Bullet):
 	KillTween_Array(_bullet.tween_Array)
@@ -1080,8 +1063,12 @@ func Create_Item(_x:float, _y:float, _vel_y:float):
 	items_Enabled_Array.append(_item)
 	#-------------------------------------------------------------------------------
 	_item.myITEM_STATE = Item.ITEM_STATE.SPIN
-	_item.velocity = Vector2(0, _vel_y)
-	_item.distance_squared_to_magnetbox = pow(15+player.magnetBox_radius, 2)
+	_item.vel_Y =  _vel_y
+	#-------------------------------------------------------------------------------
+	var _radius: float = 15.0
+	_item.radius = _radius
+	_item.distance_squared_to_magnetbox = pow(_radius + player.magnetBox_radius, 2)
+	#-------------------------------------------------------------------------------
 	_x = clamp(_x, playerLimitsX.x, playerLimitsX.y)
 	_y = clamp(_y, playerLimitsY.x, playerLimitsY.y)
 	_item.position = Vector2(_x, _y)
@@ -1092,9 +1079,9 @@ func Items_PhysicsUpdate(_item:Item):
 	var _magnetVel: float = 8.0
 	match(_item.myITEM_STATE):
 		Item.ITEM_STATE.SPIN:
-			if(_item.velocity.y <= 0):
-				_item.velocity.y += _velY_Accel * deltaTimeScale
-				_item.position.y += _item.velocity.y * deltaTimeScale
+			if(_item.vel_Y <= 0):
+				_item.vel_Y += _velY_Accel * deltaTimeScale
+				_item.position.y += _item.vel_Y * deltaTimeScale
 				_item.rotation += 0.2 * deltaTimeScale
 				return
 			#-------------------------------------------------------------------------------
@@ -1106,13 +1093,13 @@ func Items_PhysicsUpdate(_item:Item):
 		#-------------------------------------------------------------------------------
 		Item.ITEM_STATE.FALL:
 			if(_item.position.y <= height):
-				if(_item.velocity.y > _velY_Max):
-					_item.velocity.y = _velY_Max
+				if(_item.vel_Y > _velY_Max):
+					_item.vel_Y = _velY_Max
 				#-------------------------------------------------------------------------------
-				elif(_item.velocity.y < _velY_Max):
-					_item.velocity.y += _velY_Accel * deltaTimeScale
+				elif(_item.vel_Y < _velY_Max):
+					_item.vel_Y += _velY_Accel * deltaTimeScale
 				#-------------------------------------------------------------------------------
-				_item.position.y += _item.velocity.y * deltaTimeScale
+				_item.position.y += _item.vel_Y * deltaTimeScale
 				#-------------------------------------------------------------------------------
 				if(player.myPLAYER_STATE != Player.PLAYER_STATE.DEATH):
 					if(_item.position.distance_squared_to(player.position)< _item.distance_squared_to_magnetbox or myGAME_STATE != GAME_STATE.IN_GAMEPLAY):
@@ -1162,42 +1149,35 @@ func Create_Boss_Disabled(_iMax:int):
 	for _i in _iMax:
 		var _boss: Boss = boss_Prefab.instantiate() as Boss
 		boss_Disabled_Array.append(_boss)
-		_boss.physics_Update = func():Boss_PhysicsUpdate(_boss)
 		_boss.hide()
 		content.add_child(_boss)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func Enable_Boss(_boss: Boss, _hp:int):
-	boss_Disabled_Array.erase(_boss)
-	boss_Enabled_Array.append(_boss)
-	_boss.maxHp = _hp
-	_boss.hp = _hp
-	_boss.canBeHit = false
-	Set_BossLife_Label(_boss)
-#-------------------------------------------------------------------------------
-func Create_Boss(_x:float, _y:float, _hp: int) -> Boss:
+func Create_Boss(_x:float, _y:float) -> Boss:
 	var _boss: Boss
 	#-------------------------------------------------------------------------------
 	if(enemy_Disabled_Array.size() > 0):
 		_boss = boss_Disabled_Array[0]
 		_boss.show()
-		boss_Disabled_Array.erase(_boss)
 	#-------------------------------------------------------------------------------
 	else:
 		_boss = boss_Prefab.instantiate() as Boss
-		_boss.physics_Update = func():Boss_PhysicsUpdate(_boss)
+		boss_Disabled_Array.append(_boss)
 		content.add_child(_boss)
 	#-------------------------------------------------------------------------------
-	boss_Enabled_Array.append(_boss)
+	_boss.physics_Update = func():Boss_PhysicsUpdate(_boss)
 	#-------------------------------------------------------------------------------
 	_boss.position = Vector2(_x, _y)
-	_boss.radius = 45
-	_boss.distance_squared_to_hitbox = pow(45 + player.hitBox_radius, 2)
-	_boss.maxHp = _hp
-	_boss.hp = _hp
+	#-------------------------------------------------------------------------------
+	var _radius: float = 45
+	_boss.radius = _radius
+	_boss.distance_squared_to_hitbox = pow(_radius + player.hitBox_radius, 2)
+	#-------------------------------------------------------------------------------
 	_boss.vel = 0
 	_boss.dir = 90
-	Set_BossLife_Label(_boss)
+	#-------------------------------------------------------------------------------
+	_boss.canBeHit = false
+	_boss.label.hide()
 	#-------------------------------------------------------------------------------
 	return _boss
 #-------------------------------------------------------------------------------
@@ -1218,11 +1198,12 @@ func Boss_PhysicsUpdate(_boss:Boss):
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 	var _dir2: float = deg_to_rad(_boss.dir)
-	_boss.velocity.x = _boss.vel * cos(_dir2)
-	_boss.velocity.y = _boss.vel * sin(_dir2)
+	_boss.vel_X = _boss.vel * cos(_dir2)
+	_boss.vel_Y = _boss.vel * sin(_dir2)
 	#_boss.sprite.rotation_degrees = _boss.dir-90		#NOTA: Borrar si quiero enemigos que miren para abajo.
 	#-------------------------------------------------------------------------------
-	_boss.position += _boss.velocity * deltaTimeScale
+	_boss.position.x += _boss.vel_X * deltaTimeScale
+	_boss.position.y += _boss.vel_Y * deltaTimeScale
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Disable_Boss(_boss: Boss):
@@ -1270,8 +1251,11 @@ func Create_Enemy(_x:float, _y:float, _v:float, _dir: float, _hp: int) -> Enemy:
 	enemy_Enabled_Array.append(_enemy)
 	#-------------------------------------------------------------------------------
 	_enemy.position = Vector2(_x, _y)
-	_enemy.radius = 30
-	_enemy.distance_squared_to_hitbox = pow(30 + player.hitBox_radius, 2)
+	#-------------------------------------------------------------------------------
+	var _radius: float = 30.0
+	_enemy.radius = _radius
+	_enemy.distance_squared_to_hitbox = pow(_radius + player.hitBox_radius, 2)
+	#-------------------------------------------------------------------------------
 	_enemy.maxHp = _hp
 	_enemy.hp = _hp
 	_enemy.vel = _v
@@ -1298,11 +1282,12 @@ func Enemy_PhysicsUpdate(_enemy:Enemy):
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 	var _dir2: float = deg_to_rad(_enemy.dir)
-	_enemy.velocity.x = _enemy.vel * cos(_dir2)
-	_enemy.velocity.y = _enemy.vel * sin(_dir2)
+	_enemy.vel_X = _enemy.vel * cos(_dir2)
+	_enemy.vel_Y = _enemy.vel * sin(_dir2)
 	_enemy.sprite.rotation_degrees = _enemy.dir-90		#NOTA: Borrar si quiero enemigos que miren para abajo.
 	#-------------------------------------------------------------------------------
-	_enemy.position += _enemy.velocity * deltaTimeScale
+	_enemy.position.x += _enemy.vel_X * deltaTimeScale
+	_enemy.position.y += _enemy.vel_Y * deltaTimeScale
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Destroy_Enemy(_enemy: Enemy):
@@ -1339,7 +1324,8 @@ func Create_EnemyBullet_A(_x:float, _y:float, _v:float, _dir:float, _type:String
 func Create_EnemyBullet_B(_x:float, _y:float, _velX:float, _velY:float, _type:String, _can_Go_OffLimits:bool) ->Bullet:
 	var _bullet: Bullet = Create_EnemyBullet_Common(_x, _y, _type, _can_Go_OffLimits)
 	#-------------------------------------------------------------------------------
-	_bullet.velocity = Vector2(_velX, _velY)
+	_bullet.vel_X = _velX
+	_bullet.vel_Y = _velY
 	_bullet.rotation_degrees = GetAngleXY(_velX, _velY)
 	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate_B(_bullet)
 	#-------------------------------------------------------------------------------
@@ -1361,6 +1347,8 @@ func Create_EnemyBullet_Common(_x:float, _y:float, _type:String, _can_Go_OffLimi
 	#-------------------------------------------------------------------------------
 	var _bulletResource: BulletResource = bulletDictionary.get(_type, "bullet1")
 	_bullet.texture = _bulletResource.texture
+	#-------------------------------------------------------------------------------
+	_bullet.radius = _bulletResource.radius
 	_bullet.distance_squared_to_grazebox = pow(_bulletResource.radius + player.grazeBox_radius, 2)
 	_bullet.distance_squared_to_hitbox = pow(_bulletResource.radius + player.hitBox_radius, 2)
 	#-------------------------------------------------------------------------------
@@ -1391,11 +1379,12 @@ func EnemyBullet_PhysicsUpdate_A(_bullet: Bullet):
 #-------------------------------------------------------------------------------
 func EnemyBullet_PhysicsUpdate_Limitless_A(_bullet: Bullet):
 	var _dir2: float = deg_to_rad(_bullet.dir)
-	_bullet.velocity.x = _bullet.vel * cos(_dir2)
-	_bullet.velocity.y = _bullet.vel * sin(_dir2)
+	_bullet.vel_X = _bullet.vel * cos(_dir2)
+	_bullet.vel_Y = _bullet.vel * sin(_dir2)
 	_bullet.rotation_degrees = _bullet.dir
 	#-------------------------------------------------------------------------------
-	_bullet.position += _bullet.velocity * deltaTimeScale
+	_bullet.position.x += _bullet.vel_X * deltaTimeScale
+	_bullet.position.y += _bullet.vel_Y * deltaTimeScale
 	return
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -1419,9 +1408,10 @@ func EnemyBullet_PhysicsUpdate_B(_bullet: Bullet):
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func EnemyBullet_PhysicsUpdate_Limitless_B(_bullet: Bullet):
-	_bullet.rotation_degrees = GetAngleXY(_bullet.velocity.x, _bullet.velocity.y)
+	_bullet.rotation_degrees = GetAngleXY(_bullet.vel_X, _bullet.vel_Y)
 	#-------------------------------------------------------------------------------
-	_bullet.position += _bullet.velocity * deltaTimeScale
+	_bullet.position.x += _bullet.vel_X * deltaTimeScale
+	_bullet.position.y += _bullet.vel_Y * deltaTimeScale
 	return
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
