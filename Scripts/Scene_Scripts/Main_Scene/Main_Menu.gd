@@ -6,7 +6,7 @@ var singleton: Singleton
 #-------------------------------------------------------------------------------
 @export var title: Label
 @export var button: Array[Button]
-@export var gameInfo: Label
+@export var gameInfo: RichTextLabel
 @export var picture: TextureRect
 #-------------------------------------------------------------------------------
 #endregion
@@ -110,11 +110,14 @@ func SetGameInfo2(_playerIndex: int, _difficultyIndex: int, _stageIndex: int):
 	var _difficultyIndex_string: StringName = str(_difficultyIndex)
 	var _stageIndex_string: StringName = str(_stageIndex)
 	#-------------------------------------------------------------------------------
-	gameInfo.text = tr("playerMenu_button"+_playerIndex_string)+"\n"
+	gameInfo.text = "[center]"
+	gameInfo.text += "[font_size=90]"
+	#gameInfo.text = tr("playerMenu_button"+_playerIndex_string)+"\n"
 	gameInfo.text +=  tr("difficultyMenu_button"+_difficultyIndex_string)+"\n"
 	#gameInfo.text += tr("stageMenu_button"+_stageIndex_string)+"\n"
 	picture.texture = singleton.playerResource[_playerIndex].picture
 	#-------------------------------------------------------------------------------
+	gameInfo.text += "[font_size=30]"
 	gameInfo.text += "-"
 	var _stage: Dictionary = _saveData["saveData"][_playerIndex_string][_difficultyIndex_string]
 	for _i in _stage.size():

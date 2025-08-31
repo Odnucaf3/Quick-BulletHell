@@ -25,6 +25,6 @@ signal death_signal
 func Death_Signal():
 	death_signal.emit()
 #-------------------------------------------------------------------------------
-func _draw() -> void:
-	draw_circle(Vector2.ZERO, radius, Color.RED, false)
+#func _draw() -> void:
+#	draw_circle(Vector2.ZERO, radius, Color.RED, false)
 #-------------------------------------------------------------------------------

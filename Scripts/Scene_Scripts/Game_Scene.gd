@@ -48,7 +48,7 @@ var bulletDictionary: Dictionary[String, BulletResource]
 @export var leftLabel: RichTextLabel
 #-------------------------------------------------------------------------------
 @export var completedPanel: PanelContainer
-@export var completedLabel: Label
+@export var completedLabel: RichTextLabel
 #-------------------------------------------------------------------------------
 var enemyBullets_Enabled_Array: Array[Bullet]
 var enemyBullets_Disabled_Array: Array[Bullet]
@@ -93,6 +93,8 @@ var player_invincible_bool: bool
 var player_shoot_counter: float = 0
 #-------------------------------------------------------------------------------
 var bullet_Color_Id_Max: int = 16
+var turn_counter: int = 0
+var phase_counter: int = 0
 #endregion
 #-------------------------------------------------------------------------------
 #region MONOVEHAVIOUR
@@ -103,6 +105,7 @@ func _ready():
 	gameoverMenu.Start()
 	marketMenu.Start()
 	dialogueMenu.Start()
+	completedPanel.hide()
 	#-------------------------------------------------------------------------------
 	SetIdiome()
 	#-------------------------------------------------------------------------------
@@ -489,22 +492,22 @@ func Choreography():
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyWave_and_Market(_s:String, _callable:Callable, _timer:int):
-	await EnemyWave_and_Nothing(_s, _callable, _timer)
+func EnemyWave_and_Market(_callable:Callable, _timer:int):
+	await EnemyWave_and_Nothing(_callable, _timer)
 	await Nothing_and_Market()
 #-------------------------------------------------------------------------------
-func EnemyWave_and_Nothing(_s:String, _callable:Callable, _timer:int):
-	await ShowBanner(_s)
+func EnemyWave_and_Nothing(_callable:Callable, _timer:int):
+	await ShowBanner_EnemyWave()
 	_callable.call()
 	await TimeOut_Tween(_timer)
 #-------------------------------------------------------------------------------
-func SpellCard_and_Market(_s:String, _boss:Boss, _hp:int, _callable:Callable, _timer:int):
-	await SpellCard_and_Nothing(_s, _boss, _hp, _callable, _timer)
+func SpellCard_and_Market(_boss:Boss, _hp:int, _callable:Callable, _timer:int):
+	await SpellCard_and_Nothing(_boss, _hp, _callable, _timer)
 	await Nothing_and_Market()
 	await Move_Boss_to_Hook(_boss)
 #-------------------------------------------------------------------------------
-func SpellCard_and_Nothing(_s:String, _boss:Boss, _hp: int, _callable:Callable, _timer:int):
-	await ShowBanner(_s)
+func SpellCard_and_Nothing(_boss:Boss, _hp: int, _callable:Callable, _timer:int):
+	await ShowBanner_SpellCard()
 	Enable_Boss(_boss, _hp, _callable)
 	_callable.call()
 	await TimeOut_Tween(_timer)
@@ -526,41 +529,47 @@ func Nothing_and_Market():
 	Enter_GameState_InGameplay()
 #-------------------------------------------------------------------------------
 func OpenMarket():
-	await ShowBanner2("Space Market")
+	await ShowBanner_OpenMarket()
 	myGAME_STATE = GAME_STATE.IN_MARKET
 	await marketMenu.OpenMarket()
 #-------------------------------------------------------------------------------
-func Dialogue(_bossID:int, _from:int, _to:int):
-	var _bossDialogueID: String = dialogueMenu.GetSubBossDialogueID(_bossID)
-	await dialogueMenu.ReadDialogue(_bossDialogueID, _from, _to)
+func Dialogue_1_1():
+	dialogueMenu.dialogue_id = dialogueMenu.GetSubBossDialogueID(0)
+	dialogueMenu.dialogue_index = 0
+	#-------------------------------------------------------------------------------
+	await ReadLine(true, false)
+	await ReadLine(true, false)
+	await ReadLine(true, false)
+	await ReadLine(true, false)
+	await ReadLine(false, true)
+	await ReadLine(false, true)
+#-------------------------------------------------------------------------------
+func Dialogue_1_2():
+	#var _bossDialogueID: String = dialogueMenu.GetSubBossDialogueID(0)
+	#dialogueMenu.dialogue_index = 0
+	#-------------------------------------------------------------------------------
+	await ReadLine(true, false)
+	await ReadLine(false, true)
+	await ReadLine(true, false)
+	await ReadLine(false, true)
+	await ReadLine(true, false)
+	await ReadLine(false, true)
+#-------------------------------------------------------------------------------
+func ReadLine(_showSpeaker1:bool, _showSpeaker2:bool):
+	await dialogueMenu.ReadLine(_showSpeaker1, _showSpeaker2)
 #-------------------------------------------------------------------------------
 func Enter_GameState_InGameplay():
 	myGAME_STATE = GAME_STATE.IN_GAMEPLAY
+#endregion
 #-------------------------------------------------------------------------------
-func StageCommon(_s:String, _enabled:int, _completed:int):
-	await ShowBanner(_s)
+#region CLEAR STAGE FUNCTIONS
+func Stage_Completed(_enabled:int, _completed:int):
+	await ShowBanner_Completed(_completed)
 	EnableStage(_enabled)
 	CompletedStage(_completed)
 	singleton.Save_SaveData_Json(singleton.optionMenu.optionSaveData_Json["saveIndex"])
 	singleton.CommonSubmited()
 	GoToMainScene()
-#-------------------------------------------------------------------------------
-func ShowBanner(_s:String, _timer:float = 1.0):
-	await Seconds(_timer)
-	await ShowBanner2(_s)
-#-------------------------------------------------------------------------------
-func ShowBanner2(_s:String):
-	Banner_Open(_s)
-	await Seconds(2.0)
-	Banner_Close()
-#-------------------------------------------------------------------------------
-func Banner_Open(_s:String):
-	completedPanel.show()
-	completedLabel.text = _s
-#-------------------------------------------------------------------------------
-func Banner_Close():
-	completedPanel.hide()
-	completedLabel.text = ""
 #-------------------------------------------------------------------------------
 func EnableStage(_i:int):
 	var _playerIndex: StringName = str(int(singleton.currentSaveData_Json["playerIndex"]))
@@ -579,30 +588,97 @@ func GoToMainScene():
 	get_tree().change_scene_to_file(singleton.mainScene_Path)
 #endregion
 #-------------------------------------------------------------------------------
+#region BANNER FUNCTIONS
+func ShowBanner_EnemyWave():
+	turn_counter += 1
+	phase_counter += 1
+	#-------------------------------------------------------------------------------
+	var _s:String = "[center]"
+	_s += "[font_size=20]"+"Turn " + str(turn_counter)
+	_s += "\n"
+	_s += "[font_size=35]"+"Enemy Wave " + str(phase_counter)
+	#-------------------------------------------------------------------------------
+	await Seconds(1.0)
+	await ShowBanner(_s)
+#-------------------------------------------------------------------------------
+func ShowBanner_SpellCard():
+	turn_counter += 1
+	phase_counter += 1
+	#-------------------------------------------------------------------------------
+	var _s:String = "[center]"
+	_s += "[font_size=20]"+"Turn " + str(turn_counter)
+	_s += "\n"
+	_s +="[font_size=35]"+"Spell Card " + str(phase_counter)
+	#-------------------------------------------------------------------------------
+	await Seconds(1.0)
+	await ShowBanner(_s)
+#-------------------------------------------------------------------------------
+func ShowBanner_OpenMarket():
+	#-------------------------------------------------------------------------------
+	var _s:String = "[center]"
+	_s += "[font_size=20]"+"Turn " + str(turn_counter)
+	_s += "\n"
+	_s +="[font_size=35]"+"Space Market"
+	#-------------------------------------------------------------------------------
+	await ShowBanner(_s)
+#-------------------------------------------------------------------------------
+func ShowBanner_EnterBoss():
+	#-------------------------------------------------------------------------------
+	var _s:String = "[center]"
+	_s += "[font_size=20]"+"Turn " + str(turn_counter+1)
+	_s += "\n"
+	_s +="[font_size=35]"+"Enter Boss"
+	#-------------------------------------------------------------------------------
+	await Seconds(1.0)
+	await ShowBanner(_s)
+#-------------------------------------------------------------------------------
+func ShowBanner_Completed(_i:int):
+	#-------------------------------------------------------------------------------
+	var _s:String = "[center]"
+	_s += "[font_size=45]"+"Completed"
+	_s += "\n"
+	_s += "[font_size=20]"+"Stage " + str(_i+1) +" Cleared"
+	#-------------------------------------------------------------------------------
+	await Seconds(1.0)
+	await ShowBanner(_s)
+#-------------------------------------------------------------------------------
+func ShowBanner(_s:String):
+	completedLabel.text = _s
+	completedPanel.show()
+	await Seconds(2.0)
+	completedPanel.hide()
+	completedLabel.text = ""
+#endregion
+#-------------------------------------------------------------------------------
 #region STAGE_1
 func Stage1():
-	await EnemyWave_and_Market("Enemy-Wave 1", func():Stage1_EnemyWave1(), 10)
-	await EnemyWave_and_Market("Enemy-Wave 2", func():Stage1_EnemyWave2(), 10)
+	phase_counter = 0
 	#-------------------------------------------------------------------------------
-	await ShowBanner("Enter Boss")
+	await EnemyWave_and_Market(func():Stage1_Phase4(), 60)
+	await EnemyWave_and_Market(func():Stage1_Phase2(), 30)
+	#-------------------------------------------------------------------------------
+	await ShowBanner_EnterBoss()
 	await Stage1_Boss1_Dialogue1()
 	var _boss: Boss = await EnterBoss()
 	await Stage1_Boss1_Dialogue2()
 	#-------------------------------------------------------------------------------
-	dialogueMenu.CloseDialogue()
-	myGAME_STATE = GAME_STATE.IN_GAMEPLAY
+	Exit_Dialogue_Enter_Gameplay()
 	#-------------------------------------------------------------------------------
-	#await SpellCard_and_Market("Spell-Card 1", _boss, 100, func():Stage1_SpellCard1(_boss), 10)
-	await SpellCard_and_Nothing("Spell-Card 2", _boss, 100, func():Stage1_SpellCard2(_boss), 60)
+	phase_counter = 0
+	#-------------------------------------------------------------------------------
+	await SpellCard_and_Market(_boss, 100, func():Stage1_SpellCard1(_boss), 10)
+	await SpellCard_and_Nothing(_boss, 100, func():Stage1_SpellCard2(_boss), 60)
+	#-------------------------------------------------------------------------------
 	_boss.hide()
-	await StageCommon("Stage 1 Completed",1,0)
+	#-------------------------------------------------------------------------------
+	await Stage_Completed(1,0)
 #-------------------------------------------------------------------------------
 func Stage1_Boss1_Dialogue1():		#IMPORTANTE: Tiene que haber un await antes de entrar al dialogo porque si no se saltea la primer liena.
 	myGAME_STATE = GAME_STATE.IN_DIALOGUE
 	dialogueMenu.speaker2.hide()
 	dialogueMenu.OpenDialogue()
 	#-------------------------------------------------------------------------------
-	await Dialogue(0, 0, 4)
+	await Dialogue_1_1()
 #-------------------------------------------------------------------------------
 func EnterBoss() -> Boss:
 	var _boss: Boss = Create_Boss(0, 0)
@@ -619,24 +695,59 @@ func Move_Boss_to_Hook(_boss:Boss):
 #-------------------------------------------------------------------------------
 func Stage1_Boss1_Dialogue2():
 	dialogueMenu.speaker2.show()
-	await Dialogue(0, 4, 8)
+	await Dialogue_1_2()
+#-------------------------------------------------------------------------------
+func Exit_Dialogue_Enter_Gameplay():
+	dialogueMenu.CloseDialogue()
+	myGAME_STATE = GAME_STATE.IN_GAMEPLAY
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_1 ENEMYWAVE_1
-func Stage1_EnemyWave1():
+#region STAGE_1: PHASES
+func Stage1_Phase1():
 	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
 	_tween.set_loops()
-	Stage1_EnemyWave1_Mirror(_tween, 1)
-	Stage1_EnemyWave1_Mirror(_tween, -1)
+	Stage1_Wave1(_tween, 1)
+	Stage1_Wave1(_tween, -1)
 #-------------------------------------------------------------------------------
-func Stage1_EnemyWave1_Mirror(_tween:Tween, _mirror: float):
+func Stage1_Phase2():
+	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
+	_tween.set_loops()
+	Stage1_Wave2(_tween, 1)
+	Stage1_Wave2(_tween, -1)
+#-------------------------------------------------------------------------------
+func Stage1_Phase3():
+	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
+	_tween.set_loops()
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		var _tween2: Tween = CreateTween_ArrayAppend(main_tween_Array)
+		_tween2.tween_interval(0.15)
+		Stage1_Wave3(_tween2, 1)
+	)
+	#-------------------------------------------------------------------------------
+	Stage1_Wave3(_tween, -1)
+#-------------------------------------------------------------------------------
+func Stage1_Phase4():
+	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
+	_tween.set_loops()
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		var _tween2: Tween = CreateTween_ArrayAppend(main_tween_Array)
+		Stage1_Wave4(_tween2, -1)
+		)
+	#-------------------------------------------------------------------------------
+	Stage1_Wave4(_tween, 1)
+#endregion
+#-------------------------------------------------------------------------------
+#region STAGE_1: WAVES
+func Stage1_Wave1(_tween:Tween, _mirror: float):
 	for _i in 8:
 		#-------------------------------------------------------------------------------
 		for _j in 1:
 			var _x: float = width * 0.5 - width*(0.6 + 0.1 * _j) *_mirror
 			var _y: float = -height * (0.2 - 0.1 * _j)
 			_tween.tween_callback(func():
-				Stage1_EnemyWave1_Enemy1(_x, _y, _mirror)
+				Stage1_Enemy1(_x, _y, _mirror)
 			)
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(0.8)
@@ -644,7 +755,71 @@ func Stage1_EnemyWave1_Mirror(_tween:Tween, _mirror: float):
 	#-------------------------------------------------------------------------------
 	_tween.tween_interval(1)
 #-------------------------------------------------------------------------------
-func Stage1_EnemyWave1_Enemy1(_x:float, _y:float, _mirror:float):
+func Stage1_Wave2(_tween:Tween, _mirror:float):
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		var _x: float = width*0.5+width*0.25*_mirror
+		var _y: float = -height*0.1
+		var _enemy: Enemy = Stage1_Enemy2(_x, _y, _mirror)
+		#-------------------------------------------------------------------------------
+		Pause_Tween_Until_Enemy_Death(_enemy, _tween)
+	)
+	#-------------------------------------------------------------------------------
+	_tween.tween_interval(0.5)
+	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func Stage1_Wave3(_tween:Tween, _mirror:float):
+	#-------------------------------------------------------------------------------
+	var _x: float = Get_Center_X(0.4*_mirror)
+	var _y: float = height
+	#-------------------------------------------------------------------------------
+	var _dir: float = 90
+	var _dir_origen: float = 90 + 180*_mirror - 5*_mirror
+	#-------------------------------------------------------------------------------
+	var _num1: float = 8
+	#-------------------------------------------------------------------------------
+	for _i in _num1:
+		#-------------------------------------------------------------------------------
+		var _dir_pendiente: float = _mirror * 5 * cos(deg_to_rad(_dir))
+		#-------------------------------------------------------------------------------
+		_tween.tween_callback(func():
+			Stage1_Enemy3(_x, _y, _dir_origen+_dir_pendiente, _mirror)
+		)
+		#-------------------------------------------------------------------------------
+		_tween.tween_interval(0.3)
+		#-------------------------------------------------------------------------------
+		_dir -= 360/(_num1-1)
+		#-------------------------------------------------------------------------------
+	#-------------------------------------------------------------------------------
+	_tween.tween_interval(4.0)
+#-------------------------------------------------------------------------------
+func Stage1_Wave4(_tween:Tween, _mirror:float):
+	var _dir: float = 180
+	var _rad_x: float = width * 0.15
+	var _num1: float = 8
+	var _x_origen: float = Get_Center_X(0.3*_mirror)
+	#-------------------------------------------------------------------------------
+	for _i in _num1:
+		#-------------------------------------------------------------------------------
+		var _dir2: float = deg_to_rad(_dir)
+		var _x_pendiente: float = _mirror * _rad_x * cos(_dir2)
+		#-------------------------------------------------------------------------------
+		_tween.tween_callback(func():
+			#-------------------------------------------------------------------------------
+			Stage1_Enemy4(_x_origen-_x_pendiente, height*-0.1, _mirror)
+			#-------------------------------------------------------------------------------
+		)
+		#-------------------------------------------------------------------------------
+		_dir -= 360/(_num1-1)
+		#-------------------------------------------------------------------------------
+		_tween.tween_interval(0.4)
+		#-------------------------------------------------------------------------------
+	#-------------------------------------------------------------------------------
+	_tween.tween_interval(2.0)
+#endregion
+#-------------------------------------------------------------------------------
+#region STAGE_1: ENEMIES
+func Stage1_Enemy1(_x:float, _y:float, _mirror:float) -> Enemy:
 	var _enemy: Enemy = Create_Enemy(_x, _y, 4.0, 90-20*_mirror, 10)
 	#-------------------------------------------------------------------------------
 	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
@@ -652,7 +827,7 @@ func Stage1_EnemyWave1_Enemy1(_x:float, _y:float, _mirror:float):
 	_tween.tween_callback(func():
 		var _tween2: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
 		_tween2.tween_interval(1.5)
-		Stage1_EnemyWave1_Enemy1_Fire1(_tween2, _enemy)
+		Stage1_Fire1(_tween2, _enemy)
 	)
 	#-------------------------------------------------------------------------------
 	_tween.tween_interval(0.5)
@@ -663,8 +838,76 @@ func Stage1_EnemyWave1_Enemy1(_x:float, _y:float, _mirror:float):
 		Destroy_Enemy(_enemy)
 	)
 	#-------------------------------------------------------------------------------
+	return _enemy
 #-------------------------------------------------------------------------------
-func Stage1_EnemyWave1_Enemy1_Fire1(_tween:Tween, _node2D: Node2D):
+func Stage1_Enemy2(_x:float, _y:float, _mirror:float) -> Enemy:
+	var _enemy: Enemy = Create_Enemy(_x, _y, 7, 90, 10)
+	#-------------------------------------------------------------------------------
+	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
+	_tween.tween_property(_enemy, "vel", 0.5, 1.0)
+	Stage1_Fire2(_tween, _enemy, _mirror)
+	_tween.tween_interval(3.0)
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		Destroy_Enemy_with_Death_Signal(_enemy)
+	)
+	#-------------------------------------------------------------------------------
+	return _enemy
+#-------------------------------------------------------------------------------
+func Stage1_Enemy3(_x:float, _y:float, _dir:float, _mirror:float) -> Enemy:
+	var _enemy: Enemy = Create_Enemy(_x, _y, 15.0, _dir, 10)
+	#-------------------------------------------------------------------------------
+	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
+	#-------------------------------------------------------------------------------
+	_tween.tween_property(_enemy,"vel",0.50, 1.15)
+	_tween.tween_property(_enemy,"dir",90, 1)
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		var _tween2: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
+		#_tween2.tween_interval(1.5)
+		Stage1_Fire3(_tween2, _enemy)
+	)
+	#-------------------------------------------------------------------------------
+	_tween.tween_interval(2.0)
+	_tween.tween_property(_enemy,"dir",90+60*_mirror, 1.0)
+	_tween.parallel().tween_property(_enemy,"vel",4, 1.5)
+	_tween.tween_interval(2.0)
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		Destroy_Enemy(_enemy)
+	)
+	#-------------------------------------------------------------------------------
+	return _enemy
+#-------------------------------------------------------------------------------
+func Stage1_Enemy4(_x:float, _y:float, _mirror:float) -> Enemy:
+	var _enemy: Enemy = Create_Enemy(_x, _y, 1.5, 90, 10)
+	#-------------------------------------------------------------------------------
+	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
+	#-------------------------------------------------------------------------------
+	#_tween.tween_property(_enemy,"vel",2.0, 1.15)
+	_tween.tween_interval(1.0)
+	#_tween.tween_property(_enemy,"dir",90, 1)
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		var _tween2: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
+		#_tween2.tween_interval(1.5)
+		Stage1_Fire3(_tween2, _enemy)
+	)
+	#-------------------------------------------------------------------------------
+	_tween.tween_interval(1.0)
+	_tween.tween_property(_enemy,"dir",90+60*_mirror, 1.0)
+	_tween.parallel().tween_property(_enemy,"vel",4, 1.5)
+	_tween.tween_interval(2.0)
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		Destroy_Enemy(_enemy)
+	)
+	#-------------------------------------------------------------------------------
+	return _enemy
+#endregion
+#-------------------------------------------------------------------------------
+#region STAGE_1: FIRE
+func Stage1_Fire1(_tween:Tween, _node2D: Node2D):
 	var _num1: float = 5.0 + 2.0 * difficulty
 	var _vel: float = 7.5 + 0.3 * difficulty
 	var _timer: float = 0.2 - 0.03 * difficulty
@@ -679,38 +922,8 @@ func Stage1_EnemyWave1_Enemy1_Fire1(_tween:Tween, _node2D: Node2D):
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(_timer)
 	#-------------------------------------------------------------------------------
-#endregion
 #-------------------------------------------------------------------------------
-#region STAGE_1 ENEMYWAVE_2
-func Stage1_EnemyWave2():
-	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
-	_tween.set_loops()
-	Stage1_EnemyWave2_Mirror(_tween, 1)
-	Stage1_EnemyWave2_Mirror(_tween, -1)
-#-------------------------------------------------------------------------------
-func Stage1_EnemyWave2_Mirror(_tween:Tween, _mirror:float):
-	#-------------------------------------------------------------------------------
-	_tween.tween_callback(func():
-		Stage1_EnemyWave2_Enemy1(_tween, _mirror)
-		_tween.pause()
-	)
-	#-------------------------------------------------------------------------------
-	_tween.tween_interval(0.5)
-	#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-func Stage1_EnemyWave2_Enemy1(_tween_death:Tween, _mirror:float):
-	var _x: float = width*0.5+width*0.25*_mirror
-	var _enemy: Enemy = Create_Enemy(_x, -height*0.1, 0, 90, 10)
-	#-------------------------------------------------------------------------------
-	_enemy.death_signal.connect(
-		func(): _tween_death.play()
-	)
-	#-------------------------------------------------------------------------------
-	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
-	_tween.tween_property(_enemy, "position", Vector2(_x, height*0.3), 1.0)
-	Stage1_EnemyWave2_Enemy1_Fire1(_tween, _enemy, _mirror)
-#-------------------------------------------------------------------------------
-func Stage1_EnemyWave2_Enemy1_Fire1(_tween:Tween, _node2D: Node2D, _mirror:float):
+func Stage1_Fire2(_tween:Tween, _node2D: Node2D, _mirror:float):
 	var _max1: float = 10 + 5 * difficulty
 	var _max2: float = 15 + 2 * difficulty
 	var _vel: float = 4 + 0.5 * difficulty
@@ -736,9 +949,36 @@ func Stage1_EnemyWave2_Enemy1_Fire1(_tween:Tween, _node2D: Node2D, _mirror:float
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(_timer)
 	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func Stage1_Fire3(_tween:Tween, _node2D: Node2D):
+	var _num1: float = 3.0
+	var _num2: float = 5.0
+	var _vel: float = 12 + 0.3 * difficulty
+	var _timer: float = 0.05
+	var _cone: float = 10
+	#-------------------------------------------------------------------------------
+	for _i in _num1:
+		_tween.tween_callback(func():
+			var _dir: float = AngleToPlayer(_node2D) - _cone/2.0
+			var _x:float = _node2D.position.x
+			var _y:float = _node2D.position.y
+			#-------------------------------------------------------------------------------
+			for _j in 5:
+				var _bullet: Bullet = Create_EnemyBullet_A(_x, _y, _vel, _dir, "bullet2", false)
+				#-------------------------------------------------------------------------------
+				var _tween2: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
+				_tween2.tween_property(_bullet, "vel", _vel-6.0, 0.5)
+				#-------------------------------------------------------------------------------
+				_dir += _cone / (_num2-1.0)
+				#-------------------------------------------------------------------------------
+			#-------------------------------------------------------------------------------
+		)
+		#-------------------------------------------------------------------------------
+		_tween.tween_interval(_timer)
+	#-------------------------------------------------------------------------------
 #endregion
 #-------------------------------------------------------------------------------
-#region STAGE_1 SPELLCARD_1
+#region STAGE_1: SPELLCARD
 func Stage1_SpellCard1(_boss: Boss):
 	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
 	_tween.set_loops()
@@ -789,9 +1029,7 @@ func Stage1_SpellCard1_Bullet1(_node2d:Node2D, _dir:float, _vel:float, _mirror: 
 		_bullet.can_Go_OffLimits = false
 	)
 	#-------------------------------------------------------------------------------
-#endregion
 #-------------------------------------------------------------------------------
-#region STAGE_1 SPELLCARD_2
 func Stage1_SpellCard2(_boss: Boss):
 	var _tween: Tween = CreateTween_ArrayAppend(_boss.tween_Array)
 	_tween.set_loops()
@@ -841,42 +1079,42 @@ func Stage1_SpellCard2_Mirror(_node2d:Node2D, _tween:Tween):
 #-------------------------------------------------------------------------------
 #region STAGE_2
 func Stage2():
-	await StageCommon("Stage 2 Completed",2,1)
+	await Stage_Completed(2,1)
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_3
 func Stage3():
-	await StageCommon("Stage 3 Completed",3,2)
+	await Stage_Completed(3,2)
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_4
 func Stage4():
-	await StageCommon("Stage 4 Completed",4,3)
+	await Stage_Completed(4,3)
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_5
 func Stage5():
-	await StageCommon("Stage 5 Completed",5,4)
+	await Stage_Completed(5,4)
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_6
 func Stage6():
-	await StageCommon("Stage 6 Completed",6,5)
+	await Stage_Completed(6,5)
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_7
 func Stage7():
-	await StageCommon("Stage 7 Completed",7,6)
+	await Stage_Completed(7,6)
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_8
 func Stage_RougeLike():
-	await StageCommon("Stage Rogue-Like Completed",8,7)
+	await Stage_Completed(8,7)
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_9
 func Stage_BossRish():
-	await StageCommon("Stage Boss-Rish Completed",8,8)
+	await Stage_Completed(8,8)
 #endregion
 #-------------------------------------------------------------------------------
 #region PLAYER FUNCTIONS
@@ -886,7 +1124,8 @@ func PlayerShoot():
 		#-------------------------------------------------------------------------------
 		if(player_shoot_counter > 5.0):
 			player_shoot_counter = 0.0
-			Create_PlayerBullet(player.position.x, player.position.y-50, 18.0, -90.0, "bullet1")
+			Create_PlayerBullet(player.position.x-15, player.position.y-50, 18.0, -90.0, "bullet1")
+			Create_PlayerBullet(player.position.x+15, player.position.y-50, 18.0, -90.0, "bullet1")
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -1221,7 +1460,7 @@ func Set_BossLife_Label(_boss: Boss):
 	Set_CommonLife_Label(_boss.label, _boss.hp, _boss.maxHp)
 #-------------------------------------------------------------------------------
 func Set_CommonLife_Label(_label:Label, _hp:int, _maxHp:int):
-	_label.text = str(_hp)+" / "+str(_maxHp) + " hp"
+	_label.text = "  "+str(_hp)+" / "+str(_maxHp) + " hp"
 #endregion
 #-------------------------------------------------------------------------------
 #region ENEMY FUNCTIONS
@@ -1266,9 +1505,8 @@ func Create_Enemy(_x:float, _y:float, _v:float, _dir: float, _hp: int) -> Enemy:
 #-------------------------------------------------------------------------------
 func Enemy_PhysicsUpdate(_enemy:Enemy):
 	if(_enemy.hp <= 0):
-		_enemy.death_signal.emit()
-		Destroy_Enemy(_enemy)
-		var _num: int = 20+int(10*difficulty)
+		Destroy_Enemy_with_Death_Signal(_enemy)
+		var _num: int = 7+int(3*difficulty)
 		Create_Items(_enemy.position.x, _enemy.position.y, 50, _num, -3)
 		return
 	#-------------------------------------------------------------------------------
@@ -1290,12 +1528,25 @@ func Enemy_PhysicsUpdate(_enemy:Enemy):
 	_enemy.position.y += _enemy.vel_Y * deltaTimeScale
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
+func Destroy_Enemy_with_Death_Signal(_enemy: Enemy):
+	_enemy.death_signal.emit()
+	Destroy_Enemy(_enemy)
+#-------------------------------------------------------------------------------
 func Destroy_Enemy(_enemy: Enemy):
 	KillTween_Array(_enemy.tween_Array)
 	enemy_Enabled_Array.erase(_enemy)
 	enemy_Disabled_Array.append(_enemy)
 	singleton.DisconnectAll(_enemy.death_signal)
 	_enemy.hide()
+#-------------------------------------------------------------------------------
+func Pause_Tween_Until_Enemy_Death(_enemy:Enemy, _tween: Tween):
+	singleton.DisconnectAll(_enemy.death_signal)
+	#-------------------------------------------------------------------------------
+	_enemy.death_signal.connect(
+		func(): _tween.play()
+	)
+	#-------------------------------------------------------------------------------
+	_tween.pause()
 #-------------------------------------------------------------------------------
 func Set_EnemyLife_Label(_enemy: Enemy):
 	Set_CommonLife_Label(_enemy.label, _enemy.hp, _enemy.maxHp)
@@ -1453,7 +1704,7 @@ func TimeOut_Tween(_iMax: int):
 	await timer_tween.finished
 #-------------------------------------------------------------------------------
 func PrintTimer(_i:int, _iMax:int):
-	timerLabel.text = str(_i).pad_zeros(2)+" / " +str(_iMax).pad_zeros(2) + " s"
+	timerLabel.text = "  "+str(_i).pad_zeros(2)+" / " +str(_iMax).pad_zeros(2) + " s"
 #-------------------------------------------------------------------------------
 func StopEverithing():
 	timerLabel.text = ""
@@ -1484,6 +1735,10 @@ func GetAngleFromTo(_obj1: Node2D, _obj2: Node2D) -> float:
 func GetAngleXY(_dx: float, _dy: float) -> float:
 	var _f: float = rad_to_deg(atan2(_dy, _dx))
 	return _f
+#-------------------------------------------------------------------------------
+func Get_Center_X(_f: float) -> float:
+	var _x: float = width * 0.5 + width * _f
+	return _x
 #endregion
 #-------------------------------------------------------------------------------
 #region ARRAY[TWEEN] FUNCTIONS

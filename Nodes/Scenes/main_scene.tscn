@@ -65,7 +65,7 @@ layout_mode = 2
 script = ExtResource("3_s5nvw")
 mainScene = NodePath("../..")
 button = [NodePath("HBoxContainer/VBoxContainer/Button"), NodePath("HBoxContainer/VBoxContainer/Button2"), NodePath("HBoxContainer/VBoxContainer/Button3"), NodePath("HBoxContainer/VBoxContainer/Button4"), NodePath("HBoxContainer/VBoxContainer/Button5")]
-gameInfo = NodePath("HBoxContainer/Control/MarginContainer/TextureRect2/Label2")
+gameInfo = NodePath("HBoxContainer/Control/MarginContainer/TextureRect2/RichTextLabel")
 picture = NodePath("HBoxContainer/Control/MarginContainer/TextureRect2")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Main_Menu"]
@@ -164,6 +164,7 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="Label2" type="Label" parent="MarginContainer/Main_Menu/HBoxContainer/Control/MarginContainer/TextureRect2"]
+visible = false
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -181,6 +182,20 @@ Easy
 "
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/Main_Menu/HBoxContainer/Control/MarginContainer/TextureRect2"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 9
+bbcode_enabled = true
+text = "[center][font_size=90]Easy
+[font_size=30]-1-0-0-0-0-0-0-0-0-"
+fit_content = true
 
 [node name="Difficulty_Menu" type="Control" parent="MarginContainer" node_paths=PackedStringArray("mainScene", "button", "back")]
 visible = false

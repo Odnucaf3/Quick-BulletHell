@@ -6,4 +6,4 @@
 [resource]
 script = ExtResource("1_7rnex")
 texture = ExtResource("2_7rnex")
-radius = 13.0
+radius = 11.0

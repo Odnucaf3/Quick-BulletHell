@@ -68,6 +68,7 @@ tree_root = SubResource("AnimationNodeAnimation_mtsc7")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="Label" type="Label" parent="."]
+visible = false
 z_index = 29
 anchors_preset = 5
 anchor_left = 0.5
