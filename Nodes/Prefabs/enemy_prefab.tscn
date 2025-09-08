@@ -47,6 +47,7 @@ _data = {
 animation = &"Idle"
 
 [node name="Enemy" type="Node2D" node_paths=PackedStringArray("label", "sprite")]
+z_index = 3
 script = ExtResource("1_30lj2")
 label = NodePath("Label")
 sprite = NodePath("Sprite2D")

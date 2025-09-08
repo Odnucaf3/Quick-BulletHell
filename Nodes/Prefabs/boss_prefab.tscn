@@ -47,6 +47,7 @@ _data = {
 animation = &"Idle"
 
 [node name="boss_prefab" type="Node2D" node_paths=PackedStringArray("label", "sprite", "animationTree")]
+z_index = 3
 script = ExtResource("1_5s01m")
 label = NodePath("Label")
 sprite = NodePath("Sprite2D")

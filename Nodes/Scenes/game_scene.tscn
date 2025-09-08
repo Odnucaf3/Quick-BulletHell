@@ -567,6 +567,7 @@ texture = ExtResource("5_0qyn6")
 
 [node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
 show_behind_parent = true
+z_index = 1
 scale = Vector2(2.5, 2.5)
 texture = ExtResource("10_ik87f")
 offset = Vector2(0, -2)
@@ -583,6 +584,7 @@ anim_player = NodePath("../AnimationPlayer")
 [node name="Graze_Sprite2D" type="Sprite2D" parent="CanvasLayer/Window_MarginContainer/Content/Player"]
 self_modulate = Color(1, 0, 1, 0.415686)
 show_behind_parent = true
+z_index = 2
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_0qyn6")
 

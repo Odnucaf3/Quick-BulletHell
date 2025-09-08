@@ -91,20 +91,26 @@ func CreateNew_SaveData_Json() -> Dictionary:
 	_saveData["difficultyIndex"] = int(0)
 	_saveData["stageIndex"] = int(0)
 	var _playerData: Dictionary
+	#-------------------------------------------------------------------------------
 	for _i in playerResource.size():
 		var _difficultyData: Dictionary
+		#-------------------------------------------------------------------------------
 		for _j in DIFFICULTY.size():
 			var _stageData: Dictionary
+			#-------------------------------------------------------------------------------
 			for _k in STAGE.size():
 				#Aqui viene toda la data de cada nivel.
 				var _clearData: Dictionary
 				_clearData["value"] = STAGE_STATE.DISABLED
 				_stageData[str(_k)] = _clearData
-				#-------------------------------------------------------------------------------
+			#-------------------------------------------------------------------------------
 			_stageData["0"]["value"] = STAGE_STATE.ENABLED
 			_difficultyData[str(_j)] = _stageData
+		#-------------------------------------------------------------------------------
 		_playerData[str(_i)] = _difficultyData
+	#-------------------------------------------------------------------------------
 	_saveData["saveData"] = _playerData
+	#-------------------------------------------------------------------------------
 	return _saveData
 #-------------------------------------------------------------------------------
 func Get_SaveDataPath_Json(_i:int) -> String:
