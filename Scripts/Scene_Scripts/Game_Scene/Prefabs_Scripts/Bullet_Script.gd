@@ -7,6 +7,8 @@ var vel: float
 var vel_X: float
 var vel_Y: float
 #-------------------------------------------------------------------------------
+var rotation_offset: float
+#-------------------------------------------------------------------------------
 var amplitud: float
 var amplitud_x: float
 var amplitud_y: float

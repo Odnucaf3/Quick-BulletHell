@@ -656,9 +656,10 @@ func ShowBanner(_s:String):
 func Stage1():
 	phase_counter = 0
 	#-------------------------------------------------------------------------------
-	#await EnemyWave_and_Market(func():Stage1_Phase7(), 30)
-	#await EnemyWave_and_Market(func():Stage1_Phase6(), 30)
+	await EnemyWave_and_Market(func():Stage1_Phase3(), 30)
 	await EnemyWave_and_Market(func():Stage1_Phase5(), 30)
+	await EnemyWave_and_Market(func():Stage1_Phase7(), 30)
+	await EnemyWave_and_Market(func():Stage1_Phase6(), 30)
 	await EnemyWave_and_Market(func():Stage1_Phase4(), 60)
 	await EnemyWave_and_Market(func():Stage1_Phase2(), 30)
 	#-------------------------------------------------------------------------------
@@ -724,13 +725,22 @@ func Stage1_Phase3():
 	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
 	_tween.set_loops()
 	#-------------------------------------------------------------------------------
+	Stage1_Phase3_Mirror(_tween, 1)
+	Stage1_Phase3_Mirror(_tween, -1)
+#-------------------------------------------------------------------------------
+func Stage1_Phase3_Mirror(_tween:Tween, _mirror:float):
+	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
 		var _tween2: Tween = CreateTween_ArrayAppend(main_tween_Array)
 		_tween2.tween_interval(0.15)
-		Stage1_Wave3(_tween2, 1)
+		Stage1_Wave3(_tween2, _mirror)
 	)
 	#-------------------------------------------------------------------------------
-	Stage1_Wave3(_tween, -1)
+	Stage1_Wave3(_tween, -_mirror)
+	#_tween.tween_interval(1)
+	Stage1_Wave8(_tween, -_mirror, _mirror)
+	Stage1_Wave8(_tween, _mirror, _mirror)
+	_tween.tween_interval(2)
 #-------------------------------------------------------------------------------
 func Stage1_Phase4():
 	var _tween: Tween = CreateTween_ArrayAppend(main_tween_Array)
@@ -878,6 +888,21 @@ func Stage1_Wave7(_tween:Tween, _mirror:float):
 	#-------------------------------------------------------------------------------
 	_tween.tween_interval(0.5)
 	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func Stage1_Wave8(_tween:Tween,_mirror:float, _mirror2:float):
+	var _num: float = 9
+	var _x: float = Get_Center_X(-_mirror*0.5)
+	var _dx: float = width/_num
+	#-------------------------------------------------------------------------------
+	for _i in _num:
+		#-------------------------------------------------------------------------------
+		_tween.tween_callback(func():
+			var _enemy: Enemy = Stage1_Enemy8(_x, 0, _mirror2)
+		)
+		#-------------------------------------------------------------------------------
+		_x += _dx*_mirror
+		_tween.tween_interval(0.3)
+	#-------------------------------------------------------------------------------
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_1: ENEMIES
@@ -931,9 +956,9 @@ func Stage1_Enemy3(_x:float, _y:float, _dir:float, _mirror:float) -> Enemy:
 	)
 	#-------------------------------------------------------------------------------
 	_tween.tween_interval(2.0)
-	_tween.tween_property(_enemy,"dir",90+60*_mirror, 1.0)
+	_tween.tween_property(_enemy,"dir",90+80*_mirror, 1.5)
 	_tween.parallel().tween_property(_enemy,"vel",4, 1.5)
-	_tween.tween_interval(2.0)
+	_tween.tween_interval(2.5)
 	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
 		Destroy_Enemy(_enemy)
@@ -1017,6 +1042,18 @@ func Stage1_Enemy7(_x:float, _y:float, _mirror:float) -> Enemy:
 	)
 	#-------------------------------------------------------------------------------
 	return _enemy
+#-------------------------------------------------------------------------------
+func Stage1_Enemy8(_x:float, _y:float, _mirror:float) -> Enemy:
+	var _enemy: Enemy = Create_Enemy_Senoidal(_x, _y, 2, 90, 0, 2.5*_mirror, 100, 10)
+	#-------------------------------------------------------------------------------
+	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
+	_tween.tween_interval(5.5)
+	#-------------------------------------------------------------------------------
+	_tween.tween_callback(func():
+		Destroy_Enemy(_enemy)
+	)
+	#-------------------------------------------------------------------------------
+	return _enemy
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_1: FIRE
@@ -1067,7 +1104,7 @@ func Stage1_Fire3(_tween:Tween, _node2D: Node2D):
 	var _num1: float = 3.0
 	var _num2: float = 5.0
 	var _vel: float = 12 + 0.3 * difficulty
-	var _timer: float = 0.1
+	var _timer: float = 0.05
 	var _cone: float = 10
 	#-------------------------------------------------------------------------------
 	for _i in _num1:
@@ -1080,7 +1117,7 @@ func Stage1_Fire3(_tween:Tween, _node2D: Node2D):
 				var _bullet: Bullet = Create_EnemyBullet_A(_x, _y, _vel, _dir, "bullet2", false)
 				#-------------------------------------------------------------------------------
 				var _tween2: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
-				_tween2.tween_property(_bullet, "vel", _vel-6.0, 0.5)
+				_tween2.tween_property(_bullet, "vel", _vel-5.0, 0.5)
 				#-------------------------------------------------------------------------------
 				_dir += _cone / (_num2-1.0)
 				#-------------------------------------------------------------------------------
@@ -1107,8 +1144,8 @@ func Stage1_Fire5(_tween:Tween, _node2D: Node2D, _mirror:float):
 			var _ang: float = -_cone/2
 			#-------------------------------------------------------------------------------
 			for _j in _max2:
-				Create_EnemyBullet_C(_node2D.position.x, _node2D.position.y, _vel, _dir+_ang, _spin, _frecuencia, _amplitud, "bullet2", false)
-				Create_EnemyBullet_C(_node2D.position.x, _node2D.position.y, _vel, _dir+_ang, _spin, -_frecuencia, _amplitud, "bullet1", false)
+				Create_EnemyBullet_Senoidal(_node2D.position.x, _node2D.position.y, _vel, _dir+_ang, _spin, _frecuencia, _amplitud, "bullet2", false)
+				Create_EnemyBullet_Senoidal(_node2D.position.x, _node2D.position.y, _vel, _dir+_ang, _spin, -_frecuencia, _amplitud, "bullet1", false)
 				_ang += _cone/(_max2-1)
 			#-------------------------------------------------------------------------------
 		)
@@ -1130,7 +1167,7 @@ func Stage1_Fire6(_tween:Tween, _node2D: Node2D, _mirror:float):
 			var _ang: float = -_cone/2
 			#-------------------------------------------------------------------------------
 			for _j in _max2:
-				Create_EnemyBullet_D(_node2D.position.x, _node2D.position.y, _vel, _dir+_ang, 8, true, false, true, true, "bullet1", false)
+				Create_EnemyBullet_Bounce(_node2D.position.x, _node2D.position.y, _vel, _dir+_ang, 8, true, false, true, true, "bullet1", false)
 				_ang += _cone/(_max2-1)
 			#-------------------------------------------------------------------------------
 		)
@@ -1141,9 +1178,9 @@ func Stage1_Fire6(_tween:Tween, _node2D: Node2D, _mirror:float):
 func Stage1_Fire7(_tween:Tween, _node2D: Node2D, _mirror:float):
 	var _max1: float = 1
 	var _max2: float = 3
-	var _max3: float = 10
+	var _num: float = 10
 	var _cone: float = 45
-	var _vel: float = 3
+	var _vel: float = 4
 	var _timer: float = 0.1
 	var _dir: float = AngleToPlayer(_node2D)
 	#-------------------------------------------------------------------------------
@@ -1151,14 +1188,9 @@ func Stage1_Fire7(_tween:Tween, _node2D: Node2D, _mirror:float):
 		#-------------------------------------------------------------------------------
 		_tween.tween_callback(func():
 			var _dir2: float = -_cone/2
-			var _ang: float = 0
 			#-------------------------------------------------------------------------------
 			for _j in _max2:
-				for _k in _max3:
-					var _bullet: Bullet = Create_EnemyBullet_E(_node2D.position.x, _node2D.position.y, _vel, _dir+_dir2, _ang, 6, 0, "bullet2", false)
-					var _tween2: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
-					_tween2.tween_property(_bullet, "amplitud", 100, 0.5)
-					_ang += 360/_max3
+				var _array_bullet: Array[Bullet] = Create_EnemyBullet_Wheel(_node2D.position.x, _node2D.position.y, _vel, _dir+_dir2, _num, -6, 80, -90, 2, true, true, true, true, "bullet2", false)
 				#-------------------------------------------------------------------------------
 				_dir2 += _cone/(_max2-1)
 			#-------------------------------------------------------------------------------
@@ -1166,6 +1198,19 @@ func Stage1_Fire7(_tween:Tween, _node2D: Node2D, _mirror:float):
 		#-------------------------------------------------------------------------------
 		_tween.tween_interval(_timer)
 	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func Create_EnemyBullet_Wheel(_x:float, _y:float, _vel:float, _dir:float, _num:float, _frecuencia:float, _amplitud:float, _rotation_offset:float, _bounce_counter: int, _bounce_up: bool, _bounce_down: bool, _bounce_left: bool, _bounce_right: bool, _type:String, _can_Go_OffLimits:bool) ->Array[Bullet]:
+	var _ang: float = 0
+	var _bullet_array: Array[Bullet]
+	#-------------------------------------------------------------------------------
+	for _i in _num:
+		var _bullet: Bullet = Create_EnemyBullet_Spin(_x, _y, _vel, _dir, _ang, _frecuencia, 0, _rotation_offset, _bounce_counter, _bounce_up, _bounce_down, _bounce_left, _bounce_right, _type, _can_Go_OffLimits)
+		var _tween2: Tween = CreateTween_ArrayAppend(_bullet.tween_Array)
+		_tween2.tween_property(_bullet, "amplitud", _amplitud, 0.3)
+		_ang += 360/_num
+		_bullet_array.append(_bullet)
+	#-------------------------------------------------------------------------------
+	return _bullet_array
 #endregion
 #-------------------------------------------------------------------------------
 #region STAGE_1: SPELLCARD
@@ -1674,9 +1719,9 @@ func Create_Enemy(_x:float, _y:float, _v:float, _dir: float, _hp: int) -> Enemy:
 	else:
 		_enemy = enemy_Prefab.instantiate() as Enemy
 		singleton.DisconnectAll(_enemy.death_signal)
-		_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
 		content.add_child(_enemy)
 	#-------------------------------------------------------------------------------
+	_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
 	enemy_Enabled_Array.append(_enemy)
 	#-------------------------------------------------------------------------------
 	_enemy.position = Vector2(_x, _y)
@@ -1716,6 +1761,91 @@ func Enemy_PhysicsUpdate(_enemy:Enemy):
 	#-------------------------------------------------------------------------------
 	_enemy.position.x += _enemy.vel_X * deltaTimeScale
 	_enemy.position.y += _enemy.vel_Y * deltaTimeScale
+	#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+func Create_Enemy_Senoidal(_x:float, _y:float, _v:float, _dir:float, _spin:float, _frecuencia:float, _amplitud:float, _hp: int) -> Enemy:
+	var _enemy: Enemy
+	#-------------------------------------------------------------------------------
+	if(enemy_Disabled_Array.size() > 0):
+		_enemy = enemy_Disabled_Array[0]
+		_enemy.show()
+		enemy_Disabled_Array.erase(_enemy)
+	#-------------------------------------------------------------------------------
+	else:
+		_enemy = enemy_Prefab.instantiate() as Enemy
+		singleton.DisconnectAll(_enemy.death_signal)
+		content.add_child(_enemy)
+	#-------------------------------------------------------------------------------
+	_enemy.physics_Update = func(): Enemy_PhysicsUpdate_Senoidal(_enemy)
+	enemy_Enabled_Array.append(_enemy)
+	#-------------------------------------------------------------------------------
+	_enemy.position = Vector2(_x, _y)
+	#-------------------------------------------------------------------------------
+	var _radius: float = 30.0
+	_enemy.radius = _radius
+	_enemy.distance_squared_to_hitbox = pow(_radius + player.hitBox_radius, 2)
+	#-------------------------------------------------------------------------------
+	_enemy.maxHp = _hp
+	_enemy.hp = _hp
+	_enemy.vel = _v
+	_enemy.dir = _dir
+	var _rotation_offset: float = -90
+	_enemy.rotation_offset = deg_to_rad(_rotation_offset)
+	_enemy.sprite.rotation_degrees = _enemy.dir + _rotation_offset
+	#-------------------------------------------------------------------------------
+	_enemy.pos_X = _enemy.position.x
+	_enemy.pos_Y = _enemy.position.y
+	#-------------------------------------------------------------------------------
+	_enemy.spin = _spin
+	_enemy.frecuencia = _frecuencia
+	_enemy.amplitud = _amplitud
+	#-------------------------------------------------------------------------------
+	var _dir2: float = deg_to_rad(_dir)
+	#-------------------------------------------------------------------------------
+	_enemy.vel_X = _enemy.vel * cos(_dir2)
+	_enemy.vel_Y = _enemy.vel * sin(_dir2)
+	#-------------------------------------------------------------------------------
+	var _dir2_perpendicular: float = deg_to_rad(_dir + 90)
+	#-------------------------------------------------------------------------------
+	_enemy.amplitud_x = _enemy.amplitud * cos(_dir2_perpendicular)
+	_enemy.amplitud_y = _enemy.amplitud * sin(_dir2_perpendicular)
+	#-------------------------------------------------------------------------------
+	Set_EnemyLife_Label(_enemy)
+	#-------------------------------------------------------------------------------
+	return _enemy
+#-------------------------------------------------------------------------------
+func Enemy_PhysicsUpdate_Senoidal(_enemy:Enemy):
+	if(_enemy.hp <= 0):
+		Destroy_Enemy_with_Death_Signal(_enemy)
+		var _num: int = 7+int(3*difficulty)
+		Create_Items(_enemy.position.x, _enemy.position.y, 50, _num, -3)
+		return
+	#-------------------------------------------------------------------------------
+	for _i in range(playerBullets_Enabled_Array.size()-1,-1,-1):
+		var _bullet: Bullet = playerBullets_Enabled_Array[_i]
+		#-------------------------------------------------------------------------------
+		if(_bullet.position.distance_to(_enemy.position) < (_bullet.radius+_enemy.radius) and _enemy.canBeHit):
+			_enemy.hp -=1
+			Set_EnemyLife_Label(_enemy)
+			Destroy_PlayerBullet(_bullet)
+		#-------------------------------------------------------------------------------
+	#-------------------------------------------------------------------------------
+	_enemy.spin += _enemy.frecuencia * deltaTimeScale
+	var _seno: float = sin(deg_to_rad(_enemy.spin))
+	#-------------------------------------------------------------------------------
+	var _pos_x: float = _enemy.amplitud_x * _seno
+	var _pos_y: float = _enemy.amplitud_y * _seno
+	#-------------------------------------------------------------------------------
+	_enemy.pos_X += _enemy.vel_X * deltaTimeScale
+	_enemy.pos_Y += _enemy.vel_Y * deltaTimeScale
+	#-------------------------------------------------------------------------------
+	var _pos_X_new: float = _enemy.pos_X +_pos_x
+	var _pos_Y_new: float = _enemy.pos_Y +_pos_y
+	#-------------------------------------------------------------------------------
+	_enemy.sprite.rotation = atan2(_pos_Y_new-_enemy.position.y, _pos_X_new-_enemy.position.x) + _enemy.rotation_offset
+	#-------------------------------------------------------------------------------
+	_enemy.position.x = _pos_X_new
+	_enemy.position.y = _pos_Y_new
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Destroy_Enemy_with_Death_Signal(_enemy: Enemy):
@@ -1772,7 +1902,7 @@ func Create_EnemyBullet_B(_x:float, _y:float, _velX:float, _velY:float, _type:St
 	#-------------------------------------------------------------------------------
 	return _bullet
 #-------------------------------------------------------------------------------
-func Create_EnemyBullet_C(_x:float, _y:float, _v:float, _dir:float, _spin:float, _frecuencia:float, _amplitud:float, _type:String, _can_Go_OffLimits:bool) ->Bullet:
+func Create_EnemyBullet_Senoidal(_x:float, _y:float, _v:float, _dir:float, _spin:float, _frecuencia:float, _amplitud:float, _type:String, _can_Go_OffLimits:bool) ->Bullet:
 	var _bullet: Bullet = Create_EnemyBullet_Common(_x, _y, _type, _can_Go_OffLimits)
 	#-------------------------------------------------------------------------------
 	_bullet.pos_X = _x
@@ -1796,11 +1926,11 @@ func Create_EnemyBullet_C(_x:float, _y:float, _v:float, _dir:float, _spin:float,
 	_bullet.amplitud_x = _bullet.amplitud * cos(_dir2_perpendicular)
 	_bullet.amplitud_y = _bullet.amplitud * sin(_dir2_perpendicular)
 	#-------------------------------------------------------------------------------
-	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate_C(_bullet)
+	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate_Senoidal(_bullet)
 	#-------------------------------------------------------------------------------
 	return _bullet
 #-------------------------------------------------------------------------------
-func Create_EnemyBullet_D(_x:float, _y:float, _v:float, _dir:float, _bounce_counter: int, _bounce_up: bool, _bounce_down: bool, _bounce_left: bool, _bounce_right: bool, _type:String, _can_Go_OffLimits:bool) ->Bullet:
+func Create_EnemyBullet_Bounce(_x:float, _y:float, _v:float, _dir:float, _bounce_counter: int, _bounce_up: bool, _bounce_down: bool, _bounce_left: bool, _bounce_right: bool, _type:String, _can_Go_OffLimits:bool) ->Bullet:
 	var _bullet: Bullet = Create_EnemyBullet_Common(_x, _y, _type, _can_Go_OffLimits)
 	#-------------------------------------------------------------------------------
 	_bullet.vel = _v
@@ -1813,11 +1943,11 @@ func Create_EnemyBullet_D(_x:float, _y:float, _v:float, _dir:float, _bounce_coun
 	_bullet.bounce_left = _bounce_left
 	_bullet.bounce_right = _bounce_right
 	#-------------------------------------------------------------------------------
-	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate_D(_bullet)
+	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate_Bounce(_bullet)
 	#-------------------------------------------------------------------------------
 	return _bullet
 #-------------------------------------------------------------------------------
-func Create_EnemyBullet_E(_x:float, _y:float, _v:float, _dir:float, _spin:float, _frecuencia:float, _amplitud:float, _type:String, _can_Go_OffLimits:bool) ->Bullet:
+func Create_EnemyBullet_Spin(_x:float, _y:float, _v:float, _dir:float, _spin:float, _frecuencia:float, _amplitud:float, _rotation_offset:float, _bounce_counter: int, _bounce_up: bool, _bounce_down: bool, _bounce_left: bool, _bounce_right: bool, _type:String, _can_Go_OffLimits:bool) ->Bullet:
 	var _bullet: Bullet = Create_EnemyBullet_Common(_x, _y, _type, _can_Go_OffLimits)
 	#-------------------------------------------------------------------------------
 	_bullet.pos_X = _x
@@ -1827,21 +1957,29 @@ func Create_EnemyBullet_E(_x:float, _y:float, _v:float, _dir:float, _spin:float,
 	_bullet.dir = _dir
 	_bullet.rotation_degrees = _bullet.dir
 	#-------------------------------------------------------------------------------
+	_bullet.rotation_offset = deg_to_rad(_rotation_offset)
+	#-------------------------------------------------------------------------------
 	_bullet.spin = _spin
 	_bullet.frecuencia = _frecuencia
 	_bullet.amplitud = _amplitud
 	#-------------------------------------------------------------------------------
-	var _dir2: float = deg_to_rad(_dir)
+	#var _dir2: float = deg_to_rad(_dir)
 	#-------------------------------------------------------------------------------
-	_bullet.vel_X = _bullet.vel * cos(_dir2)
-	_bullet.vel_Y = _bullet.vel * sin(_dir2)
+	#_bullet.vel_X = _bullet.vel * cos(_dir2)
+	#_bullet.vel_Y = _bullet.vel * sin(_dir2)
 	#-------------------------------------------------------------------------------
 	#var _dir2_perpendicular: float = deg_to_rad(_dir + 90)
 	#-------------------------------------------------------------------------------
 	#_bullet.amplitud_x = _bullet.amplitud * cos(_dir2_perpendicular)
 	#_bullet.amplitud_y = _bullet.amplitud * sin(_dir2_perpendicular)
 	#-------------------------------------------------------------------------------
-	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate_E(_bullet)
+	_bullet.bounce_counter = _bounce_counter
+	_bullet.bounce_up = _bounce_up
+	_bullet.bounce_down = _bounce_down
+	_bullet.bounce_left = _bounce_left
+	_bullet.bounce_right = _bounce_right
+	#-------------------------------------------------------------------------------
+	_bullet.physics_Update = func(): EnemyBullet_PhysicsUpdate_Spin(_bullet)
 	#-------------------------------------------------------------------------------
 	return _bullet
 #-------------------------------------------------------------------------------
@@ -1929,14 +2067,14 @@ func EnemyBullet_PhysicsUpdate_Limitless_B(_bullet: Bullet):
 	return
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyBullet_PhysicsUpdate_C(_bullet: Bullet):
+func EnemyBullet_PhysicsUpdate_Senoidal(_bullet: Bullet):
 	if(_bullet.can_Go_OffLimits):
-		EnemyBullet_PhysicsUpdate_Limitless_C(_bullet)
+		EnemyBullet_PhysicsUpdate_Limitless_Senoidal(_bullet)
 		return
 	#-------------------------------------------------------------------------------
 	if(_bullet.position.x > enemyLimitsX.x and _bullet.position.x < enemyLimitsX.y):
 		if(_bullet.position.y > enemyLimitsY.x and _bullet.position.y < enemyLimitsY.y):
-			EnemyBullet_PhysicsUpdate_Limitless_C(_bullet)
+			EnemyBullet_PhysicsUpdate_Limitless_Senoidal(_bullet)
 		#-------------------------------------------------------------------------------
 		else:
 			Destroy_EnemyBullet(_bullet)
@@ -1948,7 +2086,7 @@ func EnemyBullet_PhysicsUpdate_C(_bullet: Bullet):
 		return
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyBullet_PhysicsUpdate_Limitless_C(_bullet: Bullet):
+func EnemyBullet_PhysicsUpdate_Limitless_Senoidal(_bullet: Bullet):
 	#-------------------------------------------------------------------------------
 	_bullet.spin += _bullet.frecuencia * deltaTimeScale
 	var _seno: float = sin(deg_to_rad(_bullet.spin))
@@ -1969,9 +2107,9 @@ func EnemyBullet_PhysicsUpdate_Limitless_C(_bullet: Bullet):
 	return
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyBullet_PhysicsUpdate_D(_bullet: Bullet):
+func EnemyBullet_PhysicsUpdate_Bounce(_bullet: Bullet):
 	if(_bullet.can_Go_OffLimits):
-		EnemyBullet_PhysicsUpdate_Limitless_D(_bullet)
+		EnemyBullet_PhysicsUpdate_Limitless_Bounce(_bullet)
 		return
 	#-------------------------------------------------------------------------------
 	if(_bullet.position.y < 0):
@@ -2015,10 +2153,10 @@ func EnemyBullet_PhysicsUpdate_D(_bullet: Bullet):
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 	else:
-		EnemyBullet_PhysicsUpdate_Limitless_D(_bullet)
+		EnemyBullet_PhysicsUpdate_Limitless_Bounce(_bullet)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyBullet_PhysicsUpdate_Limitless_D(_bullet: Bullet):
+func EnemyBullet_PhysicsUpdate_Limitless_Bounce(_bullet: Bullet):
 	var _dir2: float = deg_to_rad(_bullet.dir)
 	_bullet.vel_X = _bullet.vel * cos(_dir2)
 	_bullet.vel_Y = _bullet.vel * sin(_dir2)
@@ -2029,26 +2167,73 @@ func EnemyBullet_PhysicsUpdate_Limitless_D(_bullet: Bullet):
 	return
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyBullet_PhysicsUpdate_E(_bullet: Bullet):
+func EnemyBullet_PhysicsUpdate_Spin(_bullet: Bullet):
 	if(_bullet.can_Go_OffLimits):
-		EnemyBullet_PhysicsUpdate_Limitless_E(_bullet)
+		EnemyBullet_PhysicsUpdate_Limitless_Spin(_bullet)
 		return
 	#-------------------------------------------------------------------------------
-	if(_bullet.position.x > enemyLimitsX.x-_bullet.amplitud and _bullet.position.x < enemyLimitsX.y+_bullet.amplitud):
-		if(_bullet.position.y > enemyLimitsY.x-_bullet.amplitud and _bullet.position.y < enemyLimitsY.y+_bullet.amplitud):
-			EnemyBullet_PhysicsUpdate_Limitless_E(_bullet)
+	if(_bullet.bounce_counter>0):
+		if(_bullet.pos_Y < 0):
+			if(_bullet.bounce_up):
+				_bullet.pos_Y = 0
+				_bullet.dir = -_bullet.dir
+				_bullet.bounce_counter -= 1
+			#-------------------------------------------------------------------------------
+			else:
+				Destroy_EnemyBullet(_bullet)
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+		elif(_bullet.pos_Y > height):
+			if(_bullet.bounce_down):
+				_bullet.pos_Y = height
+				_bullet.dir = -_bullet.dir
+				_bullet.bounce_counter -= 1
+			#-------------------------------------------------------------------------------
+			else:
+				Destroy_EnemyBullet(_bullet)
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+		elif(_bullet.pos_X < 0):
+			if(_bullet.bounce_left):
+				_bullet.pos_X = 0
+				_bullet.dir = -(_bullet.dir + 180)
+				_bullet.bounce_counter -= 1
+			#-------------------------------------------------------------------------------
+			else:
+				Destroy_EnemyBullet(_bullet)
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+		elif(_bullet.pos_X > width):
+			if(_bullet.bounce_right):
+				_bullet.pos_X = width
+				_bullet.dir = -(_bullet.dir + 180)
+				_bullet.bounce_counter -= 1
+			#-------------------------------------------------------------------------------
+			else:
+				Destroy_EnemyBullet(_bullet)
+			#-------------------------------------------------------------------------------
+		#-------------------------------------------------------------------------------
+		else:
+			EnemyBullet_PhysicsUpdate_Limitless_Spin(_bullet)
+		#-------------------------------------------------------------------------------
+	#-------------------------------------------------------------------------------
+	else:
+		if(_bullet.position.x > enemyLimitsX.x-_bullet.amplitud and _bullet.position.x < enemyLimitsX.y+_bullet.amplitud):
+			if(_bullet.position.y > enemyLimitsY.x-_bullet.amplitud and _bullet.position.y < enemyLimitsY.y+_bullet.amplitud):
+				EnemyBullet_PhysicsUpdate_Limitless_Spin(_bullet)
+			#-------------------------------------------------------------------------------
+			else:
+				Destroy_EnemyBullet(_bullet)
+				return
+			#-------------------------------------------------------------------------------
 		#-------------------------------------------------------------------------------
 		else:
 			Destroy_EnemyBullet(_bullet)
 			return
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
-	else:
-		Destroy_EnemyBullet(_bullet)
-		return
-	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-func EnemyBullet_PhysicsUpdate_Limitless_E(_bullet: Bullet):
+func EnemyBullet_PhysicsUpdate_Limitless_Spin(_bullet: Bullet):
 	#-------------------------------------------------------------------------------
 	_bullet.spin += _bullet.frecuencia * deltaTimeScale
 	var _spin: float = deg_to_rad(_bullet.spin)
@@ -2056,13 +2241,16 @@ func EnemyBullet_PhysicsUpdate_Limitless_E(_bullet: Bullet):
 	var _pos_x: float = _bullet.amplitud * cos(_spin)
 	var _pos_y: float = _bullet.amplitud * sin(_spin)
 	#-------------------------------------------------------------------------------
+	var _dir2: float = deg_to_rad(_bullet.dir)
+	_bullet.vel_X = _bullet.vel * cos(_dir2)
+	_bullet.vel_Y = _bullet.vel * sin(_dir2)
 	_bullet.pos_X += _bullet.vel_X * deltaTimeScale
 	_bullet.pos_Y += _bullet.vel_Y * deltaTimeScale
 	#-------------------------------------------------------------------------------
 	var _pos_X_new: float = _bullet.pos_X +_pos_x
 	var _pos_Y_new: float = _bullet.pos_Y +_pos_y
 	#-------------------------------------------------------------------------------
-	_bullet.rotation = atan2(_pos_y, _pos_x)+PI*0.5
+	_bullet.rotation = atan2(_pos_y, _pos_x)+_bullet.rotation_offset
 	#-------------------------------------------------------------------------------
 	_bullet.position.x = _pos_X_new
 	_bullet.position.y = _pos_Y_new
