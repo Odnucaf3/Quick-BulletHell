@@ -20,8 +20,6 @@ var pos_X: float
 var pos_Y: float
 #-------------------------------------------------------------------------------
 var radius: float
-var distance_squared_to_grazebox: float
-var distance_squared_to_hitbox: float
 #-------------------------------------------------------------------------------
 var bounce_counter: int
 var bounce_up: bool
@@ -36,6 +34,6 @@ var physics_Update: Callable = func(): pass
 var tween_Array: Array[Tween] = []
 #endregion
 #-------------------------------------------------------------------------------
-#func _draw() -> void:
-#	draw_circle(Vector2.ZERO, radius/scale.x, Color.RED, false)
+func _draw() -> void:
+	draw_circle(Vector2.ZERO, radius/scale.x, Color.RED, false)
 #-------------------------------------------------------------------------------

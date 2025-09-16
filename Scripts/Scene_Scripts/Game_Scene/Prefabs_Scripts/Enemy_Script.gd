@@ -22,8 +22,8 @@ var spin: float
 var pos_X: float
 var pos_Y: float
 #-------------------------------------------------------------------------------
-var radius: float
-var distance_squared_to_hitbox: float
+var hitbox_radius: float
+var hurtbox_radius: float
 #-------------------------------------------------------------------------------
 var hp: int
 var maxHp: int
@@ -37,6 +37,7 @@ signal death_signal
 func Death_Signal():
 	death_signal.emit()
 #-------------------------------------------------------------------------------
-#func _draw() -> void:
-#	draw_circle(Vector2.ZERO, radius, Color.RED, false)
+func _draw() -> void:
+	draw_circle(Vector2.ZERO, hitbox_radius, Color.RED, false)
+	draw_circle(Vector2.ZERO, hurtbox_radius, Color.GREEN, false)
 #-------------------------------------------------------------------------------

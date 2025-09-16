@@ -21,7 +21,7 @@ var tween_Array: Array[Tween] = []
 @export var hitBox_Sprite: Sprite2D
 #-------------------------------------------------------------------------------
 var hitBox_radius: float = 6.0
-var grazeBox_radius: float = 32.0
+var grazeBox_radius: float = 16.0
 var magnetBox_radius: float = 95.0
 #-------------------------------------------------------------------------------
 var playerResource: PlayerResource
@@ -43,8 +43,8 @@ func SetPlayer(_playerResournce: PlayerResource):
 	hitBox_Sprite.scale.y  *= _playerResournce.hitBox_Scale
 #endregion
 #-------------------------------------------------------------------------------
-#func _draw() -> void:
-#	draw_circle(Vector2.ZERO, magnetBox_radius, Color.BLUE, false)
-#	draw_circle(Vector2.ZERO, grazeBox_radius, Color.GREEN, false)
-#	draw_circle(Vector2.ZERO, hitBox_radius, Color.RED, false)
+func _draw() -> void:
+	draw_circle(Vector2.ZERO, magnetBox_radius, Color.BLUE, false)
+	draw_circle(Vector2.ZERO, grazeBox_radius, Color.GREEN, false)
+	draw_circle(Vector2.ZERO, hitBox_radius, Color.RED, false)
 #-------------------------------------------------------------------------------

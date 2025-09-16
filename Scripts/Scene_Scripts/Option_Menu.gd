@@ -99,6 +99,7 @@ func GetPath_OptionSaveData_Json() -> String:
 #region RESOLUTION SETTINGS
 func SetResolution_Start():
 	SetResolution(optionSaveData_Json["resolutionIndex"])
+	Center_if_Windowed()
 	AddResolutionOptions(resolution.optionButton, resolution_dictionary)
 	resolution.optionButton.select(optionSaveData_Json["resolutionIndex"])
 	mySingleton.SetOptionButtons(resolution.optionButton, mySingleton.CommonSelected, ResolutionButton_Submited, AnyButton_Cancel)
@@ -112,12 +113,15 @@ func ResolutionButton_Submited(_index:int) -> void:
 	mySingleton.CommonSubmited()
 	optionSaveData_Json["resolutionIndex"] = _index
 	SetResolution(_index)
+	Center_if_Windowed()
 #-------------------------------------------------------------------------------
 func SetResolution(_index:int) -> void:
 	_index = clamp(_index, 0, resolution_dictionary.size())
 	DisplayServer.window_set_size(resolution_dictionary.values()[_index])
-	if(DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_WINDOWED):
-		CenterScreem()
+#-------------------------------------------------------------------------------
+func GetResolution() -> Vector2i:
+	var _v2i: Vector2i = DisplayServer.window_get_size()
+	return _v2i
 #endregion
 #-------------------------------------------------------------------------------
 #region IDIOME SETTINGS
@@ -173,7 +177,7 @@ func FullScreenButton_Submited(_b:bool):
 #-------------------------------------------------------------------------------
 func SetFullScreen(_b: bool):
 	if(_b):
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	else:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		SetResolution(optionSaveData_Json["resolutionIndex"])
@@ -247,6 +251,10 @@ func SetValume(_label: Label, _index:int, _value:float):
 func AnyButton_Cancel() -> void:
 	mySingleton.MoveToButton(back)
 	mySingleton.CommonCanceled()
+#-------------------------------------------------------------------------------
+func Center_if_Windowed():
+	if(DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_WINDOWED):
+		CenterScreem()
 #-------------------------------------------------------------------------------
 func CenterScreem():
 	var _center: Vector2i = (DisplayServer.screen_get_size()-DisplayServer.window_get_size())/2

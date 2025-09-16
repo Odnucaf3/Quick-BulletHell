@@ -194,24 +194,24 @@ func Player_Hitbox():
 	#-------------------------------------------------------------------------------
 	for _i in range(enemyBullets_Enabled_Array.size()-1, -1, -1):
 		var _bullet: Bullet = enemyBullets_Enabled_Array[_i]
-		if(_bullet.position.distance_squared_to(player.position) < _bullet.distance_squared_to_grazebox and !_bullet.isGrazed):
+		if(_bullet.position.distance_to(player.position) <  (_bullet.radius+player.grazeBox_radius) and !_bullet.isGrazed):
 			Create_Item(_bullet.position.x, _bullet.position.y, -5)
 			_bullet.isGrazed = true
 		#-------------------------------------------------------------------------------
-		if(_bullet.position.distance_squared_to(player.position) < _bullet.distance_squared_to_hitbox and player.canBeHit):
+		if(_bullet.position.distance_to(player.position) < (_bullet.radius+player.hitBox_radius) and player.canBeHit):
 			Player_Shooted()
 			Destroy_EnemyBullet(_bullet)
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 	for _i in range(enemy_Enabled_Array.size()-1, -1, -1):
 		var _enemy: Enemy = enemy_Enabled_Array[_i]
-		if(_enemy.position.distance_squared_to(player.position) < _enemy.distance_squared_to_hitbox and player.canBeHit):
+		if(_enemy.position.distance_to(player.position) < (_enemy.hitbox_radius+player.hitBox_radius) and player.canBeHit):
 			Player_Shooted()
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
 	for _i in range(boss_Enabled_Array.size()-1, -1, -1):
 		var _boss: Boss = boss_Enabled_Array[_i]
-		if(_boss.position.distance_squared_to(player.position) < _boss.distance_squared_to_hitbox and player.canBeHit):
+		if(_boss.position.distance_to(player.position) < (_boss.hitbox_radius+player.hitBox_radius) and player.canBeHit):
 			Player_Shooted()
 		#-------------------------------------------------------------------------------
 	#-------------------------------------------------------------------------------
@@ -942,7 +942,7 @@ func Stage1_Enemy2(_x:float, _y:float, _mirror:float) -> Enemy:
 	return _enemy
 #-------------------------------------------------------------------------------
 func Stage1_Enemy3(_x:float, _y:float, _dir:float, _mirror:float) -> Enemy:
-	var _enemy: Enemy = Create_Enemy(_x, _y, 15.0, _dir, 10)
+	var _enemy: Enemy = Create_Enemy(_x, _y, 15.0, _dir, 4)
 	#-------------------------------------------------------------------------------
 	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
 	#-------------------------------------------------------------------------------
@@ -997,10 +997,12 @@ func Stage1_Enemy5(_x:float, _y:float, _mirror:float) -> Enemy:
 	#-------------------------------------------------------------------------------
 	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
 	_tween.tween_property(_enemy, "vel", 0, 1.0)
+	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
 		var _tween2: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
 		Stage1_Fire5(_tween2, _enemy, _mirror)
 	)
+	#-------------------------------------------------------------------------------
 	_tween.tween_interval(3.0)
 	#-------------------------------------------------------------------------------
 	_tween.tween_callback(func():
@@ -1044,7 +1046,7 @@ func Stage1_Enemy7(_x:float, _y:float, _mirror:float) -> Enemy:
 	return _enemy
 #-------------------------------------------------------------------------------
 func Stage1_Enemy8(_x:float, _y:float, _mirror:float) -> Enemy:
-	var _enemy: Enemy = Create_Enemy_Senoidal(_x, _y, 2, 90, 0, 2.5*_mirror, 100, 10)
+	var _enemy: Enemy = Create_Enemy_Senoidal(_x, _y, 2, 90, 0, 2.5*_mirror, 100, 4)
 	#-------------------------------------------------------------------------------
 	var _tween: Tween = CreateTween_ArrayAppend(_enemy.tween_Array)
 	_tween.tween_interval(5.5)
@@ -1131,11 +1133,11 @@ func Stage1_Fire5(_tween:Tween, _node2D: Node2D, _mirror:float):
 	var _max1: float = 30
 	var _max2: float = 3
 	var _cone: float = 35
-	var _vel: float = 8
+	var _vel: float = 5
 	var _timer: float = 0.1
 	var _dir: float = AngleToPlayer(_node2D)
 	var _spin: float = 0
-	var _frecuencia: float = 8
+	var _frecuencia: float = 5
 	var _amplitud: float = 60
 	#-------------------------------------------------------------------------------
 	for _i in _max1:
@@ -1539,9 +1541,7 @@ func Create_Item(_x:float, _y:float, _vel_y:float):
 	_item.myITEM_STATE = Item.ITEM_STATE.SPIN
 	_item.vel_Y =  _vel_y
 	#-------------------------------------------------------------------------------
-	var _radius: float = 15.0
-	_item.radius = _radius
-	_item.distance_squared_to_magnetbox = pow(_radius + player.magnetBox_radius, 2)
+	_item.radius = 15.0
 	#-------------------------------------------------------------------------------
 	_x = clamp(_x, playerLimitsX.x, playerLimitsX.y)
 	_y = clamp(_y, playerLimitsY.x, playerLimitsY.y)
@@ -1576,7 +1576,7 @@ func Items_PhysicsUpdate(_item:Item):
 				_item.position.y += _item.vel_Y * deltaTimeScale
 				#-------------------------------------------------------------------------------
 				if(player.myPLAYER_STATE != Player.PLAYER_STATE.DEATH):
-					if(_item.position.distance_squared_to(player.position)< _item.distance_squared_to_magnetbox or myGAME_STATE != GAME_STATE.IN_GAMEPLAY):
+					if(_item.position.distance_to(player.position) < (_item.radius+player.magnetBox_radius) or myGAME_STATE != GAME_STATE.IN_GAMEPLAY):
 						_item.myITEM_STATE = Item.ITEM_STATE.IMANTED
 						return
 					#-------------------------------------------------------------------------------
@@ -1643,9 +1643,8 @@ func Create_Boss(_x:float, _y:float) -> Boss:
 	#-------------------------------------------------------------------------------
 	_boss.position = Vector2(_x, _y)
 	#-------------------------------------------------------------------------------
-	var _radius: float = 45
-	_boss.radius = _radius
-	_boss.distance_squared_to_hitbox = pow(_radius + player.hitBox_radius, 2)
+	_boss.hitbox_radius = 30.0
+	_boss.hurtbox_radius = 45.0
 	#-------------------------------------------------------------------------------
 	_boss.vel = 0
 	_boss.dir = 90
@@ -1665,7 +1664,7 @@ func Boss_PhysicsUpdate(_boss:Boss):
 	for _i in range(playerBullets_Enabled_Array.size()-1,-1,-1):
 		var _bullet: Bullet = playerBullets_Enabled_Array[_i]
 		#-------------------------------------------------------------------------------
-		if(_bullet.position.distance_to(_boss.position)< (_bullet.radius+_boss.radius) and _boss.canBeHit):
+		if(_bullet.position.distance_to(_boss.position) < (_bullet.radius+_boss.hurtbox_radius) and _boss.canBeHit):
 			_boss.hp -=1
 			Set_BossLife_Label(_boss)
 			Destroy_PlayerBullet(_bullet)
@@ -1703,52 +1702,27 @@ func Create_Enemy_Disabled(_iMax:int):
 	for _i in _iMax:
 		var _enemy: Enemy = enemy_Prefab.instantiate() as Enemy
 		enemy_Disabled_Array.append(_enemy)
-		_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
+		#_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
 		_enemy.hide()
 		content.add_child(_enemy)
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Create_Enemy(_x:float, _y:float, _v:float, _dir: float, _hp: int) -> Enemy:
-	var _enemy: Enemy
-	#-------------------------------------------------------------------------------
-	if(enemy_Disabled_Array.size() > 0):
-		_enemy = enemy_Disabled_Array[0]
-		_enemy.show()
-		enemy_Disabled_Array.erase(_enemy)
-	#-------------------------------------------------------------------------------
-	else:
-		_enemy = enemy_Prefab.instantiate() as Enemy
-		singleton.DisconnectAll(_enemy.death_signal)
-		content.add_child(_enemy)
-	#-------------------------------------------------------------------------------
+	var _enemy: Enemy = Create_Enemy_Common(_x, _y, _v, _dir, _hp)
 	_enemy.physics_Update = func(): Enemy_PhysicsUpdate(_enemy)
-	enemy_Enabled_Array.append(_enemy)
-	#-------------------------------------------------------------------------------
-	_enemy.position = Vector2(_x, _y)
-	#-------------------------------------------------------------------------------
-	var _radius: float = 30.0
-	_enemy.radius = _radius
-	_enemy.distance_squared_to_hitbox = pow(_radius + player.hitBox_radius, 2)
-	#-------------------------------------------------------------------------------
-	_enemy.maxHp = _hp
-	_enemy.hp = _hp
-	_enemy.vel = _v
-	_enemy.dir = _dir
-	Set_EnemyLife_Label(_enemy)
-	#-------------------------------------------------------------------------------
 	return _enemy
 #-------------------------------------------------------------------------------
 func Enemy_PhysicsUpdate(_enemy:Enemy):
 	if(_enemy.hp <= 0):
 		Destroy_Enemy_with_Death_Signal(_enemy)
 		var _num: int = 7+int(3*difficulty)
-		Create_Items(_enemy.position.x, _enemy.position.y, 50, _num, -3)
+		Create_Items(_enemy.position.x, _enemy.position.y, 25, _num, -3)
 		return
 	#-------------------------------------------------------------------------------
 	for _i in range(playerBullets_Enabled_Array.size()-1,-1,-1):
 		var _bullet: Bullet = playerBullets_Enabled_Array[_i]
 		#-------------------------------------------------------------------------------
-		if(_bullet.position.distance_to(_enemy.position) < (_bullet.radius+_enemy.radius) and _enemy.canBeHit):
+		if(_bullet.position.distance_to(_enemy.position) < (_bullet.radius+_enemy.hurtbox_radius) and _enemy.canBeHit):
 			_enemy.hp -=1
 			Set_EnemyLife_Label(_enemy)
 			Destroy_PlayerBullet(_bullet)
@@ -1764,34 +1738,8 @@ func Enemy_PhysicsUpdate(_enemy:Enemy):
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 func Create_Enemy_Senoidal(_x:float, _y:float, _v:float, _dir:float, _spin:float, _frecuencia:float, _amplitud:float, _hp: int) -> Enemy:
-	var _enemy: Enemy
-	#-------------------------------------------------------------------------------
-	if(enemy_Disabled_Array.size() > 0):
-		_enemy = enemy_Disabled_Array[0]
-		_enemy.show()
-		enemy_Disabled_Array.erase(_enemy)
-	#-------------------------------------------------------------------------------
-	else:
-		_enemy = enemy_Prefab.instantiate() as Enemy
-		singleton.DisconnectAll(_enemy.death_signal)
-		content.add_child(_enemy)
-	#-------------------------------------------------------------------------------
+	var _enemy: Enemy = Create_Enemy_Common(_x, _y, _v, _dir, _hp)
 	_enemy.physics_Update = func(): Enemy_PhysicsUpdate_Senoidal(_enemy)
-	enemy_Enabled_Array.append(_enemy)
-	#-------------------------------------------------------------------------------
-	_enemy.position = Vector2(_x, _y)
-	#-------------------------------------------------------------------------------
-	var _radius: float = 30.0
-	_enemy.radius = _radius
-	_enemy.distance_squared_to_hitbox = pow(_radius + player.hitBox_radius, 2)
-	#-------------------------------------------------------------------------------
-	_enemy.maxHp = _hp
-	_enemy.hp = _hp
-	_enemy.vel = _v
-	_enemy.dir = _dir
-	var _rotation_offset: float = -90
-	_enemy.rotation_offset = deg_to_rad(_rotation_offset)
-	_enemy.sprite.rotation_degrees = _enemy.dir + _rotation_offset
 	#-------------------------------------------------------------------------------
 	_enemy.pos_X = _enemy.position.x
 	_enemy.pos_Y = _enemy.position.y
@@ -1810,21 +1758,19 @@ func Create_Enemy_Senoidal(_x:float, _y:float, _v:float, _dir:float, _spin:float
 	_enemy.amplitud_x = _enemy.amplitud * cos(_dir2_perpendicular)
 	_enemy.amplitud_y = _enemy.amplitud * sin(_dir2_perpendicular)
 	#-------------------------------------------------------------------------------
-	Set_EnemyLife_Label(_enemy)
-	#-------------------------------------------------------------------------------
 	return _enemy
 #-------------------------------------------------------------------------------
 func Enemy_PhysicsUpdate_Senoidal(_enemy:Enemy):
 	if(_enemy.hp <= 0):
 		Destroy_Enemy_with_Death_Signal(_enemy)
 		var _num: int = 7+int(3*difficulty)
-		Create_Items(_enemy.position.x, _enemy.position.y, 50, _num, -3)
+		Create_Items(_enemy.position.x, _enemy.position.y, 25, _num, -3)
 		return
 	#-------------------------------------------------------------------------------
 	for _i in range(playerBullets_Enabled_Array.size()-1,-1,-1):
 		var _bullet: Bullet = playerBullets_Enabled_Array[_i]
 		#-------------------------------------------------------------------------------
-		if(_bullet.position.distance_to(_enemy.position) < (_bullet.radius+_enemy.radius) and _enemy.canBeHit):
+		if(_bullet.position.distance_to(_enemy.position) < (_bullet.radius+_enemy.hurtbox_radius) and _enemy.canBeHit):
 			_enemy.hp -=1
 			Set_EnemyLife_Label(_enemy)
 			Destroy_PlayerBullet(_bullet)
@@ -1848,6 +1794,39 @@ func Enemy_PhysicsUpdate_Senoidal(_enemy:Enemy):
 	_enemy.position.y = _pos_Y_new
 	#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
+func Create_Enemy_Common(_x:float, _y:float, _v:float, _dir: float, _hp: int) -> Enemy:
+	var _enemy: Enemy
+	#-------------------------------------------------------------------------------
+	if(enemy_Disabled_Array.size() > 0):
+		_enemy = enemy_Disabled_Array[0]
+		_enemy.show()
+		enemy_Disabled_Array.erase(_enemy)
+	#-------------------------------------------------------------------------------
+	else:
+		_enemy = enemy_Prefab.instantiate() as Enemy
+		singleton.DisconnectAll(_enemy.death_signal)
+		content.add_child(_enemy)
+	#-------------------------------------------------------------------------------
+	enemy_Enabled_Array.append(_enemy)
+	#-------------------------------------------------------------------------------
+	_enemy.position = Vector2(_x, _y)
+	#-------------------------------------------------------------------------------
+	_enemy.hitbox_radius = 15.0
+	_enemy.hurtbox_radius = 30.0
+	#-------------------------------------------------------------------------------
+	_enemy.maxHp = _hp
+	_enemy.hp = _hp
+	_enemy.vel = _v
+	_enemy.dir = _dir
+	#-------------------------------------------------------------------------------
+	var _rotation_offset: float = -90
+	_enemy.rotation_offset = deg_to_rad(_rotation_offset)
+	_enemy.sprite.rotation_degrees = _enemy.dir + _rotation_offset
+	#-------------------------------------------------------------------------------
+	Set_EnemyLife_Label(_enemy)
+	#-------------------------------------------------------------------------------
+	return _enemy
+#-------------------------------------------------------------------------------
 func Destroy_Enemy_with_Death_Signal(_enemy: Enemy):
 	_enemy.death_signal.emit()
 	Destroy_Enemy(_enemy)
@@ -1862,8 +1841,8 @@ func Destroy_Enemy(_enemy: Enemy):
 func Pause_Tween_Until_Enemy_Death(_enemy:Enemy, _tween: Tween):
 	singleton.DisconnectAll(_enemy.death_signal)
 	#-------------------------------------------------------------------------------
-	_enemy.death_signal.connect(
-		func(): _tween.play()
+	_enemy.death_signal.connect(func():
+		_tween.play()
 	)
 	#-------------------------------------------------------------------------------
 	_tween.pause()
@@ -2001,8 +1980,6 @@ func Create_EnemyBullet_Common(_x:float, _y:float, _type:String, _can_Go_OffLimi
 	_bullet.texture = _bulletResource.texture
 	#-------------------------------------------------------------------------------
 	_bullet.radius = _bulletResource.radius
-	_bullet.distance_squared_to_grazebox = pow(_bulletResource.radius + player.grazeBox_radius, 2)
-	_bullet.distance_squared_to_hitbox = pow(_bulletResource.radius + player.hitBox_radius, 2)
 	#-------------------------------------------------------------------------------
 	_bullet.position = Vector2(_x, _y)
 	_bullet.isGrazed = false

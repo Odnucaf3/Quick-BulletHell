@@ -54,7 +54,7 @@ sprite = NodePath("Sprite2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 show_behind_parent = true
-scale = Vector2(4, 4)
+scale = Vector2(3, 3)
 texture = ExtResource("2_ep7ps")
 offset = Vector2(0, -3)
 hframes = 2

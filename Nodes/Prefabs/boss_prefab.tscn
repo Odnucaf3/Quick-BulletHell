@@ -55,7 +55,7 @@ animationTree = NodePath("Sprite2D/AnimationTree")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 show_behind_parent = true
-scale = Vector2(4, 4)
+scale = Vector2(3, 3)
 texture = ExtResource("2_5s01m")
 offset = Vector2(0, -6)
 hframes = 2
