@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://ew6x6elopa8o"]
+
+[ext_resource type="Script" uid="uid://cb6frkhllxl6i" path="res://Scripts/Scene_Scripts/Game_Scene/Prefabs_Scripts/Enemy_Script.gd" id="1_fmvvm"]
+[ext_resource type="Texture2D" uid="uid://b2c6p7qsn55wc" path="res://Assets/ansimuz/Starfighter Files/Spritesheets/asteroids.png" id="2_tdrm8"]
+
+[node name="Asteroid_Prefab" type="Node2D" node_paths=PackedStringArray("label", "sprite")]
+script = ExtResource("1_fmvvm")
+label = NodePath("Label")
+sprite = NodePath("Sprite2D")
+metadata/_custom_type_script = "uid://cb6frkhllxl6i"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(3, 3)
+texture = ExtResource("2_tdrm8")
+hframes = 3
+vframes = 3
+frame = 6
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0

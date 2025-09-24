@@ -4,6 +4,9 @@ class_name Enemy
 #region VARIABLES
 @export var label: Label
 @export var sprite: Sprite2D
+@export var shadow: Sprite2D
+@export var animationPlayer: AnimationPlayer
+@export var animationTree: AnimationTree
 #-------------------------------------------------------------------------------
 var dir: float
 var vel: float
@@ -37,7 +40,7 @@ signal death_signal
 func Death_Signal():
 	death_signal.emit()
 #-------------------------------------------------------------------------------
-func _draw() -> void:
-	draw_circle(Vector2.ZERO, hitbox_radius, Color.RED, false)
-	draw_circle(Vector2.ZERO, hurtbox_radius, Color.GREEN, false)
+#func _draw() -> void:
+#	draw_circle(Vector2.ZERO, hitbox_radius, Color.RED, false)
+#	draw_circle(Vector2.ZERO, hurtbox_radius, Color.GREEN, false)
 #-------------------------------------------------------------------------------

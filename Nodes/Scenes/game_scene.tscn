@@ -1,11 +1,15 @@
-[gd_scene load_steps=36 format=3 uid="uid://qpw70cvfh5bf"]
+[gd_scene load_steps=40 format=3 uid="uid://qpw70cvfh5bf"]
 
 [ext_resource type="Script" uid="uid://b471unj5j3evn" path="res://Scripts/Scene_Scripts/Game_Scene.gd" id="1_143dr"]
 [ext_resource type="PackedScene" uid="uid://c3ym6uahxyv5x" path="res://Nodes/Prefabs/enemy_prefab.tscn" id="2_acyb6"]
+[ext_resource type="Texture2D" uid="uid://b2c6p7qsn55wc" path="res://Assets/ansimuz/Starfighter Files/Spritesheets/asteroids.png" id="3_1th3s"]
 [ext_resource type="PackedScene" uid="uid://cspvg8uimw0jt" path="res://Nodes/Prefabs/bullet_prefab.tscn" id="3_5om1x"]
+[ext_resource type="Texture2D" uid="uid://bxxdr2igf40ia" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/spritesheets/enemy-small.png" id="3_mitwg"]
 [ext_resource type="PackedScene" uid="uid://d04ils16lapv4" path="res://Nodes/Prefabs/boss_prefab.tscn" id="3_xrh8u"]
 [ext_resource type="PackedScene" uid="uid://b2r2t7rrfwiys" path="res://Nodes/Prefabs/item_prefab.tscn" id="4_7dwg7"]
+[ext_resource type="Texture2D" uid="uid://cfmmjgokty6kp" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/spritesheets/enemy-medium.png" id="4_xhx7r"]
 [ext_resource type="Texture2D" uid="uid://cqyeeer0mksgx" path="res://Assets/Sprites/Magnet.png" id="5_0qyn6"]
+[ext_resource type="Texture2D" uid="uid://h7snutjxiuqj" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/spritesheets/enemy-big.png" id="5_42b3h"]
 [ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="6_igypo"]
 [ext_resource type="Texture2D" uid="uid://x1c0ncf0umcf" path="res://Assets/kenney-assets/pattern-pack-2/PNG/Thin/Default (256px)/pattern_0005.png" id="7_gg6rv"]
 [ext_resource type="Texture2D" uid="uid://dhr2o7k6gxpyg" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/desert-backgorund.png" id="7_xrh8u"]
@@ -165,6 +169,10 @@ player = NodePath("CanvasLayer/Window_MarginContainer/Content/Player")
 explotion = NodePath("CanvasLayer/Window_MarginContainer/Content/Explotion_Sprite2D")
 explotion_anim = NodePath("CanvasLayer/Window_MarginContainer/Content/Explotion_Sprite2D/Explotion_AnimationPlayer")
 enemy_Prefab = ExtResource("2_acyb6")
+smallShip_sprite = ExtResource("3_mitwg")
+midShip_sprite = ExtResource("4_xhx7r")
+bigShip_sprite = ExtResource("5_42b3h")
+asteroid_sprite = ExtResource("3_1th3s")
 boss_Prefab = ExtResource("3_xrh8u")
 bullet_Prefab = ExtResource("3_5om1x")
 item_Prefab = ExtResource("4_7dwg7")
@@ -613,7 +621,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 45
 text = "60 / 60 s"
 horizontal_alignment = 1
 
