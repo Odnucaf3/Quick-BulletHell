@@ -43,8 +43,8 @@ func SetPlayer(_playerResournce: PlayerResource):
 	hitBox_Sprite.scale.y  *= _playerResournce.hitBox_Scale
 #endregion
 #-------------------------------------------------------------------------------
-#func _draw() -> void:
-#	draw_circle(Vector2.ZERO, magnetBox_radius, Color.BLUE, false)
-#	draw_circle(Vector2.ZERO, grazeBox_radius, Color.GREEN, false)
-#	draw_circle(Vector2.ZERO, hitBox_radius, Color.RED, false)
+func _draw() -> void:
+	draw_circle(Vector2.ZERO, magnetBox_radius, Color.BLUE, false)
+	draw_circle(Vector2.ZERO, grazeBox_radius, Color.GREEN, false)
+	draw_circle(Vector2.ZERO, hitBox_radius, Color.RED, false)
 #-------------------------------------------------------------------------------

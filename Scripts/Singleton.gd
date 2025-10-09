@@ -15,8 +15,11 @@ enum STAGE{STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, STAGE_6, STAGE_7, ROGUEL
 @export var bgmPlayer : AudioStreamPlayer
 var playPosition: float = 0.0
 @export var bgmStage1 : AudioStreamOggVorbis
+@export var bgmStage1_mp3 : AudioStreamMP3
 @export var bgmBoss1 : AudioStreamOggVorbis
+@export var bgmBoss1_mp3 : AudioStreamMP3
 @export var bgmTitle : AudioStreamOggVorbis
+@export var bgmTitle_mp3 : AudioStreamMP3
 #-------------------------------------------------------------------------------
 const submitInput: String = "ui_accept"
 const cancelInput: String = "ui_cancel"
@@ -287,7 +290,11 @@ func MoveToLastButton(_b:Array[Button]) -> void:
 func MoveToFirstButton(_b:Array[Button]) -> void:
 	MoveToButton(_b[0])
 #-------------------------------------------------------------------------------
-func PlayBGM(_bgm:AudioStreamOggVorbis) -> void:
+func PlayBGM_OGG(_bgm:AudioStreamOggVorbis) -> void:
+	bgmPlayer.stream = _bgm
+	bgmPlayer.play()
+#-------------------------------------------------------------------------------
+func PlayBGM_MP3(_bgm:AudioStreamMP3) -> void:
 	bgmPlayer.stream = _bgm
 	bgmPlayer.play()
 #-------------------------------------------------------------------------------

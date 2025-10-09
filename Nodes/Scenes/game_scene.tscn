@@ -293,6 +293,7 @@ text = "[center]000,000,000[/center]"
 fit_content = true
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/LeftUI_MarginContainer/LeftUI_VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/LeftUI_MarginContainer/LeftUI_VBoxContainer/MarginContainer"]

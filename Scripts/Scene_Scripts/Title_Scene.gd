@@ -19,7 +19,8 @@ func _ready() -> void:
 	SetIdiome()
 	#-------------------------------------------------------------------------------
 	singleton.MoveToButton(titleMenu.button[0])
-	singleton.PlayBGM(singleton.bgmTitle)
+	#singleton.PlayBGM_OGG(singleton.bgmTitle)
+	singleton.PlayBGM_MP3(singleton.bgmTitle_mp3)
 	show()
 #-------------------------------------------------------------------------------
 #endregion

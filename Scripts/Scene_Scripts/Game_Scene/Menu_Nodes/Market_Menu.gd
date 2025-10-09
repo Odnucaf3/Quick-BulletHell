@@ -144,7 +144,7 @@ func GetCardText_Description(_id:String) -> String:
 #-------------------------------------------------------------------------------
 #region CARD BUTTON FUNCTIONS
 func CardButton_Selected(_id:String) -> void:
-	var _s: String = "[center][font_size=35]"+ GetCardText_Name(_id) + "[/font_size][font_size=20]\n"
+	var _s: String = "[center][u][font_size=35]"+ GetCardText_Name(_id) + "[/font_size][/u][font_size=20]\n"
 	_s += _id+"\n"
 	_s += GetCardText_Description(_id)
 	description.text = _s

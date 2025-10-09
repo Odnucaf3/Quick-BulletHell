@@ -118,6 +118,7 @@ theme_override_font_sizes/font_size = 50
 text = "Quit"
 
 [node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/Title_Menu"]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

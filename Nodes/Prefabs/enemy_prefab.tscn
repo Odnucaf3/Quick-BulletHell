@@ -51,9 +51,16 @@ z_index = 3
 script = ExtResource("1_30lj2")
 label = NodePath("Label")
 sprite = NodePath("Sprite2D")
-shadow = NodePath("Sprite2D/Sprite2D2")
+shadow = NodePath("Sprite2D2")
 animationPlayer = NodePath("Sprite2D/AnimationPlayer")
 animationTree = NodePath("Sprite2D/AnimationTree")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+self_modulate = Color(0, 0, 0, 0.4117647)
+show_behind_parent = true
+scale = Vector2(0.24, 0.24)
+texture = ExtResource("3_b7mhl")
+offset = Vector2(0, -30)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 show_behind_parent = true
@@ -70,13 +77,6 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="Sprite2D"]
 tree_root = SubResource("AnimationNodeAnimation_mtsc7")
 anim_player = NodePath("../AnimationPlayer")
-
-[node name="Sprite2D2" type="Sprite2D" parent="Sprite2D"]
-self_modulate = Color(0, 0, 0, 0.4117647)
-show_behind_parent = true
-scale = Vector2(0.08, 0.08)
-texture = ExtResource("3_b7mhl")
-offset = Vector2(0, -30)
 
 [node name="Label" type="Label" parent="."]
 visible = false

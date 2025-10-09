@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d0dbuca6xjv3b"]
+[gd_scene load_steps=13 format=3 uid="uid://d0dbuca6xjv3b"]
 
 [ext_resource type="Script" uid="uid://dh6p17sjfdxco" path="res://Scripts/Scene_Scripts/Main_Scene.gd" id="1_5f268"]
 [ext_resource type="Texture2D" uid="uid://djkxoqfcmr4a5" path="res://Assets/Sprites/White Square.png" id="2_yl2dh"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://ctqwl3pbjdb7h" path="res://Assets/ansimuz/Starfighter Files/sprites/shoot.png" id="6_482i4"]
 [ext_resource type="Script" uid="uid://c1hg3hvpiyil0" path="res://Scripts/Scene_Scripts/Main_Scene/Stage_Menu.gd" id="6_x5vwy"]
 [ext_resource type="Script" uid="uid://0ka8twb7v4p3" path="res://Scripts/Scene_Scripts/Main_Scene/Start_Menu.gd" id="7_jwsoe"]
+[ext_resource type="Texture2D" uid="uid://dhr2o7k6gxpyg" path="res://Assets/ansimuz/Spaceship-shooter-gamekit/Desert/desert-backgorund.png" id="8_bkmeg"]
+[ext_resource type="Texture2D" uid="uid://d05iwj1eiaepx" path="res://Assets/ansimuz/Starfighter Files/sprites/Shoot1.png" id="11_482i4"]
 
 [node name="Main_Scene" type="Control" node_paths=PackedStringArray("mainMenu", "difficultyMenu", "playerMenu", "stageMenu", "startMenu")]
 layout_mode = 3
@@ -61,6 +63,7 @@ theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
 [node name="Main_Menu" type="Control" parent="MarginContainer" node_paths=PackedStringArray("mainScene", "button", "gameInfo", "picture")]
+visible = false
 layout_mode = 2
 script = ExtResource("3_s5nvw")
 mainScene = NodePath("../..")
@@ -202,26 +205,16 @@ visible = false
 layout_mode = 2
 script = ExtResource("5_i24b0")
 mainScene = NodePath("../..")
-button = [NodePath("VBoxContainer2/Button"), NodePath("VBoxContainer2/Button2"), NodePath("VBoxContainer2/Button3"), NodePath("VBoxContainer2/Button4")]
-back = NodePath("Button5")
-
-[node name="Label" type="Label" parent="MarginContainer/Difficulty_Menu"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 83.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 60
-text = "Difficulty Select"
-horizontal_alignment = 1
+button = [NodePath("HBoxContainer/VBoxContainer2/Button"), NodePath("HBoxContainer/VBoxContainer2/Button2"), NodePath("HBoxContainer/VBoxContainer2/Button3"), NodePath("HBoxContainer/VBoxContainer2/Button4")]
+back = NodePath("HBoxContainer/VBoxContainer2/Button5")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Difficulty_Menu"]
-visible = false
-layout_mode = 2
-offset_right = 282.0
-offset_bottom = 550.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/Difficulty_Menu/HBoxContainer"]
 layout_mode = 2
@@ -229,225 +222,197 @@ size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Difficultu Select"
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 60
+text = "Difficulty Select"
 horizontal_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2"]
-clip_contents = true
-custom_minimum_size = Vector2(0, 450)
-layout_mode = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2/MarginContainer"]
-clip_contents = false
-custom_minimum_size = Vector2(0, 150)
-layout_mode = 2
-size_flags_vertical = 6
-follow_focus = true
-scroll_vertical = 100
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2/MarginContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_right = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2/MarginContainer/ScrollContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-
-[node name="Button" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 150)
-layout_mode = 2
-text = "Saturday of Salamanca
-Difficult-Mode
-For Those who want to have fun."
-
-[node name="Button2" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 150)
-layout_mode = 2
-text = "Saturday of Salamanca
-Difficult-Mode
-For Those who want to have fun."
-
-[node name="Button3" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 150)
-layout_mode = 2
-text = "Saturday of Salamanca
-Difficult-Mode
-For Those who want to have fun."
-
-[node name="Button4" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 150)
-layout_mode = 2
-text = "Saturday of Salamanca
-Difficult-Mode
-For Those who want to have fun."
 
 [node name="Button" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 30
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 50
+text = "Easy"
+
+[node name="Button2" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 50
+text = "Normal"
+
+[node name="Button3" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 50
+text = "Hard"
+
+[node name="Button4" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 50
+text = "Lunatic"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Button5" type="Button" parent="MarginContainer/Difficulty_Menu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "Back"
 
 [node name="Control" type="Control" parent="MarginContainer/Difficulty_Menu/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/Difficulty_Menu"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -160.0
-offset_bottom = 160.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="Button" type="Button" parent="MarginContainer/Difficulty_Menu/VBoxContainer2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Easy"
-
-[node name="Button2" type="Button" parent="MarginContainer/Difficulty_Menu/VBoxContainer2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Normal"
-
-[node name="Button3" type="Button" parent="MarginContainer/Difficulty_Menu/VBoxContainer2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Hard"
-
-[node name="Button4" type="Button" parent="MarginContainer/Difficulty_Menu/VBoxContainer2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Lunatic"
-
-[node name="Button5" type="Button" parent="MarginContainer/Difficulty_Menu"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -77.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 4
-size_flags_vertical = 8
-theme_override_font_sizes/font_size = 50
-text = "Back"
-
 [node name="Stage_Menu" type="Control" parent="MarginContainer" node_paths=PackedStringArray("mainScene", "button", "back")]
-visible = false
 layout_mode = 2
 script = ExtResource("6_x5vwy")
 mainScene = NodePath("../..")
-button = [NodePath("VBoxContainer2/Button"), NodePath("VBoxContainer2/Button2"), NodePath("VBoxContainer2/Button3"), NodePath("VBoxContainer2/Button4"), NodePath("VBoxContainer2/Button5"), NodePath("VBoxContainer2/Button6"), NodePath("VBoxContainer2/Button7"), NodePath("VBoxContainer2/Button8"), NodePath("VBoxContainer2/Button9")]
-back = NodePath("Button")
+button = [NodePath("HBoxContainer/VBoxContainer2/Button"), NodePath("HBoxContainer/VBoxContainer2/Button2"), NodePath("HBoxContainer/VBoxContainer2/Button3"), NodePath("HBoxContainer/VBoxContainer2/Button4"), NodePath("HBoxContainer/VBoxContainer2/Button5"), NodePath("HBoxContainer/VBoxContainer2/Button6"), NodePath("HBoxContainer/VBoxContainer2/Button7"), NodePath("HBoxContainer/VBoxContainer2/Button8"), NodePath("HBoxContainer/VBoxContainer2/Button9")]
+back = NodePath("HBoxContainer/VBoxContainer2/Button10")
 
-[node name="Label" type="Label" parent="MarginContainer/Stage_Menu"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Stage_Menu"]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
-offset_bottom = 83.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/Stage_Menu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 60
 text = "Stage Select"
 horizontal_alignment = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/Stage_Menu"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -175.0
-offset_bottom = 175.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="Button" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
+[node name="Button" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Stage 1"
 
-[node name="Button2" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
+[node name="Button2" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Stage 2"
 
-[node name="Button3" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
+[node name="Button3" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Stage 3"
 
-[node name="Button4" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
+[node name="Button4" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Stage 4"
 
-[node name="Button5" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
+[node name="Button5" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Stage 5"
 
-[node name="Button6" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
+[node name="Button6" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Stage Final"
 
-[node name="Button7" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
-visible = false
+[node name="Button7" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Stage Extra"
 
-[node name="Button8" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
-visible = false
+[node name="Button8" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Rogue-Like Mode"
 
-[node name="Button9" type="Button" parent="MarginContainer/Stage_Menu/VBoxContainer2"]
+[node name="Button9" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 visible = false
 custom_minimum_size = Vector2(300, 55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Boss-Rush Mode"
 
-[node name="Button" type="Button" parent="MarginContainer/Stage_Menu"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button10" type="Button" parent="MarginContainer/Stage_Menu/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(300, 55)
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -50.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 4
-size_flags_vertical = 8
+layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Back"
+
+[node name="Control" type="Control" parent="MarginContainer/Stage_Menu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/Stage_Menu/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Stage_Menu/HBoxContainer/Control/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Stage_Menu/HBoxContainer/Control/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Stage_Menu/HBoxContainer/Control/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 350)
+layout_mode = 2
+texture = ExtResource("8_bkmeg")
+stretch_mode = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/Stage_Menu/HBoxContainer/Control/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[center][font_size=24][u]The Valderramas Forest[/u][/font_size]
+
+[font_size=20]Located at the edge of Gensokyo, the shrine and its miko (shrine maiden) Reimu Hakurei are responsible for maintaining the barrier and resolving supernatural incidents. "
+
+[node name="Control2" type="Control" parent="MarginContainer/Stage_Menu/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Stage_Menu/HBoxContainer/Control2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_482i4")
+expand_mode = 3
+flip_h = true
 
 [node name="Start_Menu" type="Control" parent="MarginContainer" node_paths=PackedStringArray("mainScene", "start", "back")]
 visible = false
@@ -591,3 +556,367 @@ text = "Back
 [node name="Control" type="Control" parent="Player_Menu/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Player_Menu"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player_Menu/MarginContainer2"]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="Player_Menu/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Control2"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 253.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Control2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "Player Select"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="Player_Menu/MarginContainer2/HBoxContainer/Control2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Player 1"
+autowrap_mode = 2
+
+[node name="Button2" type="Button" parent="Player_Menu/MarginContainer2/HBoxContainer/Control2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Player 2"
+
+[node name="HSeparator" type="HSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Control2/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Button3" type="Button" parent="Player_Menu/MarginContainer2/HBoxContainer/Control2"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -77.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 50
+text = "Back"
+
+[node name="Panel" type="Panel" parent="Player_Menu/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 30
+text = "Player Name"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "The Evil Dragon Lady"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Max Lives:"
+
+[node name="Label4" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "5"
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Label2" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Max Power:"
+
+[node name="Label5" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "5"
+horizontal_alignment = 2
+
+[node name="VSeparator2" type="VSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Label3" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Max Money:"
+
+[node name="Label6" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "450"
+horizontal_alignment = 2
+
+[node name="HSeparator2" type="HSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Target Rad:"
+
+[node name="Label4" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "x1.0"
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Label2" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Graze Rad:"
+
+[node name="Label5" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "x1.0"
+horizontal_alignment = 2
+
+[node name="VSeparator2" type="VSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Label3" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Magnet Rad:"
+
+[node name="Label6" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "x1.0"
+horizontal_alignment = 2
+
+[node name="HSeparator3" type="HSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Normal Spd:"
+
+[node name="Label3" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "7"
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Label2" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Focus Spd:"
+
+[node name="Label4" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "3.5"
+horizontal_alignment = 2
+
+[node name="VSeparator2" type="VSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Label5" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Magnet Line:"
+
+[node name="Label6" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "x0.3"
+horizontal_alignment = 2
+
+[node name="HSeparator4" type="HSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Main Shoot:"
+
+[node name="Label2" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Arrow Head"
+horizontal_alignment = 2
+
+[node name="HSeparator5" type="HSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Power Bomb:"
+
+[node name="Label2" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Homming Attack"
+horizontal_alignment = 2
+
+[node name="HSeparator6" type="HSeparator" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label2" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 3
+text = "Description:
+             Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla."
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="Player_Menu/MarginContainer2/HBoxContainer/Panel/MarginContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 30
+text = "A powerfull maiden with Incredible power."
+autowrap_mode = 2
+
+[node name="Control" type="Control" parent="Player_Menu/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Player_Menu/MarginContainer2/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = -90
+theme_override_constants/margin_top = -100
+
+[node name="TextureRect" type="TextureRect" parent="Player_Menu/MarginContainer2/HBoxContainer/Control/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("11_482i4")
+expand_mode = 3
+stretch_mode = 5
